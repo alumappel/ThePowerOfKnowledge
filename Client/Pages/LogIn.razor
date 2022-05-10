@@ -1,0 +1,45 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject NavigationManager nav
+
+<h3>Login</h3>
+
+<MudTextField @bind-Value="inputMail" Label="כתובת מייל" Variant="Variant.Outlined"></MudTextField>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="loginUser">כניסה</MudButton>
+
+<p>@msg</p>
+
+
+@code {
+    string inputMail = "";
+    string msg = "";
+    async Task loginUser()
+    {
+        if (string.IsNullOrEmpty(inputMail) == false)
+        {
+            var getResponse = await Http.GetAsync("api/Users/" + inputMail);
+            if (getResponse.IsSuccessStatusCode)
+            {
+                int userId = getResponse.Content.ReadFromJsonAsync<int>().Result;
+                nav.NavigateTo("./UserHomeScreen/" + userId);
+            }
+            else
+            {
+                string error = getResponse.Content.ReadAsStringAsync().Result;
+                if (error == "User not found")
+                {
+                    msg = "לא נמצא משתמש התואם למייל שהוזן";
+                }
+                else
+                {
+                    msg = "התרחשה תקלת שרת";
+                }
+            }
+        }
+        else
+        {
+            msg = "יש להקליד כתובת מייל";
+        }
+    }
+}
+
