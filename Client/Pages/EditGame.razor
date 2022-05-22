@@ -20,7 +20,8 @@
 
 @*הגדרות משחק כלליות*@
 <section>
-
+    @*עושה שגיאההה*@
+    <MudTextField @bind-Value="currentGame.GameTopic" Label="נושא המשחק" Variant="Variant.Outlined" HelperText="@currentGame.GameTopic.Length.ToString()"></MudTextField>
 </section>
 @*תוכן מסיח*@
 <section>
@@ -38,7 +39,6 @@
     [Parameter]
     public int gameId { get; set; }
 
-    //שייך לבדיקה
     Game currentGame;
 
     protected async override Task OnInitializedAsync()
