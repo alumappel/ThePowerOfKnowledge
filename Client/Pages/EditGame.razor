@@ -6,7 +6,50 @@
 
 
 <h3>EditGame</h3>
+@*//בדיקה*@
+
+@if (currentGame != null)
+{
+    <h3>המשחקים של @(currentGame.GameTopic)</h3>
+}
+
+@*תנאי סף וכפתור שמירה*@
+<section>
+
+</section>
+
+@*הגדרות משחק כלליות*@
+<section>
+
+</section>
+@*תוכן מסיח*@
+<section>
+
+</section>
+@*טבלת מסיחים*@
+<section>
+
+</section>
+
+
+
 
 @code {
+    [Parameter]
+    public int gameId { get; set; }
+
+    //שייך לבדיקה
+    Game currentGame;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var getResponse = await Http.GetAsync("api/Games/byGameId/" + gameId);
+        if (getResponse.IsSuccessStatusCode)
+        {
+            currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+        }
+    }
+
+
 
 }

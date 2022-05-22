@@ -48,3 +48,10 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.cardGame {
+    display: inline-block;
+    margin: 20px;
+    width:135px;
+    height:auto;
+}

@@ -20,7 +20,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
         {
             _context = context;
         }
-        [HttpGet("{userId}")]
+        [HttpGet("byUserId/{userId}")]
         public async Task<IActionResult> GetAllGames(int userId)
         {
             string sessionContent = HttpContext.Session.GetString("UserId");
@@ -40,6 +40,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
             }
             return BadRequest("EmptySession");
         }
+
         [HttpGet("byCode/{gameCode}")]
         public async Task<IActionResult> GetGameByCode(int gamePin)
         {
@@ -59,7 +60,26 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
         }
 
-
+        [HttpGet("byGameId/{gameId}")]
+        public async Task<IActionResult> GetGameAndAllA(int gameId)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == gameId)
+                {
+                    Game gameToReturn = await _context.Games.Include(a => a.GameAnswers).FirstOrDefaultAsync(g => g.ID == gameId);
+                    if (gameToReturn != null)
+                    {
+                        return Ok(gameToReturn);
+                    }
+                    return BadRequest("Game not found");
+                }
+                return BadRequest("User not login");
+            }
+            return BadRequest("EmptySession");
+        }
 
 
 

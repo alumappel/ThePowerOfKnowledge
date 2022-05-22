@@ -7,49 +7,42 @@
 {
     <h3>המשחקים של @(currentUser.FirstName)</h3>
 
-    <MudTable Items="@currentUser.UserGames" Hover="true">
-        <HeaderContent>
-            <MudTh>שם משחק</MudTh>
-            <MudTh>קוד משחק</MudTh>
-            <MudTh>האם פורסם?</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="שם משחק">@context.GameTopic</MudTd>
-            <MudTd DataLabel="קוד משחק">@context.GamePin</MudTd>
-            <MudTd DataLabel="האם פורסם?"><MudCheckBox CheckedChanged="@((bool newState) => publishGame (context.ID))" Checked="@context.IsPublish" Color="Color.Primary"></MudCheckBox></MudTd>
-        </RowTemplate>
-    </MudTable>
-
-
     //כרטיסייה
+<MudContainer Width="90%" Fixed="true">
+    @*//כרטיסיה ריקה של חדש*@
+    <MudCard Outlined="true" Class="cardGame">
+        <MudCardActions>
+            <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" />
+        </MudCardActions>
+    </MudCard>
+
     @if (currentUser != null)
     {
         @foreach (Game currentGame in currentUser.UserGames)
         {
-            <MudContainer Width="300px">
-                <MudCard Outlined="true">
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
-                            <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
-                        <MudText Typo="Typo.body2">
-                            <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
-                        </MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
+            <MudCard Outlined="true" Class="cardGame">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
+                        <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
+                    <MudText Typo="Typo.body2">
+                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
+                    </MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
+                </MudCardActions>
+            </MudCard>
 
-                        <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@nav.NavigateTo("./EditGame/" + currentGame.ID)" />
-                    </MudCardActions>
-                </MudCard>
-            </MudContainer>
         }
-    }
 
+    }
+</MudContainer>
 
 
 
@@ -58,14 +51,15 @@
 
 }
 
-@code {[Parameter]
+@code {
+    [Parameter]
     public int userId { get; set; }
 
     User currentUser;
 
     protected async override Task OnInitializedAsync()
     {
-        var getResponse = await Http.GetAsync("api/Games/" + userId);
+        var getResponse = await Http.GetAsync("api/Games/byUserId/" + userId);
         if (getResponse.IsSuccessStatusCode)
         {
             currentUser = getResponse.Content.ReadFromJsonAsync<User>().Result;
@@ -82,14 +76,7 @@
     {
         //selectedGame.IsPublish = !selectedGame.IsPublish;
     }
-
-
-
-    void NavToEdit(Game current)
-    {
-        nav.NavigateTo("./EditGame/" + current.ID);
-    }
-
+     
 
 
 }
