@@ -11,27 +11,37 @@
 @if (currentGame != null)
 {
     <h3>המשחקים של @(currentGame.GameTopic)</h3>
-}
 
-@*תנאי סף וכפתור שמירה*@
-<section>
 
-</section>
+    @*תנאי סף וכפתור שמירה*@
+    <section>
+    </section>
 
-@*הגדרות משחק כלליות*@
+    @*הגדרות משחק כלליות*@
 <section>
     @*עושה שגיאההה*@
     <MudTextField @bind-Value="currentGame.GameTopic" Label="נושא המשחק" Variant="Variant.Outlined" HelperText="@currentGame.GameTopic.Length.ToString()"></MudTextField>
-</section>
-@*תוכן מסיח*@
-<section>
+    <h2>הנחייה</h2><br/>
+    <p>איספו בגרירה  ניני</p>
+    <MudTextField @bind-Value="currentGame.GameQuestionText" Label="המשך הנחייה" Variant="Variant.Outlined" HelperText="@currentGame.GameQuestionText.Length.ToString()"></MudTextField>
+    <span>
 
-</section>
-@*טבלת מסיחים*@
-<section>
+        <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
 
+        <MudIconButton HtmlTag="label"
+                       Color="Color.Info"
+                       Icon="@Icons.Filled.PhotoCamera"
+                       for="fileInput1">
+        </MudIconButton>
+    </span>
 </section>
-
+    @*תוכן מסיח*@
+    <section>
+    </section>
+    @*טבלת מסיחים*@
+    <section>
+    </section>
+}
 
 
 
@@ -41,14 +51,59 @@
 
     Game currentGame;
 
+
+
     protected async override Task OnInitializedAsync()
     {
         var getResponse = await Http.GetAsync("api/Games/byGameId/" + gameId);
         if (getResponse.IsSuccessStatusCode)
         {
             currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+            notNull();
+        }
+
+    }
+
+    private void notNull()
+    {
+        string tupicCharCounter = "מספר תווים: " + (currentGame.GameTopic.Length.ToString()) + "/20";
+    }
+
+
+    //תמונה
+    string myFileImage;
+    long maxFileSize = 4194304;
+    
+
+    List<string> myFiles = new List<string>();
+    
+
+
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+        var imageFiles = e.GetMultipleFiles();
+        foreach (var file in imageFiles)
+        {
+            if (file.Size <= maxFileSize)
+            {
+                var buffer = new byte[file.Size];
+                await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
+                var imageBase64 = Convert.ToBase64String(buffer);
+                var saveResponse = await Http.PostAsJsonAsync("api/Games/upload", imageBase64);
+
+                if (saveResponse.IsSuccessStatusCode == true)
+                {
+                    string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
+                    myFileImage = resizeUrl;
+                    Console.WriteLine(resizeUrl);
+                }
+            }
         }
     }
+
+
+
+
 
 
 

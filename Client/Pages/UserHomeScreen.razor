@@ -34,8 +34,9 @@
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
                     <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
+                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
+
                 </MudCardActions>
             </MudCard>
 

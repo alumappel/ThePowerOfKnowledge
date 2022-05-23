@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThePowerOfKnowledge.Server.Data;
+using ThePowerOfKnowledge.Server.Helpers;
 using ThePowerOfKnowledge.Shared.Entities;
 
 namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
@@ -14,11 +15,15 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
+        
         private readonly DataContext _context;
+        private readonly FileStorage _fileStorage;
 
-        public GamesController(DataContext context)
+        public GamesController(DataContext contex, FileStorage fileStorage)
         {
-            _context = context;
+
+            _context = contex;
+            _fileStorage = fileStorage;
         }
         [HttpGet("byUserId/{userId}")]
         public async Task<IActionResult> GetAllGames(int userId)
@@ -82,6 +87,23 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
         }
 
 
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFile([FromBody] string imageBase64)
+        {
+            byte[] picture = Convert.FromBase64String(imageBase64);
+            string url = await _fileStorage.SaveFile(picture, "png", "uploadedFiles");
+            return Ok(url);
+        }
+
+        [HttpPost("deleteImages")]
+        public async Task<IActionResult> DeleteImages([FromBody] List<string> images)
+        {
+            foreach (string img in images)
+            {
+                await _fileStorage.DeleteFile(img, "uploadedFiles");
+            }
+            return Ok("deleted");
+        }
 
 
 

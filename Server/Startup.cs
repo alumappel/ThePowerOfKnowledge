@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using ThePowerOfKnowledge.Server.Data;
+using ThePowerOfKnowledge.Server.Helpers;
 
 namespace ThePowerOfKnowledge.Server
 {
@@ -41,6 +42,7 @@ namespace ThePowerOfKnowledge.Server
             });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<FileStorage>();
 
         }
 
