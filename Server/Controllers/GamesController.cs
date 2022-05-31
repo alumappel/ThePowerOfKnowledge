@@ -91,7 +91,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
         public async Task<IActionResult> UploadFile([FromBody] string imageBase64)
         {
             byte[] picture = Convert.FromBase64String(imageBase64);
-            string url = await _fileStorage.SaveFile(picture, "png", "uploadedFiles");
+            string url = await _fileStorage.SaveFile(picture, "jpg", "uploadedFiles");
             return Ok(url);
         }
 
