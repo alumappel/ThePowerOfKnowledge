@@ -1,0 +1,21 @@
+﻿@page "/Test"
+
+
+@inject IDialogService DialogService
+
+
+<MudButton @onclick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
+    Open Simple Dialog
+</MudButton>
+@code {
+  
+    private void OpenDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete these records? This process cannot be undone.");
+
+        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+    }
+}

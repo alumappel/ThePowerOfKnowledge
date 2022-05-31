@@ -2,48 +2,50 @@
 @using ThePowerOfKnowledge.Shared.Entities;
 @inject HttpClient Http
 @inject NavigationManager nav
+@inject IDialogService DialogService
+
 
 @if (currentUser != null)
 {
     <h3>המשחקים של @(currentUser.FirstName)</h3>
 
     //כרטיסייה
-<MudContainer Width="90%" Fixed="true">
-    @*//כרטיסיה ריקה של חדש*@
-    <MudCard Outlined="true" Class="cardGame">
-        <MudCardActions>
-            <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" />
-        </MudCardActions>
-    </MudCard>
+    <MudContainer Width="90%" Fixed="true">
+        @*//כרטיסיה ריקה של חדש*@
+        <MudCard Outlined="true" Class="cardGame">
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" />
+            </MudCardActions>
+        </MudCard>
 
-    @if (currentUser != null)
-    {
-        @foreach (Game currentGame in currentUser.UserGames)
+        @if (currentUser != null)
         {
-            <MudCard Outlined="true" Class="cardGame">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
-                        <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
-                    <MudText Typo="Typo.body2">
-                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
-                    </MudText>
-                </MudCardContent>
-                <MudCardActions>
-                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
-                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
+            @foreach (Game currentGame in currentUser.UserGames)
+            {
+                <MudCard Outlined="true" Class="cardGame">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
+                            <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
+                        <MudText Typo="Typo.body2">
+                            <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
+                        </MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
+                        <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
 
-                </MudCardActions>
-            </MudCard>
+                    </MudCardActions>
+                </MudCard>
+
+            }
 
         }
-
-    }
-</MudContainer>
+    </MudContainer>
 
 
 
@@ -58,13 +60,45 @@
 
     User currentUser;
 
+    string ErorContent;
+
     protected async override Task OnInitializedAsync()
     {
-        var getResponse = await Http.GetAsync("api/Games/byUserId/" + userId);
+        var getResponse = await Http.GetAsync("api/Users/byUserId/" + userId);
         if (getResponse.IsSuccessStatusCode)
         {
             currentUser = getResponse.Content.ReadFromJsonAsync<User>().Result;
         }
+        else
+        {
+            string ErorType= getResponse.Content.ReadAsStringAsync().Result;
+            if (ErorType == "User not found")
+            {
+                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+            }
+            if (ErorType == "User not login")
+            {
+                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+            }
+            if (ErorType == "EmptySession")
+            {
+                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+            }
+
+            OpenDialog();
+        }
+    }
+
+
+    private void OpenDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", ErorContent);
+
+        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+
     }
 
     void publishGame(int gameId)
@@ -77,7 +111,12 @@
     {
         //selectedGame.IsPublish = !selectedGame.IsPublish;
     }
-     
+
+
+
+
+
+
 
 
 }

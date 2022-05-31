@@ -1,0 +1,21 @@
+﻿@inject NavigationManager nav
+
+
+<MudDialog>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">מעבר לעמוד התחברות</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void Submit() => nav.NavigateTo("./");
+
+    [Parameter] public string ContentText { get; set; }
+
+}

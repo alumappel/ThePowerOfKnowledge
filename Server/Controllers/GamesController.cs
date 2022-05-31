@@ -25,26 +25,8 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
             _context = contex;
             _fileStorage = fileStorage;
         }
-        [HttpGet("byUserId/{userId}")]
-        public async Task<IActionResult> GetAllGames(int userId)
-        {
-            string sessionContent = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrEmpty(sessionContent) == false)
-            {
-                int sessionId = Convert.ToInt32(sessionContent);
-                if (sessionId == userId)
-                {
-                    User userToReturn = await _context.Users.Include(u => u.UserGames).ThenInclude(g => g.GameAnswers).FirstOrDefaultAsync(u => u.ID == userId);
-                    if (userToReturn != null)
-                    {
-                        return Ok(userToReturn);
-                    }
-                    return BadRequest("User not found");
-                }
-                return BadRequest("User not login");
-            }
-            return BadRequest("EmptySession");
-        }
+     
+
 
         [HttpGet("byCode/{gameCode}")]
         public async Task<IActionResult> GetGameByCode(int gamePin)

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject HttpClient Http
 @inject NavigationManager nav
+@inject IDialogService DialogService
 
 <h3>Login</h3>
 
@@ -29,17 +30,35 @@
                 if (error == "User not found")
                 {
                     msg = "לא נמצא משתמש התואם למייל שהוזן";
+                    
                 }
                 else
                 {
-                    msg = "התרחשה תקלת שרת";
+                    msg = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
+                    OpenDialog();
                 }
             }
         }
         else
         {
             msg = "יש להקליד כתובת מייל";
+            OpenDialog();
         }
     }
+
+    private void OpenDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", msg);
+
+        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+
+    }
+
+
+
+
 }
 
