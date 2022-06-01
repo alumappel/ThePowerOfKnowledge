@@ -6,18 +6,34 @@
 <h3>Login</h3>
 
 <MudTextField @bind-Value="inputMail" Label="כתובת מייל" Variant="Variant.Outlined"></MudTextField>
+
+
+@if (alrtUser == true)
+{
+    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">לא נמצא משתמש תואם למייל שהוזן</MudAlert>
+}
+@if (alrtEmail == true)
+{
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להקליד כתובת מייל</MudAlert>
+}
+
+
 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="loginUser">כניסה</MudButton>
-
-<p>@msg</p>
-
 
 @code {
     string inputMail = "";
     string msg = "";
+    bool alrtEmail = false;
+    bool alrtUser = false;
+
     async Task loginUser()
     {
+        alrtEmail = false;
+        alrtUser = false;
+        Console.WriteLine("לחיצה" + inputMail);
         if (string.IsNullOrEmpty(inputMail) == false)
         {
+            Console.WriteLine("סטרינג לא ריק "+ inputMail);
             var getResponse = await Http.GetAsync("api/Users/" + inputMail);
             if (getResponse.IsSuccessStatusCode)
             {
@@ -26,11 +42,13 @@
             }
             else
             {
+                Console.WriteLine("חזרה שגיאה" + inputMail);
                 string error = getResponse.Content.ReadAsStringAsync().Result;
                 if (error == "User not found")
                 {
-                    msg = "לא נמצא משתמש התואם למייל שהוזן";
-                    
+                    Console.WriteLine("לא נמצא משתמש" + inputMail);
+                    alrtUser = true;
+
                 }
                 else
                 {
@@ -41,8 +59,8 @@
         }
         else
         {
-            msg = "יש להקליד כתובת מייל";
-            OpenDialog();
+            Console.WriteLine("סטרינק ריק" + inputMail);
+            alrtEmail = true;
         }
     }
 
