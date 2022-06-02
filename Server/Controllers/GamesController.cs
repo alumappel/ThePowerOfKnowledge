@@ -47,6 +47,8 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
         }
 
+
+        //עם שגיאה בבדיקות שולח משחק ולא משתמש
         [HttpGet("byGameId/{gameId}")]
         public async Task<IActionResult> GetGameAndAllA(int gameId)
         {
@@ -67,6 +69,75 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
             }
             return BadRequest("EmptySession");
         }
+
+
+
+        //מחיקת רשומה
+        [HttpDelete("{userId}/{gameId}")]
+        public async Task<IActionResult> DeleteGame(int userId , int gameId)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+                if (string.IsNullOrEmpty(sessionContent) == false)
+                {
+                    int sessionId = Convert.ToInt32(sessionContent);
+                    if (sessionId == userId)
+                 {
+                    Game DeleteGame = await _context.Games.FirstOrDefaultAsync(g => g.ID == gameId);
+                    if (DeleteGame != null)
+                    {
+                        _context.Games.Remove(DeleteGame);
+                        await _context.SaveChangesAsync();
+                        User userToReturn = await _context.Users.Include(u => u.UserGames).ThenInclude(g => g.GameAnswers).FirstOrDefaultAsync(u => u.ID == userId);
+					if (userToReturn != null)
+					{
+						return Ok(userToReturn);
+					}
+                        return BadRequest("User not found");
+                    }
+                    return BadRequest("Game not found");
+                }
+                    return BadRequest("User not login");
+                }
+                return BadRequest("EmptySession");
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         [HttpPost("upload")]

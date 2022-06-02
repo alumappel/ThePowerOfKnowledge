@@ -1,4 +1,5 @@
-﻿@inject NavigationManager nav
+﻿
+
 @*חלונית פופ אפ*@
 <MudDialog>
     <DialogContent>
@@ -6,10 +7,10 @@
         <MudText>@ContentText</MudText>
     </DialogContent>
     @*פה כל הפעולות של החלונית*@
-    <DialogActions>
-        @*כפתור שחוזר לעמוד הבית*@
-        <MudButton Color="Color.Primary" OnClick="Submit">@ButtonText</MudButton>
-    </DialogActions>
+<DialogActions>
+    <MudButton OnClick="Cancel">ביטול פעולה</MudButton>
+    <MudButton Color="@Color" Variant="Variant.Filled" OnClick="DoIt">@ButtonText</MudButton>
+</DialogActions>
 </MudDialog>
 
 
@@ -19,26 +20,22 @@
 
     //    פרמטר שמקבל את הטקסט של התוכן
     [Parameter] public string ContentText { get; set; }
-
     //פרמטר שמקבל את התוכן של כפתור אישור
     [Parameter] public string ButtonText { get; set; }
+    //פרמטר שמקבל את הצבע של כפתור אישור
+    [Parameter] public Color Color { get; set; }
 
 
-    //    פונקצייה שמנווטת לעמוד הבית בלחיצה על הכפתור
-    private void Submit()
+    //סגירת החלונית והחזרת תשובות
+
+    private void Cancel()
     {
-        if (ButtonText == "הבנתי")
-        {
-            MudDialog.Cancel();
-        }
-        else
-        {
-            nav.NavigateTo("./");
-        }
-
+        MudDialog.Cancel();
     }
 
 
-
-
+    private void DoIt()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
 }

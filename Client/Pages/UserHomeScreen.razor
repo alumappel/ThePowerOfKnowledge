@@ -3,13 +3,15 @@
 @inject HttpClient Http
 @inject NavigationManager nav
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
-
+@*במידה ונמצא משתמש אז מציגים את כל התוכן*@
 @if (currentUser != null)
 {
-    <h3>המשחקים של @(currentUser.FirstName)</h3>
+    //כותרת
+    <h1>המשחקים של @(currentUser.FirstName)</h1>
 
-    //כרטיסייה
+    //קונטיינר המכיל את כל הכרטיסיות
     <MudContainer Width="90%" Fixed="true">
         @*//כרטיסיה ריקה של חדש*@
         <MudCard Outlined="true" Class="cardGame">
@@ -18,88 +20,194 @@
             </MudCardActions>
         </MudCard>
 
-        @if (currentUser != null)
+
+        @*לולאה שמציגה את כל המשחקים הקיימים של המתשמש*@
+        @foreach (Game currentGame in currentUser.UserGames)
         {
-            @foreach (Game currentGame in currentUser.UserGames)
-            {
-                <MudCard Outlined="true" Class="cardGame">
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
-                            <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
-                        <MudText Typo="Typo.body2">
-                            <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
-                        </MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
-                        <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
-
-                    </MudCardActions>
-                </MudCard>
-
-            }
-
+            //כרטיסייה עם משחק קיים
+            <MudCard Outlined="true" Class="cardGame">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
+                        <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
+                    <MudText Typo="Typo.body2">
+                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
+                    </MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
+                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
+                </MudCardActions>
+            </MudCard>
         }
+
     </MudContainer>
-
-
 
 
 
 
 }
 
+
+
+
+
+
+
 @code {
+    // פרמטר שמתקבל מהכתובת
     [Parameter]
     public int userId { get; set; }
 
+    //   שמירה של השליפה של היוזר המחובר
     User currentUser;
 
+    //  מחרוזת ששמורת את הערך של הודעת השגיאה
     string ErorContent;
 
+    string SureContent;
+    string ErorButtonContent;
+
+    //  שיטה ששולפת משתמש
     protected async override Task OnInitializedAsync()
     {
         var getResponse = await Http.GetAsync("api/Users/byUserId/" + userId);
+        //   אם נמצא המשתמש כל המידע שלו נשמש במופע של משתמש
         if (getResponse.IsSuccessStatusCode)
         {
             currentUser = getResponse.Content.ReadFromJsonAsync<User>().Result;
         }
+        //   אם חזרה שגיאה אז נפתח פופ אפ עם הודעת שגיאה מותאמת
         else
         {
-            string ErorType= getResponse.Content.ReadAsStringAsync().Result;
-            if (ErorType == "User not found")
-            {
-                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-            }
-            if (ErorType == "User not login")
-            {
-                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-            }
-            if (ErorType == "EmptySession")
-            {
-                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-            }
+            string ErorType = getResponse.Content.ReadAsStringAsync().Result;
 
-            OpenDialog();
+            switch (ErorType)
+            {
+                case "User not found":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "User not login":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "EmptySession":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                default:
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+            }
+            OpenErorDialog();
         }
     }
 
-
-    private void OpenDialog()
+    // שיטה שמציגה חלון שגיאת שרת
+    private void OpenErorDialog()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
         DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
         var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
         parameters.Add("ContentText", ErorContent);
-
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", ErorButtonContent);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
         DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
 
     }
+
+
+    //שיטה של מחיקת משחק
+    private async Task DeleteGame(Game currentGameToDelete)
+    {
+        //חלונית ווידוא מחיקה
+
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        SureContent = "רק רצינו לוודא שברצונך למחוק את המשחק בנושא " + currentGameToDelete.GameTopic;
+        parameters.Add("ContentText", SureContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", "מחיקת משחק");
+        //שליחת צבע כפתור אישור
+        parameters.Add("Color", Color.Error);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        var dialog = DialogService.Show<AreUSureDialog>("עצרו הכל!", parameters, options);
+
+        //קבלת תשובה מהחלונית
+        var result = await dialog.Result;
+
+        //במידה ולחצו אישור
+        if (!result.Cancelled)
+        {
+            var getResponse = await Http.DeleteAsync("api/Games/" + currentUser.ID +"/" + currentGameToDelete.ID);
+            if (getResponse.IsSuccessStatusCode)
+            {
+                currentUser = getResponse.Content.ReadFromJsonAsync<User>().Result;
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+               Snackbar.Add("המשחק נמחק", Severity.Success, (options) =>
+               {
+                   options.CloseAfterNavigation = true;
+               }
+               );
+            }
+            else
+            {
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+                switch (ErorType)
+                {
+                    case "User not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "Game not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך. ";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                }
+                OpenErorDialog();
+            }
+
+        }
+
+
+    }
+
+
+
+
+
+
+
+
 
     void publishGame(int gameId)
     {
@@ -111,12 +219,5 @@
     {
         //selectedGame.IsPublish = !selectedGame.IsPublish;
     }
-
-
-
-
-
-
-
 
 }

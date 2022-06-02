@@ -2,54 +2,75 @@
 @inject HttpClient Http
 @inject NavigationManager nav
 @inject IDialogService DialogService
-
+@*כותרת*@
 <h3>Login</h3>
-
+@*שורה להכנסת כתובת מייל*@
 <MudTextField @bind-Value="inputMail" Label="כתובת מייל" Variant="Variant.Outlined"></MudTextField>
 
+@*הודעות שמוצגות במקרה של שגיאה
 
+    שגיאה של אין כזה משתמש*@
 @if (alrtUser == true)
 {
     <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">לא נמצא משתמש תואם למייל שהוזן</MudAlert>
 }
+
+@*שגיאה של לא הוכנס שום ערך לתיבה*@
 @if (alrtEmail == true)
 {
     <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להקליד כתובת מייל</MudAlert>
 }
 
-
+@*כפתור שליחה*@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="loginUser">כניסה</MudButton>
 
+
+
+
+
 @code {
+    //שומר את המייל שהמשתמש הכניס
     string inputMail = "";
+    // שומרת את תוכן ההודעה שמוצגת בשגיאה
     string msg = "";
+    // האם צריך להציג הוגעת שיגיאה לא הוכנס מייל
     bool alrtEmail = false;
+    // האם צריך להציג הודעת שגיאה שאין כזה משתמש
     bool alrtUser = false;
 
+
+    // שיטה שמחפשת את המשתמש בבסיס הנתונים ופועלת לפי התשובה
     async Task loginUser()
     {
+        // איפוס ההתראות בכל לחיצה
         alrtEmail = false;
         alrtUser = false;
-        Console.WriteLine("לחיצה" + inputMail);
+
+
+        // בדיקה האם הוזן תוכן לתיבה
         if (string.IsNullOrEmpty(inputMail) == false)
         {
-            Console.WriteLine("סטרינג לא ריק "+ inputMail);
+            // שליחת בקשה
             var getResponse = await Http.GetAsync("api/Users/" + inputMail);
+
+            // במידה ונמצא משתמש העברה לעמוד כל המשחקים
             if (getResponse.IsSuccessStatusCode)
             {
                 int userId = getResponse.Content.ReadFromJsonAsync<int>().Result;
                 nav.NavigateTo("./UserHomeScreen/" + userId);
             }
+            // אם חזרה שגיאה
             else
             {
-                Console.WriteLine("חזרה שגיאה" + inputMail);
+                // אם חזרה שגיאה של משתמש לא קיים הצגת התראה
                 string error = getResponse.Content.ReadAsStringAsync().Result;
                 if (error == "User not found")
                 {
-                    Console.WriteLine("לא נמצא משתמש" + inputMail);
+
                     alrtUser = true;
 
                 }
+                //  אם יש כל שגיאה אחרת חלון שגיאת שרת
                 else
                 {
                     msg = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
@@ -57,20 +78,27 @@
                 }
             }
         }
+        // במידה ולא הוזן כלום בתיבה אז התראה
         else
         {
-            Console.WriteLine("סטרינק ריק" + inputMail);
+
             alrtEmail = true;
         }
     }
 
+
+    // שיטה שמציגה חלון שגיאת שרת
     private void OpenDialog()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+     //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+     //   אי אפשר ללחוץ על העמוד מתחת
         DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+     //   אפשרות לשללוח פרמטרים
         var parameters = new DialogParameters();
+     //   שליחה של טקסט תוכן
         parameters.Add("ContentText", msg);
-
+     //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
         DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
 
     }
