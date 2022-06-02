@@ -73,7 +73,7 @@
                 //  אם יש כל שגיאה אחרת חלון שגיאת שרת
                 else
                 {
-                    msg = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
+                    msg = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";                    
                     OpenDialog();
                 }
             }
@@ -90,15 +90,17 @@
     // שיטה שמציגה חלון שגיאת שרת
     private void OpenDialog()
     {
-     //   לא נסגר בלחיצה על ESC
+        //   לא נסגר בלחיצה על ESC
         var options = new DialogOptions { CloseOnEscapeKey = false };
-     //   אי אפשר ללחוץ על העמוד מתחת
+        //   אי אפשר ללחוץ על העמוד מתחת
         DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-     //   אפשרות לשללוח פרמטרים
+        //   אפשרות לשללוח פרמטרים
         var parameters = new DialogParameters();
-     //   שליחה של טקסט תוכן
+        //   שליחה של טקסט תוכן
         parameters.Add("ContentText", msg);
-     //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", "הבנתי");
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
         DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
 
     }

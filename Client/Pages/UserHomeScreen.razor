@@ -4,7 +4,6 @@
 @inject NavigationManager nav
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
-
 @*במידה ונמצא משתמש אז מציגים את כל התוכן*@
 @if (currentUser != null)
 {
@@ -29,13 +28,33 @@
                 <MudCardHeader>
                     <CardHeaderContent>
                         <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
-                        <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+                        @if (currentGame.IsPublish == true)
+                        {
+                            <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+                        }
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent>
                     <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
                     <MudText Typo="Typo.body2">
-                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => publishGame2 (currentGame))" Label="פרסום" Color="Color.Success" />
+                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => ChangeInSwich (currentGame))" Label="פרסום משחק" Color="Color.Info" Disabled="@GameNotInPublishCretiria(currentGame)" />
+                        @if (GameNotInPublishCretiria(currentGame) == true)
+                        {
+                            <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left" >
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Outlined.Info" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
+                                    @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
+                                    {                                   
+                                        <MudText Typo="Typo.body2">@s</MudText>
+                                        <br />
+                                    }
+
+                                </TooltipContent>
+                            </MudTooltip>
+                        }
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
@@ -49,28 +68,26 @@
 
 
 
-
 }
 
 
-
-
-
-
-
 @code {
-    // פרמטר שמתקבל מהכתובת
-    [Parameter]
-    public int userId { get; set; }
+        // פרמטר שמתקבל מהכתובת
+        [Parameter]
+        public int userId { get; set; }
 
-    //   שמירה של השליפה של היוזר המחובר
-    User currentUser;
+        //   שמירה של השליפה של היוזר המחובר
+        User currentUser;
 
-    //  מחרוזת ששמורת את הערך של הודעת השגיאה
-    string ErorContent;
+        //  מחרוזת ששמורת את הערך של הודעת השגיאה
+        string ErorContent;
+        //תוכן כפתור הודעת שגיאה
+        string ErorButtonContent;
 
-    string SureContent;
-    string ErorButtonContent;
+        //תוכן הודעה ווידוא פעולה
+        string SureContent;
+
+
 
     //  שיטה ששולפת משתמש
     protected async override Task OnInitializedAsync()
@@ -101,8 +118,8 @@
                     ErorButtonContent = "חזרה לעמוד התחברות";
                     break;
                 default:
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                    ErorButtonContent = "הבנתי";
                     break;
             }
             OpenErorDialog();
@@ -155,16 +172,16 @@
         //במידה ולחצו אישור
         if (!result.Cancelled)
         {
-            var getResponse = await Http.DeleteAsync("api/Games/" + currentUser.ID +"/" + currentGameToDelete.ID);
+            var getResponse = await Http.DeleteAsync("api/Games/" + currentUser.ID + "/" + currentGameToDelete.ID);
             if (getResponse.IsSuccessStatusCode)
             {
                 currentUser = getResponse.Content.ReadFromJsonAsync<User>().Result;
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-               Snackbar.Add("המשחק נמחק", Severity.Success, (options) =>
-               {
-                   options.CloseAfterNavigation = true;
-               }
-               );
+                Snackbar.Add("המשחק נמחק", Severity.Success, (options) =>
+                {
+                    options.CloseAfterNavigation = true;
+                }
+                );
             }
             else
             {
@@ -189,8 +206,8 @@
                         ErorButtonContent = "חזרה לעמוד התחברות";
                         break;
                     default:
-                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד";
-                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                        ErorButtonContent = "הבנתי";
                         break;
                 }
                 OpenErorDialog();
@@ -203,21 +220,206 @@
 
 
 
-
-
-
-
-
-
-    void publishGame(int gameId)
+    private bool GameNotInPublishCretiria(Game GameToChake)
     {
-        //selectedGame.IsPublish = !selectedGame.IsPublish;
+        int correctAnswersCount = 0;
+        int wrongAnswersCount = 0;
+
+        if (GameToChake.GameTopic.Length > 0 && GameToChake.GameQuestionText.Length > 0 && GameToChake.GameAnswers.Count > 4)
+        {
+            foreach (Answer a in GameToChake.GameAnswers)
+            {
+                if (a.CorrectAnswer == true)
+                {
+                    correctAnswersCount++;
+                }
+                else
+                {
+                    wrongAnswersCount++;
+                }
+            }
+
+            if (correctAnswersCount > 0 && wrongAnswersCount > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
 
     }
 
-    void publishGame2(Game selectedGame)
+    private List<string> WhyGameNotInPublishCretiria(Game GameToChake)
     {
-        //selectedGame.IsPublish = !selectedGame.IsPublish;
+        List<string> msg = new List<string>();
+        msg.Add("במשחקך חסר :");
+
+        int correctAnswersCount = 0;
+        int wrongAnswersCount = 0;
+
+        if (GameToChake.GameTopic.Length <= 0)
+        {
+            msg.Add("נושא למשחק ") ;
+        }
+        if (GameToChake.GameQuestionText.Length <= 0)
+        {
+            msg.Add("הנחייה מילולית למשחק " );
+        }
+        if (GameToChake.GameAnswers.Count < 4)
+        {
+            msg.Add("לפחות 5 מסיחים " );
+        }
+
+        foreach (Answer a in GameToChake.GameAnswers)
+        {
+            if (a.CorrectAnswer == true)
+            {
+                correctAnswersCount++;
+            }
+            else
+            {
+                wrongAnswersCount++;
+            }
+        }
+
+        if (correctAnswersCount==0)
+        {
+            msg.Add("לפחות מסיח אחד מתאים " );
+        }
+
+        if (wrongAnswersCount == 0)
+        {
+            msg.Add("לפחות מסיח אחד לא מתאים");
+        }
+
+
+        return msg;
     }
+
+
+
+
+    private async Task ChangeInSwich(Game GameToChack)
+    {
+        switch (GameToChack.IsPublish)
+        {
+            //ביטול פרסום
+            case true:
+                GameToChack.IsPublish = false;
+                var updateResponse = await Http.PostAsJsonAsync("api/Games/Update/" + currentUser.ID, GameToChack);
+                if (updateResponse.IsSuccessStatusCode == true)
+                {
+                    //סנקבר
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                    Snackbar.Add("המשחק במצב נסתר", Severity.Success, (options) =>
+                    {
+                        options.CloseAfterNavigation = true;
+
+                    }
+                    );
+                    break;
+                }
+                string ErorType = updateResponse.Content.ReadAsStringAsync().Result;
+
+                switch (ErorType)
+                {
+                    case "User not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "Game not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך. ";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                }
+                OpenErorDialog();
+                break;
+
+            //פירסום
+            case false:
+                if (GameNotInPublishCretiria(GameToChack) != true)
+                {
+
+                    GameToChack.IsPublish = true;
+
+                    if (GameToChack.GamePin != 0)
+                    {
+                        GameToChack.GamePin = GameToChack.ID + 100;
+                    }
+
+
+                    var updateResponse1 = await Http.PostAsJsonAsync("api/Games/Update/" + currentUser.ID, GameToChack);
+                    if (updateResponse1.IsSuccessStatusCode == true)
+                    {
+                        //סנקבר
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                        Snackbar.Add("המשחק פורסם", Severity.Success, (options) =>
+                        {
+                            options.CloseAfterNavigation = true;
+                        }
+                        );
+                        break;
+                    }
+                    string ErorType1 = updateResponse1.Content.ReadAsStringAsync().Result;
+
+                    switch (ErorType1)
+                    {
+                        case "User not found":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        case "Game not found":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך. ";
+                            ErorButtonContent = "הבנתי";
+                            break;
+                        case "User not login":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        case "EmptySession":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        default:
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                            ErorButtonContent = "הבנתי";
+                            break;
+                    }
+                    OpenErorDialog();
+                    break;
+                }
+                //לא עומד בתנאי פרסום
+                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שהמשחק שלך לא עומד בתנאי הפרסום. ";
+                ErorButtonContent = "הבנתי";
+                OpenErorDialog();
+                break;
+
+            // כל מקרה אחר
+            default:
+                Console.WriteLine("on tring to publish a game the bool is publish was nither true or false " + "is publish bool: " + GameToChack.IsPublish);
+                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה באתר. חכה מספר דקות ורענן את העמוד. אם התקלה חוזרת בבקשה צורך איתנו קשר במייל Alumappe@gmail.com בצירוף צילום מסך.";
+                ErorButtonContent = "הבנתי";
+                OpenErorDialog();
+                break;
+
+        }
+
+    }
+
+
+
+
 
 }

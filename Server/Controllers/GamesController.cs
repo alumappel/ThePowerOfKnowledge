@@ -103,6 +103,39 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
 
 
+        //עדכון רשומה
+        [HttpPost("Update/{userId}")]
+        public async Task<IActionResult> UpdateGame(int userId, Game TheGame)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+                    Game GameFromDb = await _context.Games.FirstOrDefaultAsync(g => g.ID == TheGame.ID);
+
+                    if (GameFromDb != null)
+                    {
+                        GameFromDb.GamePin = TheGame.GamePin;
+                        GameFromDb.GameTopic = TheGame.GameTopic;
+                        GameFromDb.GameQuestionText = TheGame.GameQuestionText;
+                        GameFromDb.GameQuestionImge = TheGame.GameQuestionImge;
+                        GameFromDb.IsPublish = TheGame.IsPublish;
+                        
+                        await _context.SaveChangesAsync();
+                        return Ok(GameFromDb);
+
+                    }
+                    else
+                    {
+                        return BadRequest("Game not found");
+                    }
+                }
+                return BadRequest("User not login");
+            }
+            return BadRequest("EmptySession");
+        }
 
 
 
@@ -120,11 +153,6 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
 
 
-
-
-
-
-    
 
 
 
