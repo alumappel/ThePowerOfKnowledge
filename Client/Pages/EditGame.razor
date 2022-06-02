@@ -1,4 +1,4 @@
-﻿@page "/EditGame/{gameId:int}"
+﻿@page "/EditGame/{userId:int}/{gameId:int}"
 @using ThePowerOfKnowledge.Shared.Entities;
 @inject HttpClient Http
 @inject NavigationManager nav
@@ -18,25 +18,25 @@
     </section>
 
     @*הגדרות משחק כלליות*@
-<section>
-       <MudTextField @bind-Value="currentGame.GameTopic" Label="נושא המשחק" Variant="Variant.Outlined" HelperText="@currentGame.GameTopic.Length.ToString()"></MudTextField>
-    <h2>הנחייה</h2><br/>
-    <p>איספו בגרירה  ניני</p>
-    <MudTextField @bind-Value="currentGame.GameQuestionText" Label="המשך הנחייה" Variant="Variant.Outlined" 
-                  HelperText="@("מספר תווים מתוך: " + (currentGame.GameQuestionText.Length.ToString())+ "/20")">
+    <section>
+        <MudTextField @bind-Value="currentGame.GameTopic" Label="נושא המשחק" Variant="Variant.Outlined" HelperText="@currentGame.GameTopic.Length.ToString()"></MudTextField>
+        <h2>הנחייה</h2><br />
+        <p>איספו בגרירה  ניני</p>
+        <MudTextField @bind-Value="currentGame.GameQuestionText" Label="המשך הנחייה" Variant="Variant.Outlined"
+                      HelperText="@("מספר תווים מתוך: " + (currentGame.GameQuestionText.Length.ToString())+ "/20")">
 
-    </MudTextField>
-    <span>
+        </MudTextField>
+        <span>
 
-        <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
+            <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
 
-        <MudIconButton HtmlTag="label"
-                       Color="Color.Info"
-                       Icon="@Icons.Filled.PhotoCamera"
-                       for="fileInput1">
-        </MudIconButton>
-    </span>
-</section>
+            <MudIconButton HtmlTag="label"
+                           Color="Color.Info"
+                           Icon="@Icons.Filled.PhotoCamera"
+                           for="fileInput1">
+            </MudIconButton>
+        </span>
+    </section>
     @*תוכן מסיח*@
     <section>
     </section>
@@ -51,6 +51,9 @@
     [Parameter]
     public int gameId { get; set; }
 
+    [Parameter]
+    public int userId { get; set; }
+
     Game currentGame;
 
 
@@ -61,21 +64,21 @@
         if (getResponse.IsSuccessStatusCode)
         {
             currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-            
+
         }
 
     }
 
-    
+
 
 
     //תמונה
     string myFileImage;
     long maxFileSize = 4194304;
-    
+
 
     List<string> myFiles = new List<string>();
-    
+
 
 
     private async Task UploadFile(InputFileChangeEventArgs e)
@@ -107,3 +110,4 @@
 
 
 }
+

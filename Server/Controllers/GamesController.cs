@@ -142,6 +142,33 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
 
 
+        //יצירת משחק חדש
+        [HttpPost("NewGame/{userId}")]
+
+        public async Task<IActionResult> CreatGame(int userId, Game NewGame)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+
+                    if (NewGame != null)
+                    {
+                        _context.Games.Add(NewGame);
+                        await _context.SaveChangesAsync();
+                        return Ok(NewGame.ID);
+                    }
+                    else
+                    {
+                        return BadRequest("No game sent");
+                    }
+                }
+                return BadRequest("User not login");
+            }
+            return BadRequest("EmptySession");
+        }
 
 
 

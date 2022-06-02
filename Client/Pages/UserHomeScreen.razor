@@ -11,23 +11,26 @@
     <h1>המשחקים של @(currentUser.FirstName)</h1>
 
     //קונטיינר המכיל את כל הכרטיסיות
-    <MudContainer Width="90%" Fixed="true">
-        @*//כרטיסיה ריקה של חדש*@
-        <MudCard Outlined="true" Class="cardGame">
-            <MudCardActions>
-                <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" />
-            </MudCardActions>
-        </MudCard>
+<MudContainer Width="90%" Fixed="true">
+    @*//כרטיסיה ריקה של חדש*@
+    <MudCard Outlined="true" Class="cardGame">
+        <MudCardActions>
+            <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" @onclick="()=>AddNewGame()" />
+        </MudCardActions>
+    </MudCard>
 
 
-        @*לולאה שמציגה את כל המשחקים הקיימים של המתשמש*@
-        @foreach (Game currentGame in currentUser.UserGames)
+    @*לולאה שמציגה את כל המשחקים הקיימים של המתשמש*@
+    @foreach (Game currentGame in currentUser.UserGames)
+    {
+        if (currentGame.GameTopic != null)
         {
             //כרטיסייה עם משחק קיים
             <MudCard Outlined="true" Class="cardGame">
                 <MudCardHeader>
                     <CardHeaderContent>
                         <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
+                        @*מציג רק אם המשחק מפורסם*@
                         @if (currentGame.IsPublish == true)
                         {
                             <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
@@ -37,17 +40,19 @@
                 <MudCardContent>
                     <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
                     <MudText Typo="Typo.body2">
-                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => ChangeInSwich (currentGame))" Label="פרסום משחק" Color="Color.Info" Disabled="@GameNotInPublishCretiria(currentGame)" />
+                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => ChangeInSwich(currentGame))" Label="פרסום משחק" Color="Color.Info" Disabled="@GameNotInPublishCretiria(currentGame)" />
+                        @*מציג רק אם המשחק לא עומד בתנאי פרסום*@
                         @if (GameNotInPublishCretiria(currentGame) == true)
                         {
-                            <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left" >
+                            <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left">
                                 <ChildContent>
                                     <MudIconButton Icon="@Icons.Outlined.Info" />
                                 </ChildContent>
                                 <TooltipContent>
                                     <MudText Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
+                                    @*לולאה להצגת כל הבעיות*@
                                     @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
-                                    {                                   
+                                    {
                                         <MudText Typo="Typo.body2">@s</MudText>
                                         <br />
                                     }
@@ -58,13 +63,14 @@
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentGame.ID))" />
+                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentUser.ID + "/" + currentGame.ID))" />
                     <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
                 </MudCardActions>
             </MudCard>
         }
+    }
 
-    </MudContainer>
+</MudContainer>
 
 
 
@@ -72,21 +78,23 @@
 
 
 @code {
-        // פרמטר שמתקבל מהכתובת
-        [Parameter]
-        public int userId { get; set; }
+    // פרמטר שמתקבל מהכתובת
+    [Parameter]
+    public int userId { get; set; }
 
-        //   שמירה של השליפה של היוזר המחובר
-        User currentUser;
+    //   שמירה של השליפה של היוזר המחובר
+    User currentUser;
 
-        //  מחרוזת ששמורת את הערך של הודעת השגיאה
-        string ErorContent;
-        //תוכן כפתור הודעת שגיאה
-        string ErorButtonContent;
+    //  מחרוזת ששמורת את הערך של הודעת השגיאה
+    string ErorContent;
+    //תוכן כפתור הודעת שגיאה
+    string ErorButtonContent;
 
-        //תוכן הודעה ווידוא פעולה
-        string SureContent;
+    //תוכן הודעה ווידוא פעולה
+    string SureContent;
 
+    //מופע ריק חדש של משחק
+    Game NewGame = new Game();
 
 
     //  שיטה ששולפת משתמש
@@ -126,23 +134,6 @@
         }
     }
 
-    // שיטה שמציגה חלון שגיאת שרת
-    private void OpenErorDialog()
-    {
-        //   לא נסגר בלחיצה על ESC
-        var options = new DialogOptions { CloseOnEscapeKey = false };
-        //   אי אפשר ללחוץ על העמוד מתחת
-        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-        //   אפשרות לשללוח פרמטרים
-        var parameters = new DialogParameters();
-        //   שליחה של טקסט תוכן
-        parameters.Add("ContentText", ErorContent);
-        //שליחת תוכן כפתור אישור
-        parameters.Add("ButtonText", ErorButtonContent);
-        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
-
-    }
 
 
     //שיטה של מחיקת משחק
@@ -172,10 +163,14 @@
         //במידה ולחצו אישור
         if (!result.Cancelled)
         {
+            //מחיקה מבסיס נתונים
             var getResponse = await Http.DeleteAsync("api/Games/" + currentUser.ID + "/" + currentGameToDelete.ID);
             if (getResponse.IsSuccessStatusCode)
             {
+                //   עדכון נתוני המשתמש שנמצאים בעמוד
                 currentUser = getResponse.Content.ReadFromJsonAsync<User>().Result;
+
+                //הודעה שהפעולה בוצעה
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
                 Snackbar.Add("המשחק נמחק", Severity.Success, (options) =>
                 {
@@ -183,9 +178,11 @@
                 }
                 );
             }
+            //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
             else
             {
                 string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+                Console.WriteLine("erorType: " + ErorType);
 
                 switch (ErorType)
                 {
@@ -220,93 +217,20 @@
 
 
 
-    private bool GameNotInPublishCretiria(Game GameToChake)
-    {
-        int correctAnswersCount = 0;
-        int wrongAnswersCount = 0;
 
-        if (GameToChake.GameTopic.Length > 0 && GameToChake.GameQuestionText.Length > 0 && GameToChake.GameAnswers.Count > 4)
-        {
-            foreach (Answer a in GameToChake.GameAnswers)
-            {
-                if (a.CorrectAnswer == true)
-                {
-                    correctAnswersCount++;
-                }
-                else
-                {
-                    wrongAnswersCount++;
-                }
-            }
-
-            if (correctAnswersCount > 0 && wrongAnswersCount > 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
-
-    }
-
-    private List<string> WhyGameNotInPublishCretiria(Game GameToChake)
-    {
-        List<string> msg = new List<string>();
-        msg.Add("במשחקך חסר :");
-
-        int correctAnswersCount = 0;
-        int wrongAnswersCount = 0;
-
-        if (GameToChake.GameTopic.Length <= 0)
-        {
-            msg.Add("נושא למשחק ") ;
-        }
-        if (GameToChake.GameQuestionText.Length <= 0)
-        {
-            msg.Add("הנחייה מילולית למשחק " );
-        }
-        if (GameToChake.GameAnswers.Count < 4)
-        {
-            msg.Add("לפחות 5 מסיחים " );
-        }
-
-        foreach (Answer a in GameToChake.GameAnswers)
-        {
-            if (a.CorrectAnswer == true)
-            {
-                correctAnswersCount++;
-            }
-            else
-            {
-                wrongAnswersCount++;
-            }
-        }
-
-        if (correctAnswersCount==0)
-        {
-            msg.Add("לפחות מסיח אחד מתאים " );
-        }
-
-        if (wrongAnswersCount == 0)
-        {
-            msg.Add("לפחות מסיח אחד לא מתאים");
-        }
-
-
-        return msg;
-    }
-
-
-
-
+    //שיטה של פרסום או ביטול פרסום של משחק
     private async Task ChangeInSwich(Game GameToChack)
     {
+        // בדיקה של המצב הנוכחי
         switch (GameToChack.IsPublish)
         {
             //ביטול פרסום
             case true:
+                //עדכון למצב הרצוי
                 GameToChack.IsPublish = false;
+                //עדכון בבסיס הנתונים
                 var updateResponse = await Http.PostAsJsonAsync("api/Games/Update/" + currentUser.ID, GameToChack);
+                //אישור ביצוע פעולה
                 if (updateResponse.IsSuccessStatusCode == true)
                 {
                     //סנקבר
@@ -319,6 +243,8 @@
                     );
                     break;
                 }
+
+                //במידה ויש שגיאה בתהליך הצגת הודעת שגיאה מתאימה
                 string ErorType = updateResponse.Content.ReadAsStringAsync().Result;
 
                 switch (ErorType)
@@ -349,18 +275,21 @@
 
             //פירסום
             case false:
+                //בדיקה שהמשחק עומד בתנאי פרסום
                 if (GameNotInPublishCretiria(GameToChack) != true)
                 {
-
+                    //עדכון לערך הרצוי
                     GameToChack.IsPublish = true;
 
+                    //בדיקה שיש למשחק קוד משחק ובמידה ואין הזנה של אחד
                     if (GameToChack.GamePin != 0)
                     {
                         GameToChack.GamePin = GameToChack.ID + 100;
                     }
 
-
+                    //שליחת מידע לבסיס נתונים
                     var updateResponse1 = await Http.PostAsJsonAsync("api/Games/Update/" + currentUser.ID, GameToChack);
+                    //אישור ביצוע פעולה
                     if (updateResponse1.IsSuccessStatusCode == true)
                     {
                         //סנקבר
@@ -372,6 +301,7 @@
                         );
                         break;
                     }
+                    //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
                     string ErorType1 = updateResponse1.Content.ReadAsStringAsync().Result;
 
                     switch (ErorType1)
@@ -401,6 +331,7 @@
                     break;
                 }
                 //לא עומד בתנאי פרסום
+                //הצגת חלון שגיאה מתאים
                 ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שהמשחק שלך לא עומד בתנאי הפרסום. ";
                 ErorButtonContent = "הבנתי";
                 OpenErorDialog();
@@ -408,7 +339,7 @@
 
             // כל מקרה אחר
             default:
-                Console.WriteLine("on tring to publish a game the bool is publish was nither true or false " + "is publish bool: " + GameToChack.IsPublish);
+                Console.WriteLine("on tring to publish a game the bool is publish was nither true or false. " + "is publish bool: " + GameToChack.IsPublish);
                 ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה באתר. חכה מספר דקות ורענן את העמוד. אם התקלה חוזרת בבקשה צורך איתנו קשר במייל Alumappe@gmail.com בצירוף צילום מסך.";
                 ErorButtonContent = "הבנתי";
                 OpenErorDialog();
@@ -419,7 +350,166 @@
     }
 
 
+    //יצירת משחק חדש
+    async Task AddNewGame()
+    {
+        //הוספת קישור למשתמש במשחק החדש
+        NewGame.UserID = currentUser.ID;
+        //שליחת משחק חדש לבסיס נתונים
+        var postResponse = await Http.PostAsJsonAsync("api/Games/NewGame/" + currentUser.ID, NewGame);
+        //קבלת אישור פעולה
+        if (postResponse.IsSuccessStatusCode == true)
+        {
+            //ניווט לעמוד עריכה עבור המשחק החדש
+            int NewGameID = postResponse.Content.ReadFromJsonAsync<int>().Result;
+            nav.NavigateTo("./EditGame/" + currentUser.ID + "/" + NewGameID);
+        }
+        //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+        else
+        {
+            string ErorType = postResponse.Content.ReadAsStringAsync().Result;
+
+            switch (ErorType)
+            {
+                case "User not found":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "No game sent":
+                    Console.WriteLine("on creat new gmae no empty game sent to controller" + "user Email: " + currentUser.Email + " /n " + "the game that it was spuse to sent: " + NewGame);
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה באתר. חכה מספר דקות ורענן את העמוד. אם התקלה חוזרת בבקשה צורך איתנו קשר במייל Alumappe@gmail.com בצירוף צילום מסך. ";
+                    ErorButtonContent = "הבנתי";
+                    break;
+                case "User not login":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "EmptySession":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                default:
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                    ErorButtonContent = "הבנתי";
+                    break;
+            }
+            OpenErorDialog();
+        }
+
+    }
 
 
+
+
+
+
+
+
+
+
+    // שיטה שמציגה חלון שגיאה
+    private void OpenErorDialog()
+    {
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        parameters.Add("ContentText", ErorContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", ErorButtonContent);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+
+    }
+
+    //שיטה שבודקת האם משחק עומד בתנאי פירסום ומחזירה ערך בוליאני
+    private bool GameNotInPublishCretiria(Game GameToChake)
+    {
+        int correctAnswersCount = 0;
+        int wrongAnswersCount = 0;
+        if (GameToChake.GameTopic.Length > 0 && GameToChake.GameQuestionText.Length > 0 && GameToChake.GameAnswers.Count > 4)
+        {
+            //בדיקה של מסיח אחד נכון מכל סוג
+            foreach (Answer a in GameToChake.GameAnswers)
+            {
+                if (a.CorrectAnswer == true)
+                {
+                    correctAnswersCount++;
+                }
+                else
+                {
+                    wrongAnswersCount++;
+                }
+            }
+
+            //החזרת משחק עומד בתנאים
+            //זה הפוך מהההיגיון אבל כן מתאים לשם של הפונקציה
+            //זה הפוך כדי שהדיסאייבלד של הסוויץ יעבוד
+            if (correctAnswersCount > 0 && wrongAnswersCount > 0)
+            {
+                return false;
+            }
+        }
+        //החזרת משחק לא עומד בתנאים
+        return true;
+
+    }
+
+
+
+
+
+    //שיטה שבודקת למה המשחק לא עומד בתנאי הפרסום ומחזירה מערך של מחרוזות עם הסבר
+    //זה מחזיר מערך כי לא משנה מה הכנסתי בתוך המחרוזת זה לא הסכים לרדת שורה בטולטיפ
+    private List<string> WhyGameNotInPublishCretiria(Game GameToChake)
+    {
+        List<string> msg = new List<string>();
+        msg.Add("במשחקך חסר :");
+
+        int correctAnswersCount = 0;
+        int wrongAnswersCount = 0;
+
+        if (GameToChake.GameTopic.Length <= 0)
+        {
+            msg.Add("נושא למשחק ");
+        }
+        if (GameToChake.GameQuestionText.Length <= 0)
+        {
+            msg.Add("הנחייה מילולית למשחק ");
+        }
+        if (GameToChake.GameAnswers.Count < 4)
+        {
+            msg.Add("לפחות 5 מסיחים ");
+        }
+
+        //בדיקה של לפחות מסיח אחד מכל סוג
+        foreach (Answer a in GameToChake.GameAnswers)
+        {
+            if (a.CorrectAnswer == true)
+            {
+                correctAnswersCount++;
+            }
+            else
+            {
+                wrongAnswersCount++;
+            }
+        }
+
+        if (correctAnswersCount == 0)
+        {
+            msg.Add("לפחות מסיח אחד מתאים ");
+        }
+
+        if (wrongAnswersCount == 0)
+        {
+            msg.Add("לפחות מסיח אחד לא מתאים");
+        }
+
+
+        return msg;
+    }
 
 }
