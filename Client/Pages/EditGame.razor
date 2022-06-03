@@ -2,7 +2,8 @@
 @using ThePowerOfKnowledge.Shared.Entities;
 @inject HttpClient Http
 @inject NavigationManager nav
-
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 
 <h3>EditGame</h3>
@@ -10,23 +11,37 @@
 
 @if (currentGame != null)
 {
-    <h3>המשחקים של @(currentGame.GameTopic)</h3>
-
-
     @*תנאי סף וכפתור שמירה*@
     <section>
     </section>
 
     @*הגדרות משחק כלליות*@
-    <section>
-        <MudTextField @bind-Value="currentGame.GameTopic" Label="נושא המשחק" Variant="Variant.Outlined" HelperText="@currentGame.GameTopic.Length.ToString()"></MudTextField>
-        <h2>הנחייה</h2><br />
-        <p>איספו בגרירה  ניני</p>
-        <MudTextField @bind-Value="currentGame.GameQuestionText" Label="המשך הנחייה" Variant="Variant.Outlined"
-                      HelperText="@("מספר תווים מתוך: " + (currentGame.GameQuestionText.Length.ToString())+ "/20")">
+<MudContainer Width="70%" Fixed="true">
+    <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
 
-        </MudTextField>
-        <span>
+
+    <h2>הנחייה</h2>
+    <br />
+    <MudGrid>
+        <MudItem xs="3">
+            <p>איספו בגירירה את כל התפוחים שעליהם </p>
+        </MudItem>
+        <MudItem xs="7">
+            @*במידה ואין תמונה*@
+            @if (currentGame.GameQuestionImge.Length == 0)
+            {
+                <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" Lines="3" />
+            }
+
+            @*במידה ויש תמונה*@
+            @if (currentGame.GameQuestionImge.Length > 0)
+            {
+                <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+            }
+        </MudItem>
+
+
+        <MudItem xs="2">
 
             <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
 
@@ -35,79 +50,160 @@
                            Icon="@Icons.Filled.PhotoCamera"
                            for="fileInput1">
             </MudIconButton>
-        </span>
-    </section>
+            
+
+            @*<MudIconButton 
+                           Color="Color.Info"
+                           Icon="@Icons.Filled.Delete" 
+                           @onclick=""
+            </MudIconButton>*@
+
+        </MudItem>
+    </MudGrid>
+
+
+
+</MudContainer>
     @*תוכן מסיח*@
     <section>
     </section>
     @*טבלת מסיחים*@
     <section>
     </section>
-}
-
-
-
-@code {
-    [Parameter]
-    public int gameId { get; set; }
-
-    [Parameter]
-    public int userId { get; set; }
-
-    Game currentGame;
-
-
-
-    protected async override Task OnInitializedAsync()
-    {
-        var getResponse = await Http.GetAsync("api/Games/byGameId/" + gameId);
-        if (getResponse.IsSuccessStatusCode)
-        {
-            currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-
-        }
-
     }
 
 
 
+    @code {
+        //פרמטר המקבל ID של משחר בשורת הכתובה
+        [Parameter]
+        public int gameId { get; set; }
 
-    //תמונה
-    string myFileImage;
-    long maxFileSize = 4194304;
+        //פרמטר המקבל ID של משתמש בשורת הכתובת
+        [Parameter]
+        public int userId { get; set; }
+
+        //שומר את המשחק שעליו פועלים
+        Game currentGame;
+
+        //  מחרוזת ששמורת את הערך של הודעת השגיאה
+        string ErorContent;
+        //תוכן כפתור הודעת שגיאה
+        string ErorButtonContent;
 
 
-    List<string> myFiles = new List<string>();
-
-
-
-    private async Task UploadFile(InputFileChangeEventArgs e)
-    {
-        var imageFiles = e.GetMultipleFiles();
-        foreach (var file in imageFiles)
+        //שליפת המשחק המדובר מבסיס הנתונים בטעינת עמוד
+        protected async override Task OnInitializedAsync()
         {
-            if (file.Size <= maxFileSize)
+            var getResponse = await Http.GetAsync("api/Games/byGameId/" + userId + "/" + gameId);
+            if (getResponse.IsSuccessStatusCode)
             {
-                var buffer = new byte[file.Size];
-                await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
-                var imageBase64 = Convert.ToBase64String(buffer);
-                var saveResponse = await Http.PostAsJsonAsync("api/Games/upload", imageBase64);
+                currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
 
-                if (saveResponse.IsSuccessStatusCode == true)
+            }
+            //   אם חזרה שגיאה אז נפתח פופ אפ עם הודעת שגיאה מותאמת
+            else
+            {
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+                switch (ErorType)
                 {
-                    string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
-                    myFileImage = resizeUrl;
-                    Console.WriteLine(resizeUrl);
+                    case "User not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                }
+                OpenErorDialog();
+            }
+        }
+
+
+
+
+
+        //תמונה
+        string myFileImage;
+        long maxFileSize = 4194304;
+
+
+        List<string> myFiles = new List<string>();
+
+
+
+        private async Task UploadFile(InputFileChangeEventArgs e)
+        {
+            var imageFiles = e.GetMultipleFiles();
+            foreach (var file in imageFiles)
+            {
+                if (file.Size <= maxFileSize)
+                {
+                    var buffer = new byte[file.Size];
+                    await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
+                    var imageBase64 = Convert.ToBase64String(buffer);
+                    var saveResponse = await Http.PostAsJsonAsync("api/Games/upload", imageBase64);
+
+                    if (saveResponse.IsSuccessStatusCode == true)
+                    {
+                        string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
+                        myFileImage = resizeUrl;
+                        Console.WriteLine(resizeUrl);
+                    }
                 }
             }
         }
+
+
+
+
+        // שיטה שמציגה חלון שגיאה
+        private void OpenErorDialog()
+        {
+            //   לא נסגר בלחיצה על ESC
+            var options = new DialogOptions { CloseOnEscapeKey = false };
+            //   אי אפשר ללחוץ על העמוד מתחת
+            DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+            //   אפשרות לשללוח פרמטרים
+            var parameters = new DialogParameters();
+            //   שליחה של טקסט תוכן
+            parameters.Add("ContentText", ErorContent);
+            //שליחת תוכן כפתור אישור
+            parameters.Add("ButtonText", ErorButtonContent);
+            //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+            DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+
+        }
+
+        //ספירת מגבלת תווים
+
+        private IEnumerable<string> MaxCharacters20(string ch)
+        {
+            if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
+        }
+        private IEnumerable<string> MaxCharacters50(string ch)
+        {
+            if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
+        }
+        private IEnumerable<string> MaxCharacters25(string ch)
+        {
+            if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
+        }
+
+
+
     }
-
-
-
-
-
-
-
-}
 

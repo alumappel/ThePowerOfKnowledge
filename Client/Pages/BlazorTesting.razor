@@ -1,7 +1,7 @@
 ﻿@page "/Test"
 
 
-<MudTextField T="string" Counter="25" MaxLength="25" HelperText="This field uses Counter and MaxLength prop" Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" Label="נושא המשחק" Variant="Variant.Text" @*@bind-Value="currentGame.GameTopic"*@ />
+<MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" Label="נושא המשחק: " Variant="Variant.Text" @*@bind-Value="currentGame.GameTopic"*@ />
 
 
 
