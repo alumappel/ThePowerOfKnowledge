@@ -9,201 +9,332 @@
 <h3>EditGame</h3>
 @*//בדיקה*@
 
+@*בדיקה שאכן יש משהו במשחק*@
 @if (currentGame != null)
 {
     @*תנאי סף וכפתור שמירה*@
-    <section>
-    </section>
+    <MudContainer>
+
+    </MudContainer>
 
     @*הגדרות משחק כלליות*@
-<MudContainer Width="70%" Fixed="true">
-    <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
+    //מכיל את כל איזור העריכה
+    <MudContainer Width="70%" Fixed="true">
+        <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
 
 
-    <h2>הנחייה</h2>
-    <br />
-    <MudGrid>
-        <MudItem xs="3">
-            <p>איספו בגירירה את כל התפוחים שעליהם </p>
-        </MudItem>
-        <MudItem xs="7">
-            @*במידה ואין תמונה*@
-            @if (currentGame.GameQuestionImge.Length == 0)
-            {
-                <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" Lines="3" />
-            }
+        <MudText Typo="Typo.h2">הנחייה</MudText>
+        <br />
+        @*שורה של הנחייה*@
+        <MudGrid>
+            <MudItem xs="3">
+                <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
+            </MudItem>
+            <MudItem xs="7">
+                @*במידה ואין תמונה*@
+                @if (currentGame.GameQuestionImge.Length == 0)
+                {
+                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+                }
 
-            @*במידה ויש תמונה*@
-            @if (currentGame.GameQuestionImge.Length > 0)
-            {
-                <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-            }
-        </MudItem>
-
-
-        <MudItem xs="2">
-
-            <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
-
-            <MudIconButton HtmlTag="label"
-                           Color="Color.Info"
-                           Icon="@Icons.Filled.PhotoCamera"
-                           for="fileInput1">
-            </MudIconButton>
-            
-
-            @*<MudIconButton 
-                           Color="Color.Info"
-                           Icon="@Icons.Filled.Delete" 
-                           @onclick=""
-            </MudIconButton>*@
-
-        </MudItem>
-    </MudGrid>
+                @*במידה ויש תמונה*@
+                @if (currentGame.GameQuestionImge.Length > 0)
+                {
+                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+                }
+            </MudItem>
 
 
+            <MudItem xs="2">
 
-</MudContainer>
-    @*תוכן מסיח*@
-    <section>
-    </section>
+                <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
+
+                <MudIconButton HtmlTag="label"
+                               Color="Color.Info"
+                               Icon="@Icons.Filled.PhotoCamera"
+                               for="fileInput1">
+                </MudIconButton>
+
+
+                <MudIconButton Color="Color.Info"
+                               Icon="@Icons.Filled.Delete">
+                </MudIconButton>
+
+            </MudItem>
+        </MudGrid>
+
+        @*מכיל את כל מה שקשור לעריכת מסיח*@
+        <MudContainer>
+            <MudText Typo="Typo.h2">עריכת מסיח</MudText>
+
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן המסיח: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText>או</MudText>
+                </MudItem>
+                <MudItem xs="2">
+
+                    <InputFile id="fileInput1" OnChange="UploadFile" hidden accept="image/png, image/gif, image/jpeg" />
+
+                    <MudIconButton HtmlTag="label"
+                                   Color="Color.Info"
+                                   Icon="@Icons.Filled.PhotoCamera"
+                                   for="fileInput1">
+                    </MudIconButton>
+
+
+                    <MudIconButton Color="Color.Info"
+                                   Icon="@Icons.Filled.Delete">
+                    </MudIconButton>
+
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והמסיח מתאים להנחייה</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
+                </MudItem>
+            </MudGrid>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת מסיח</MudButton>
+
+        </MudContainer>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת משחק</MudButton>
+
+    </MudContainer>
+
+
     @*טבלת מסיחים*@
-    <section>
-    </section>
-    }
+    <MudContainer>
+        @*מחלק לשתי עמודות*@
+        <MudGrid>
+            @*מסיחים נכונים*@
+            <MudItem xs="6">
+                <MudText Typo="Typo.h3">מסיחים מתאימים</MudText>
+                <MudText>מספר מסיחים + </MudText>
+                @*מכיל את כל המסיחים*@
+                <MudContainer>
 
-
-
-    @code {
-        //פרמטר המקבל ID של משחר בשורת הכתובה
-        [Parameter]
-        public int gameId { get; set; }
-
-        //פרמטר המקבל ID של משתמש בשורת הכתובת
-        [Parameter]
-        public int userId { get; set; }
-
-        //שומר את המשחק שעליו פועלים
-        Game currentGame;
-
-        //  מחרוזת ששמורת את הערך של הודעת השגיאה
-        string ErorContent;
-        //תוכן כפתור הודעת שגיאה
-        string ErorButtonContent;
-
-
-        //שליפת המשחק המדובר מבסיס הנתונים בטעינת עמוד
-        protected async override Task OnInitializedAsync()
-        {
-            var getResponse = await Http.GetAsync("api/Games/byGameId/" + userId + "/" + gameId);
-            if (getResponse.IsSuccessStatusCode)
-            {
-                currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-
-            }
-            //   אם חזרה שגיאה אז נפתח פופ אפ עם הודעת שגיאה מותאמת
-            else
-            {
-                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-                switch (ErorType)
-                {
-                    case "User not found":
-                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-                        ErorButtonContent = "חזרה לעמוד התחברות";
-                        break;
-                    case "User not login":
-                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                        ErorButtonContent = "חזרה לעמוד התחברות";
-                        break;
-                    case "EmptySession":
-                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                        ErorButtonContent = "חזרה לעמוד התחברות";
-                        break;
-                    default:
-                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                        ErorButtonContent = "הבנתי";
-                        break;
-                }
-                OpenErorDialog();
-            }
-        }
-
-
-
-
-
-        //תמונה
-        string myFileImage;
-        long maxFileSize = 4194304;
-
-
-        List<string> myFiles = new List<string>();
-
-
-
-        private async Task UploadFile(InputFileChangeEventArgs e)
-        {
-            var imageFiles = e.GetMultipleFiles();
-            foreach (var file in imageFiles)
-            {
-                if (file.Size <= maxFileSize)
-                {
-                    var buffer = new byte[file.Size];
-                    await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
-                    var imageBase64 = Convert.ToBase64String(buffer);
-                    var saveResponse = await Http.PostAsJsonAsync("api/Games/upload", imageBase64);
-
-                    if (saveResponse.IsSuccessStatusCode == true)
+                    @foreach (Answer currentAnswer in currentGame.GameAnswers)
                     {
-                        string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
-                        myFileImage = resizeUrl;
-                        Console.WriteLine(resizeUrl);
+
+
+                        @if (currentAnswer.CorrectAnswer == true)
+                        {
+
+                            <MudCard>
+                                @if (currentAnswer.HaveImge == false)
+                                {
+                                    <MudCardContent>
+                                        <MudText>
+                                            @currentAnswer.Content
+                                        </MudText>
+                                    </MudCardContent>
+
+                                }
+                                @if (currentAnswer.HaveImge == true)
+                                {
+                                    <MudCardMedia>
+
+                                    </MudCardMedia>
+                                }
+
+                                <MudCardActions>
+                                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" />
+                                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                                </MudCardActions>
+                            </MudCard>
+                        }
                     }
+
+                </MudContainer>
+
+                @*מסיחים לא נכונים*@
+            </MudItem>
+            <MudItem xs="6">
+                <MudText Typo="Typo.h3">מסיחים לא מתאימים</MudText>
+                <MudText>מספר מסיחים + </MudText>
+
+                <MudContainer>
+
+                    @foreach (Answer currentAnswer in currentGame.GameAnswers)
+                    {
+
+
+                        @if (currentAnswer.CorrectAnswer == false)
+                        {
+
+                            <MudCard>
+                                @if (currentAnswer.HaveImge == false)
+                                {
+                                    <MudCardContent>
+                                        <MudText>
+                                            @currentAnswer.Content
+                                        </MudText>
+                                    </MudCardContent>
+
+                                }
+                                @if (currentAnswer.HaveImge == true)
+                                {
+                                    <MudCardMedia>
+
+                                    </MudCardMedia>
+                                }
+
+                                <MudCardActions>
+                                    <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" />
+                                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                                </MudCardActions>
+                            </MudCard>
+                        }
+                    }
+
+                </MudContainer>
+
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}
+
+
+
+@code {
+    //פרמטר המקבל ID של משחר בשורת הכתובה
+    [Parameter]
+    public int gameId { get; set; }
+
+    //פרמטר המקבל ID של משתמש בשורת הכתובת
+    [Parameter]
+    public int userId { get; set; }
+
+    //שומר את המשחק שעליו פועלים
+    Game currentGame;
+
+    //  מחרוזת ששמורת את הערך של הודעת השגיאה
+    string ErorContent;
+    //תוכן כפתור הודעת שגיאה
+    string ErorButtonContent;
+
+    //מסיח חדש בטעינת עמוד
+    Answer currentAnswerEdite = new Answer();
+
+
+    //שליפת המשחק המדובר מבסיס הנתונים בטעינת עמוד
+    protected async override Task OnInitializedAsync()
+    {
+        var getResponse = await Http.GetAsync("api/Games/byGameId/" + userId + "/" + gameId);
+        if (getResponse.IsSuccessStatusCode)
+        {
+            currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+
+        }
+        //   אם חזרה שגיאה אז נפתח פופ אפ עם הודעת שגיאה מותאמת
+        else
+        {
+            string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+            switch (ErorType)
+            {
+                case "User not found":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "User not login":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "EmptySession":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                default:
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                    ErorButtonContent = "הבנתי";
+                    break;
+            }
+            OpenErorDialog();
+        }
+    }
+
+
+
+
+
+    //תמונה
+    string myFileImage;
+    long maxFileSize = 4194304;
+
+
+    List<string> myFiles = new List<string>();
+
+
+
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+        var imageFiles = e.GetMultipleFiles();
+        foreach (var file in imageFiles)
+        {
+            if (file.Size <= maxFileSize)
+            {
+                var buffer = new byte[file.Size];
+                await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
+                var imageBase64 = Convert.ToBase64String(buffer);
+                var saveResponse = await Http.PostAsJsonAsync("api/Games/upload", imageBase64);
+
+                if (saveResponse.IsSuccessStatusCode == true)
+                {
+                    string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
+                    myFileImage = resizeUrl;
+                    Console.WriteLine(resizeUrl);
                 }
             }
         }
+    }
 
 
 
 
-        // שיטה שמציגה חלון שגיאה
-        private void OpenErorDialog()
-        {
-            //   לא נסגר בלחיצה על ESC
-            var options = new DialogOptions { CloseOnEscapeKey = false };
-            //   אי אפשר ללחוץ על העמוד מתחת
-            DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-            //   אפשרות לשללוח פרמטרים
-            var parameters = new DialogParameters();
-            //   שליחה של טקסט תוכן
-            parameters.Add("ContentText", ErorContent);
-            //שליחת תוכן כפתור אישור
-            parameters.Add("ButtonText", ErorButtonContent);
-            //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-            DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
-
-        }
-
-        //ספירת מגבלת תווים
-
-        private IEnumerable<string> MaxCharacters20(string ch)
-        {
-            if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
-                yield return "הגעת למדבלת התווים האפשרית";
-        }
-        private IEnumerable<string> MaxCharacters50(string ch)
-        {
-            if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
-                yield return "הגעת למדבלת התווים האפשרית";
-        }
-        private IEnumerable<string> MaxCharacters25(string ch)
-        {
-            if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
-                yield return "הגעת למדבלת התווים האפשרית";
-        }
-
-
+    // שיטה שמציגה חלון שגיאה
+    private void OpenErorDialog()
+    {
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        parameters.Add("ContentText", ErorContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", ErorButtonContent);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
 
     }
+
+    //ספירת מגבלת תווים
+
+    private IEnumerable<string> MaxCharacters20(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
+    private IEnumerable<string> MaxCharacters50(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
+    private IEnumerable<string> MaxCharacters25(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
+
+
+
+}
 
