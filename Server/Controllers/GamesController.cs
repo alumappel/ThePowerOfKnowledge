@@ -63,14 +63,10 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
                     {
                         return Ok(gameToReturn);
                     }
-                    return BadRequest("Game not found");
+                    return BadRequest("Game not found");                    
                 }
-                return BadRequest("User not found");
+                return BadRequest("User not login");
             }
-            return BadRequest("Game not found");
-
-            return BadRequest("User not login");
-
             return BadRequest("EmptySession");
         }
 
