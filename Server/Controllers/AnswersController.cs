@@ -70,7 +70,7 @@ namespace ThePowerOfKnowledge.Server.Controllers
 
 
 
-        //יצירת משחק חדש
+        //יצירת מסיח חדש
         [HttpPost("NewAnswer/{userId}/{gameId}")]
         public async Task<IActionResult> CreatAnswer(int userId, int gameId, Answer TheAnswer)
         {
@@ -110,7 +110,38 @@ namespace ThePowerOfKnowledge.Server.Controllers
 
 
 
-         
+        //מחיקת רשומה
+        [HttpDelete("{userId}/{gameId}/{AnswerGameId}/{answerId}")]
+        public async Task<IActionResult> DeleteGame(int userId, int gameId, int AnswerGameId, int answerId)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+                    if (gameId == AnswerGameId)
+                    {
+                        Answer DeleteAnswer = await _context.Answers.FirstOrDefaultAsync(a => a.ID == answerId);
+                        if (DeleteAnswer != null)
+                        {
+                            _context.Answers.Remove(DeleteAnswer);
+                            await _context.SaveChangesAsync();
+                            Game gameToReturn = await _context.Games.Include(g => g.GameAnswers).FirstOrDefaultAsync(g => g.ID == gameId);
+                            if (gameToReturn != null)
+                            {
+                                return Ok(gameToReturn);
+                            }
+                            return BadRequest("Game not found");
+                        }
+                        return BadRequest("Answer not found");
+                    }
+                    return BadRequest("Game Id not Mach");
+                }
+                return BadRequest("User not login");
+            }
+            return BadRequest("EmptySession");
+        }
 
 
 

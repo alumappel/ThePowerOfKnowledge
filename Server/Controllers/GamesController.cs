@@ -133,8 +133,11 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
                         GameFromDb.IsPublish = TheGame.IsPublish;
 
                         await _context.SaveChangesAsync();
-                        return Ok(GameFromDb);
-
+                        Game gameToReturn = await _context.Games.Include(a => a.GameAnswers).FirstOrDefaultAsync(g => g.ID == TheGame.ID);
+                        if (gameToReturn != null)
+                        {
+                            return Ok(gameToReturn);
+                        }                     
                     }
                     else
                     {
