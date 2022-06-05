@@ -331,7 +331,8 @@
                 if (postResponse.IsSuccessStatusCode == true)
                 {
                     //עדכון המידע בעמוד
-                    currentGame = postResponse.Content.ReadFromJsonAsync<Game>().Result;
+                    Game tempGame = postResponse.Content.ReadFromJsonAsync<Game>().Result;
+                    currentGame.GameAnswers = tempGame.GameAnswers;
 
                     //סנקבר
                     Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
@@ -389,7 +390,8 @@
                 if (updateResponse1.IsSuccessStatusCode == true)
                 {
                     //עדכון המידע בעמוד
-                    currentGame = updateResponse1.Content.ReadFromJsonAsync<Game>().Result;
+                    Game tempGame = updateResponse1.Content.ReadFromJsonAsync<Game>().Result;
+                    currentGame.GameAnswers = tempGame.GameAnswers;
                     //סנקבר
                     Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
                     Snackbar.Add("המסיח נשמר", Severity.Success, (options) =>
@@ -566,7 +568,8 @@
         if (getResponse.IsSuccessStatusCode)
         {
             //   עדכון נתוני המשתמש שנמצאים בעמוד
-            currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+            Game tempGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+            currentGame.GameAnswers = tempGame.GameAnswers;
 
             //הודעה שהפעולה בוצעה
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
@@ -601,7 +604,7 @@
                     ErorButtonContent = "חזרה לעמוד התחברות";
                     break;
                 default:
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
                     ErorButtonContent = "הבנתי";
                     break;
             }
