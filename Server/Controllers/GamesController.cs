@@ -63,7 +63,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
                     {
                         return Ok(gameToReturn);
                     }
-                    return BadRequest("Game not found");                    
+                    return BadRequest("Game not found");
                 }
                 return BadRequest("User not login");
             }
@@ -137,7 +137,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
                         if (gameToReturn != null)
                         {
                             return Ok(gameToReturn);
-                        }                     
+                        }
                     }
                     else
                     {
@@ -183,46 +183,49 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadFile([FromBody] string imageBase64)
+        //העלאת תמונה
+        [HttpPost("upload/{userId}")]
+        public async Task<IActionResult> UploadFile([FromBody] string imageBase64, int userId)
         {
-            byte[] picture = Convert.FromBase64String(imageBase64);
-            string url = await _fileStorage.SaveFile(picture, "jpg", "uploadedFiles");
-            return Ok(url);
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+                    byte[] picture = Convert.FromBase64String(imageBase64);
+                    string url = await _fileStorage.SaveFile(picture, "jpg", "uploadedFiles");
+                    return Ok(url);
+                }
+                return BadRequest("User not login");
+            } 
+            return BadRequest("EmptySession");
         }
 
-        [HttpPost("deleteImages")]
-        public async Task<IActionResult> DeleteImages([FromBody] List<string> images)
+
+
+
+
+
+        //מחיקת תמונה
+        [HttpPost("deleteImages/{userId}")]
+        public async Task<IActionResult> DeleteImages([FromBody] List<string> images, int userId)
         {
-            foreach (string img in images)
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
             {
-                await _fileStorage.DeleteFile(img, "uploadedFiles");
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+                    foreach (string img in images)
+                    {
+                        await _fileStorage.DeleteFile(img, "uploadedFiles");
+                    }
+                    return Ok("deleted");
+                }
+                return BadRequest("User not login");
             }
-            return Ok("deleted");
+            return BadRequest("EmptySession");
         }
 
 
