@@ -146,6 +146,50 @@ namespace ThePowerOfKnowledge.Server.Controllers
 
 
 
+        //העלאת תמונה
+        [HttpPost("upload/{userId}")]
+        public async Task<IActionResult> UploadFile([FromBody] string imageBase64, int userId)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+                    byte[] picture = Convert.FromBase64String(imageBase64);
+                    string url = await _fileStorage.SaveFile(picture, "jpg", "uploadedFiles");
+                    return Ok(url);
+                }
+                return BadRequest("User not login");
+            }
+            return BadRequest("EmptySession");
+        }
+
+
+
+
+
+
+        //מחיקת תמונה
+        [HttpPost("deleteImages/{userId}")]
+        public async Task<IActionResult> DeleteImages([FromBody] List<string> images, int userId)
+        {
+            string sessionContent = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(sessionContent) == false)
+            {
+                int sessionId = Convert.ToInt32(sessionContent);
+                if (sessionId == userId)
+                {
+                    foreach (string img in images)
+                    {
+                        await _fileStorage.DeleteFile(img, "uploadedFiles");
+                    }
+                    return Ok("deleted");
+                }
+                return BadRequest("User not login");
+            }
+            return BadRequest("EmptySession");
+        }
 
 
 

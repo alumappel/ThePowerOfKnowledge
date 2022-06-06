@@ -19,121 +19,135 @@
 
     @*הגדרות משחק כלליות*@
     //מכיל את כל איזור העריכה
-<MudContainer Width="70%" Fixed="true">
-    <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
-    @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
-    @if (AlertEmptyTopic == true)
-    {
-        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
-    }
+    <MudContainer Width="70%" Fixed="true">
+        <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
+        @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
+        @if (AlertEmptyTopic == true)
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
+        }
 
-    <MudText Typo="Typo.h2">הנחייה</MudText>
-    <br />
-    @*שורה של הנחייה*@
-    <MudGrid>
-        <MudItem xs="3">
-            <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
-        </MudItem>
-        <MudItem xs="7">
-            @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
-            @if (currentGame.GameQuestionImge != null)
-            {
-                @*במידה ואין תמונה*@
-                @if (currentGame.GameQuestionImge.Length == 0)
-                {
-                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-                }
-
-                @*במידה ויש תמונה*@
-                @if (currentGame.GameQuestionImge.Length > 0)
-                {
-                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-                }
-            }
-
-            @*במידה והתמונה ריקה*@
-            <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-
-        </MudItem>
-
-
-        <MudItem xs="2">
-
-            <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
-
-            <MudIconButton HtmlTag="label"
-                           Color="Color.Info"
-                           Icon="@Icons.Filled.PhotoCamera"
-                           for="fileInput1">
-            </MudIconButton>
-
-
-            <MudIconButton Color="Color.Info"
-                           Icon="@Icons.Filled.Delete"
-                           @onclick="DeleteImageGame" >
-            </MudIconButton>
-
-        </MudItem>
-    </MudGrid>
-    @*שגיאה של תמונה גדולה מדי*@
-    @if (AlertTooBigImgGame == true)
-    {
-        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
-    }
-    @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
-    @if (AlertEmptyQwastion == true)
-    {
-        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
-    }
-
-    @*מכיל את כל מה שקשור לעריכת פריט*@
-    <MudContainer>
-        <MudText Typo="Typo.h2">עריכת פריט</MudText>
-
+        <MudText Typo="Typo.h2">הנחייה</MudText>
+        <br />
+        @*שורה של הנחייה*@
         <MudGrid>
-            <MudItem xs="6">
-                <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+            <MudItem xs="3">
+                <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
             </MudItem>
-            <MudItem xs="2">
-                <MudText>או</MudText>
+            <MudItem xs="7">
+                @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
+                @if (currentGame.GameQuestionImge != null)
+                {
+
+
+                    <MudTextField T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+
+                }
+
+                @*במידה והתמונה ריקה*@
+                @if (currentGame.GameQuestionImge == null)
+                {
+
+                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+                }
             </MudItem>
+
+
             <MudItem xs="2">
 
-                <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" />
+                <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
 
                 <MudIconButton HtmlTag="label"
                                Color="Color.Info"
                                Icon="@Icons.Filled.PhotoCamera"
-                               for="fileInput1">
+                               for="fileInput1"
+                               Disabled="@imgIsOnGame()">
                 </MudIconButton>
 
 
                 <MudIconButton Color="Color.Info"
-                               Icon="@Icons.Filled.Delete">
+                               Icon="@Icons.Filled.Delete"
+                               @onclick="DeleteImageGame"
+                               Disabled="@imgIsOffGame()">
                 </MudIconButton>
 
             </MudItem>
         </MudGrid>
-        @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
-        @if (AlertEmptyAnswer == true)
+        @*שגיאה של תמונה גדולה מדי*@
+        @if (AlertTooBigImgGame == true)
         {
-            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+        }
+        @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
+        @if (AlertEmptyQwastion == true)
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
         }
 
-        <MudGrid>
-            <MudItem xs="6">
-                <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
-            </MudItem>
-            <MudItem xs="2">
-                <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
-            </MudItem>
-        </MudGrid>
-        <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת פריט</MudButton>
+
+
+
+
+
+
+
+
+        @*מכיל את כל מה שקשור לעריכת פריט*@
+        <MudContainer>
+            <MudText Typo="Typo.h2">עריכת פריט</MudText>
+
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText>או</MudText>
+                </MudItem>
+                <MudItem xs="2">
+
+                    <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
+
+                    <MudIconButton HtmlTag="label"
+                                   Color="Color.Info"
+                                   Icon="@Icons.Filled.PhotoCamera"
+                                   for="fileInput2"
+                                   Disabled="@currentAnswerEdite.HaveImge">
+                    </MudIconButton>
+
+
+                    <MudIconButton Color="Color.Info"
+                                   Icon="@Icons.Filled.Delete"
+                                   @onclick="DeleteImageAnswer"
+                                   Disabled="@imgIsOffAnswer()">
+                    </MudIconButton>
+
+                </MudItem>
+            </MudGrid>
+            @*שגיאה של תמונה גדולה מדי*@
+            @if (AlertTooBigImgAnswer == true)
+            {
+                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+            }
+            @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
+            @if (AlertEmptyAnswer == true)
+            {
+                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+            }
+
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
+                </MudItem>
+            </MudGrid>
+            <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת פריט</MudButton>
+
+        </MudContainer>
+        <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת משחק</MudButton>
 
     </MudContainer>
-    <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת משחק</MudButton>
-
-</MudContainer>
 
 
     @*טבלת פריטים*@
@@ -166,9 +180,7 @@
                                 }
                                 @if (currentAnswer.HaveImge == true)
                                 {
-                                    <MudCardMedia>
-
-                                    </MudCardMedia>
+                                    <img src="@currentAnswer.Content" width="150" />
                                 }
 
                                 <MudCardActions>
@@ -208,9 +220,8 @@
                                 }
                                 @if (currentAnswer.HaveImge == true)
                                 {
-                                    <MudCardMedia>
+                                    <img src="@currentAnswer.Content" width="150" />
 
-                                    </MudCardMedia>
                                 }
 
                                 <MudCardActions>
@@ -258,12 +269,21 @@
     bool AlertEmptyQwastion = false;
     //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי במשחק
     bool AlertTooBigImgGame = false;
+    //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי בפריט
+    bool AlertTooBigImgAnswer = false;
 
     //של תמונות למשחק
     string myFileImage;
     long maxFileSize = 4194304;
     //מחיקת תמונה מהמשחק
     List<string> DeletedImages = new List<string>();
+
+
+    //של תמונות לפריט
+    string myFileImage1;
+    //מחיקת תמונה מפריט
+    List<string> DeletedImages1 = new List<string>();
+
 
 
 
@@ -598,7 +618,7 @@
         else
         {
             string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-            
+
 
             switch (ErorType)
             {
@@ -626,57 +646,8 @@
             OpenErorDialog();
         }
 
-
-
-
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    // שיטה שמציגה חלון שגיאה
-    private void OpenErorDialog()
-    {
-        //   לא נסגר בלחיצה על ESC
-        var options = new DialogOptions { CloseOnEscapeKey = false };
-        //   אי אפשר ללחוץ על העמוד מתחת
-        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-        //   אפשרות לשללוח פרמטרים
-        var parameters = new DialogParameters();
-        //   שליחה של טקסט תוכן
-        parameters.Add("ContentText", ErorContent);
-        //שליחת תוכן כפתור אישור
-        parameters.Add("ButtonText", ErorButtonContent);
-        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
-
-    }
-
-    //ספירת מגבלת תווים
-
-    private IEnumerable<string> MaxCharacters20(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
-    private IEnumerable<string> MaxCharacters50(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
-    private IEnumerable<string> MaxCharacters25(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
 
 
 
@@ -698,15 +669,22 @@
                 if (saveResponse.IsSuccessStatusCode == true)
                 {
                     string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
-                    myFileImage = resizeUrl;                    
+                    myFileImage = resizeUrl;
                     currentGame.GameQuestionImge = resizeUrl;
-                   
+                    //סנקבר
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                    Snackbar.Add("התמונה עלתה בהצלחה", Severity.Success, (options) =>
+                    {
+                        options.CloseAfterNavigation = true;
+                    }
+                    );
+
                 }
                 //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
                 else
                 {
                     string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
-                    
+
                     switch (ErorType)
                     {
                         case "User not login":
@@ -744,13 +722,13 @@
     //מחיקת תמונה מהנחייה
     private async Task DeleteImageGame()
     {
-        DeletedImages.Add(currentGame.GameQuestionImge);        
-        var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/"+userId, DeletedImages);
+        DeletedImages.Add(currentGame.GameQuestionImge);
+        var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/" + userId, DeletedImages);
 
         if (saveResponse.IsSuccessStatusCode == true)
         {
             myFileImage = "";
-            currentGame.GameQuestionImge = "";
+            currentGame.GameQuestionImge = null;
             //סנקבר
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
             Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
@@ -763,7 +741,126 @@
         // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
         else
         {
-            string ErorType = saveResponse.Content.ReadAsStringAsync().Result;           
+            string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+            switch (ErorType)
+            {
+                case "User not login":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                case "EmptySession":
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                    ErorButtonContent = "חזרה לעמוד התחברות";
+                    break;
+                default:
+                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                    ErorButtonContent = "הבנתי";
+                    break;
+            }
+            OpenErorDialog();
+        }
+    }
+
+
+
+    // העלאת תמונה לפריט
+    private async Task UploadFileAnswer(InputFileChangeEventArgs e)
+    {
+        AlertTooBigImgAnswer = false;
+
+        var imageFiles = e.GetMultipleFiles();
+        foreach (var file in imageFiles)
+        {
+            if (file.Size <= maxFileSize)
+            {
+                var buffer = new byte[file.Size];
+                await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
+                var imageBase64 = Convert.ToBase64String(buffer);
+                var saveResponse = await Http.PostAsJsonAsync("api/Answers/upload/" + userId, imageBase64);
+
+                if (saveResponse.IsSuccessStatusCode == true)
+                {
+                    string resizeUrl1 = saveResponse.Content.ReadAsStringAsync().Result;
+                    myFileImage1 = resizeUrl1;
+                    currentAnswerEdite.Content = resizeUrl1;
+                    currentAnswerEdite.HaveImge = true;
+
+                    //סנקבר
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                    Snackbar.Add("התמונה עלתה בהצלחה", Severity.Success, (options) =>
+                    {
+                        options.CloseAfterNavigation = true;
+                    }
+                );
+
+                }
+                //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                else
+                {
+                    string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                    switch (ErorType)
+                    {
+                        case "User not login":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        case "EmptySession":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        default:
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                            ErorButtonContent = "הבנתי";
+                            break;
+                    }
+                    OpenErorDialog();
+                }
+            }
+            else
+            {
+                AlertTooBigImgAnswer = true;
+                //סנקבר
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                Snackbar.Add("תמונה כבדה מדי", Severity.Error, (options) =>
+                {
+                    options.CloseAfterNavigation = true;
+                }
+                );
+
+            }
+        }
+    }
+
+
+
+    //מחיקת תמונה מפריט
+    private async Task DeleteImageAnswer()
+    {
+        DeletedImages1.Add(currentAnswerEdite.Content);
+        var saveResponse = await Http.PostAsJsonAsync("api/Answers/deleteImages/" + userId, DeletedImages);
+
+        if (saveResponse.IsSuccessStatusCode == true)
+        {
+            myFileImage1 = "";
+            currentAnswerEdite.Content = null;
+            currentAnswerEdite.HaveImge = false;
+            Console.WriteLine("currentAnswerEdite.HaveImge " + currentAnswerEdite.HaveImge);
+            Console.WriteLine("currentAnswerEdite.Content " + currentAnswerEdite.Content);
+            //סנקבר
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+            Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
+            {
+                options.CloseAfterNavigation = true;
+            }
+            );
+
+        }
+        // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+        else
+        {
+            string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
 
             switch (ErorType)
             {
@@ -791,10 +888,67 @@
 
 
 
+    // שיטה שמציגה חלון שגיאה
+    private void OpenErorDialog()
+    {
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        parameters.Add("ContentText", ErorContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", ErorButtonContent);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+
+    }
+
+    //שיטות שסופרות מגבלת תווים ומחזירות תיבה אדומה במידה ועוברים על המגבלה
+    private IEnumerable<string> MaxCharacters20(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
+    private IEnumerable<string> MaxCharacters50(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
+    private IEnumerable<string> MaxCharacters25(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
+    private IEnumerable<string> MaxCharacters35(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 35 < ch?.Length)
+            yield return "הגעת למדבלת התווים האפשרית";
+    }
 
 
 
-
+    //שיטות שמשנות את כפתורי העלאת ומחיקת תמונה במשחק ללא פעילים
+    private bool imgIsOnGame()
+    {
+        if (currentGame.GameQuestionImge != null)
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool imgIsOffGame()
+    {
+        bool ToReturn = !imgIsOnGame();
+        return ToReturn;
+    }
+    private bool imgIsOffAnswer()
+    {
+        bool ToReturn = !currentAnswerEdite.HaveImge;
+        return ToReturn;
+    }
 
 
 
