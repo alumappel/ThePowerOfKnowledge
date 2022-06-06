@@ -65,7 +65,7 @@
                             </MudText>
                         </MudCardContent>
                         <MudCardActions>
-                            <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="@(() => nav.NavigateTo("./EditGame/" + currentUser.ID + "/" + currentGame.ID))" />
+                            <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="() => EditGame(currentGame)" />
                             <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
                         </MudCardActions>
                     </MudCard>
@@ -157,7 +157,7 @@
             //שליחת צבע כפתור אישור
             parameters.Add("Color", Color.Error);
             //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-            var dialog = DialogService.Show<AreUSureDialog>("עצרו הכל!", parameters, options);
+            var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
 
             //קבלת תשובה מהחלונית
             var result = await dialog.Result;
@@ -513,5 +513,61 @@
 
             return msg;
         }
+
+
+        //שיטה של עריכת משחק
+        async Task EditGame(Game currentGameToEdite)
+        {
+            if (currentGameToEdite.IsPublish == true)
+            {
+                //חלונית ווידוא ביטול פרסום
+
+                //   לא נסגר בלחיצה על ESC
+                var options = new DialogOptions { CloseOnEscapeKey = false };
+                //   אי אפשר ללחוץ על העמוד מתחת
+                DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+                //   אפשרות לשללוח פרמטרים
+                var parameters = new DialogParameters();
+                //   שליחה של טקסט תוכן
+                SureContent = "בכדי לערוך משחק עליך לבטל את פרסומו ";
+                parameters.Add("ContentText", SureContent);
+                //שליחת תוכן כפתור אישור
+                parameters.Add("ButtonText", "ביטול פרסום ומעבר לעמוד עריכה");
+                //שליחת צבע כפתור אישור
+                parameters.Add("Color", Color.Success);
+                //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+                var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
+
+                //קבלת תשובה מהחלונית
+                var result = await dialog.Result;
+
+                //במידה ולחצו אישור
+                if (!result.Cancelled)
+                {
+                    await ChangeInSwich(currentGameToEdite);
+                    nav.NavigateTo("./EditGame/" + currentUser.ID + "/" + currentGameToEdite.ID);
+
+                }
+
+            }
+            else
+            {
+                nav.NavigateTo("./EditGame/" + currentUser.ID + "/" + currentGameToEdite.ID);
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
     }

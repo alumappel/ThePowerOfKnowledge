@@ -19,135 +19,161 @@
 
     @*הגדרות משחק כלליות*@
     //מכיל את כל איזור העריכה
-    <MudContainer Width="70%" Fixed="true">
-        <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
-        @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
-        @if (AlertEmptyTopic == true)
-        {
-            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
-        }
+<MudContainer Width="70%" Fixed="true">
+    <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
+    @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
+    @if (AlertEmptyTopic == true)
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
+    }
 
-        <MudText Typo="Typo.h2">הנחייה</MudText>
-        <br />
-        @*שורה של הנחייה*@
-        <MudGrid>
-            <MudItem xs="3">
-                <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
-            </MudItem>
-            <MudItem xs="7">
-                @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
-                @if (currentGame.GameQuestionImge != null)
-                {
-
-
-                    <MudTextField T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-
-                }
-
-                @*במידה והתמונה ריקה*@
-                @if (currentGame.GameQuestionImge == null)
-                {
-
-                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-                }
-            </MudItem>
-
-
-            <MudItem xs="2">
-
-                <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
-
-                <MudIconButton HtmlTag="label"
-                               Color="Color.Info"
-                               Icon="@Icons.Filled.PhotoCamera"
-                               for="fileInput1"
-                               Disabled="@imgIsOnGame()">
-                </MudIconButton>
-
-
-                <MudIconButton Color="Color.Info"
-                               Icon="@Icons.Filled.Delete"
-                               @onclick="DeleteImageGame"
-                               Disabled="@imgIsOffGame()">
-                </MudIconButton>
-
-            </MudItem>
-        </MudGrid>
-        @*שגיאה של תמונה גדולה מדי*@
-        @if (AlertTooBigImgGame == true)
-        {
-            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
-        }
-        @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
-        @if (AlertEmptyQwastion == true)
-        {
-            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
-        }
-
-
-
-
-
-
-
-
-
-        @*מכיל את כל מה שקשור לעריכת פריט*@
-        <MudContainer>
-            <MudText Typo="Typo.h2">עריכת פריט</MudText>
-
-            <MudGrid>
-                <MudItem xs="6">
-                    <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
-                </MudItem>
-                <MudItem xs="2">
-                    <MudText>או</MudText>
-                </MudItem>
-                <MudItem xs="2">
-
-                    <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
-
-                    <MudIconButton HtmlTag="label"
-                                   Color="Color.Info"
-                                   Icon="@Icons.Filled.PhotoCamera"
-                                   for="fileInput2"
-                                   Disabled="@currentAnswerEdite.HaveImge">
-                    </MudIconButton>
-
-
-                    <MudIconButton Color="Color.Info"
-                                   Icon="@Icons.Filled.Delete"
-                                   @onclick="DeleteImageAnswer"
-                                   Disabled="@imgIsOffAnswer()">
-                    </MudIconButton>
-
-                </MudItem>
-            </MudGrid>
-            @*שגיאה של תמונה גדולה מדי*@
-            @if (AlertTooBigImgAnswer == true)
+    <MudText Typo="Typo.h2">הנחייה</MudText>
+    <br />
+    @*שורה של הנחייה*@
+    <MudGrid>
+        <MudItem xs="3">
+            <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
+        </MudItem>
+        <MudItem xs="7">
+            @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
+            @if (currentGame.GameQuestionImge != null)
             {
-                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
-            }
-            @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
-            @if (AlertEmptyAnswer == true)
-            {
-                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+
+
+                <MudTextField T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+
             }
 
-            <MudGrid>
-                <MudItem xs="6">
-                    <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
-                </MudItem>
-                <MudItem xs="2">
-                    <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
-                </MudItem>
-            </MudGrid>
-            <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת פריט</MudButton>
+            @*במידה והתמונה ריקה*@
+            @if (currentGame.GameQuestionImge == null)
+            {
 
-        </MudContainer>
-        <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת משחק</MudButton>
+                <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+            }
+        </MudItem>
 
-    </MudContainer>
+
+        <MudItem xs="2">
+
+            <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
+
+            <MudIconButton HtmlTag="label"
+                           Color="Color.Info"
+                           Icon="@Icons.Filled.PhotoCamera"
+                           for="fileInput1"
+                           Disabled="@imgIsOnGame()">
+            </MudIconButton>
+
+
+            <MudIconButton Color="Color.Info"
+                           Icon="@Icons.Filled.Delete"
+                           @onclick="DeleteImageGame"
+                           Disabled="@imgIsOffGame()">
+            </MudIconButton>
+
+        </MudItem>
+    </MudGrid>
+    @*שגיאה של תמונה גדולה מדי*@
+    @if (AlertTooBigImgGame == true)
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+    }
+    @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
+    @if (AlertEmptyQwastion == true)
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
+    }
+
+
+
+
+
+
+
+
+
+    @*מכיל את כל מה שקשור לעריכת פריט*@
+    @if (reachMaxItemNum() == true)
+    {
+        @*שגיאה של יותר מדי פריטים*@        
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">הגעת למגבלת הפריטים האפשריים במשחק, לא ניתן להזין למשחק יותר מ30 פריטים.</MudAlert>
+        
+    }
+    @if (reachMaxItemNum() == false)
+    {
+<MudContainer>
+    @if (currentAnswerEdite.ID == 0)
+    {
+        <MudText Typo="Typo.h2">הוספת פריט</MudText>
+    }
+    @if (currentAnswerEdite.ID != 0)
+    {
+        <MudText Typo="Typo.h2">עריכת פריט</MudText>
+    }
+
+
+    <MudGrid>
+        <MudItem xs="6">
+            <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+        </MudItem>
+        <MudItem xs="2">
+            <MudText>או</MudText>
+        </MudItem>
+        <MudItem xs="2">
+
+            <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
+
+            <MudIconButton HtmlTag="label"
+                           Color="Color.Info"
+                           Icon="@Icons.Filled.PhotoCamera"
+                           for="fileInput2"
+                           Disabled="@currentAnswerEdite.HaveImge">
+            </MudIconButton>
+
+
+            <MudIconButton Color="Color.Info"
+                           Icon="@Icons.Filled.Delete"
+                           @onclick="DeleteImageAnswer"
+                           Disabled="@imgIsOffAnswer()">
+            </MudIconButton>
+
+        </MudItem>
+    </MudGrid>
+    @*שגיאה של תמונה גדולה מדי*@
+    @if (AlertTooBigImgAnswer == true)
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+    }
+    @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
+    @if (AlertEmptyAnswer == true)
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+    }
+
+    <MudGrid>
+        <MudItem xs="6">
+            <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
+        </MudItem>
+        <MudItem xs="2">
+            <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
+        </MudItem>
+    </MudGrid>
+    <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת פריט</MudButton>
+
+</MudContainer>
+    }
+    <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת משחק</MudButton>
+
+</MudContainer>
+
+
+
+
+
+
+
+
+
 
 
     @*טבלת פריטים*@
@@ -168,7 +194,7 @@
                         @if (currentAnswer.CorrectAnswer == true)
                         {
 
-                            <MudCard>
+                            <MudCard Outlined="@EditingThisNow(currentAnswer)" Class="cardAnswer">
                                 @if (currentAnswer.HaveImge == false)
                                 {
                                     <MudCardContent>
@@ -208,7 +234,7 @@
                         @if (currentAnswer.CorrectAnswer == false)
                         {
 
-                            <MudCard>
+                            <MudCard Outlined="@EditingThisNow(currentAnswer)"  Class="cardAnswer">
                                 @if (currentAnswer.HaveImge == false)
                                 {
                                     <MudCardContent>
@@ -952,6 +978,30 @@
 
 
 
+
+
+
+
+    //בודק מגבלת פריטים
+    private bool reachMaxItemNum()
+    {
+        if (currentGame.GameAnswers.Count >= 30)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    //בודקת אם זה הפריט שעורכים
+    private bool EditingThisNow(Answer TheAnswer)
+    {
+        if (TheAnswer.ID == currentAnswerEdite.ID)
+        {
+            return true;
+        }
+        return false;
+    }
 
 
 
