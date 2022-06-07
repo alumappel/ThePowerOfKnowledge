@@ -136,111 +136,126 @@
             @*אם לא הגענו למגבלת פריטים*@
             @if (reachMaxItemNum() == false || currentAnswerEdite.ID != 0)
             {
-        <MudContainer>
-            @if (currentAnswerEdite.ID == 0)
-            {
-                <MudText Typo="Typo.h2">הוספת פריט</MudText>
-            }
-            @if (currentAnswerEdite.ID != 0)
-            {
-                <MudText Typo="Typo.h2">עריכת פריט</MudText>
-            }
-
-
-            <MudGrid>
-                <MudItem xs="6">
-                    @*אם יש תמונה*@
-                    @if (currentAnswerEdite.HaveImge == true)
+                <MudContainer>
+                    @if (currentAnswerEdite.ID == 0)
                     {
-                        <MudCard>
-                            <MudCardHeader>
-                                <MudText>תוכן הפריט: </MudText>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                <img src="@currentAnswerEdite.Content" width="150" />
-                            </MudCardContent>
-                            <MudCardActions>
-                                <MudIconButton Color="Color.Info"
-                                               Icon="@Icons.Filled.Delete"
-                                               @onclick="DeleteImageAnswer"
-                                               Disabled="@imgIsOffAnswer()">
+                        <MudText Typo="Typo.h2">הוספת פריט</MudText>
+                    }
+                    @if (currentAnswerEdite.ID != 0)
+                    {
+                        <MudText Typo="Typo.h2">עריכת פריט</MudText>
+                    }
+
+
+                    <MudGrid>
+                        <MudItem xs="6">
+                            @*אם יש תמונה*@
+                            @if (currentAnswerEdite.HaveImge == true)
+                            {
+                                <MudCard>
+                                    <MudCardHeader>
+                                        <MudText>תוכן הפריט: </MudText>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <img src="@currentAnswerEdite.Content" width="150" />
+                                    </MudCardContent>
+                                    <MudCardActions>
+                                        @*אם זו ערכית פריט אז מחיקה פיקטיבית*@
+                                        @if (currentAnswerEdite.ID != 0)
+                                        {
+                                            <MudIconButton Color="Color.Info"
+                                                           Icon="@Icons.Filled.Delete"
+                                                           @onclick="FakeDeletImg"
+                                                           Disabled="@imgIsOffAnswer()">
+                                            </MudIconButton>
+                                        }
+
+                                        @*אם זה מסיח חדש אז מחיקה אמיתית*@
+                                        @if (currentAnswerEdite.ID == 0)
+                                        {
+                                            <MudIconButton Color="Color.Info"
+                                                           Icon="@Icons.Filled.Delete"
+                                                           @onclick="DeleteImageAnswer"
+                                                           Disabled="@imgIsOffAnswer()">
+                                            </MudIconButton>
+                                        }
+
+                                    </MudCardActions>
+                                </MudCard>
+                            }
+
+
+                            @*אם אין תמונה*@
+                            @if (currentAnswerEdite.HaveImge == false)
+                            {
+                                <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+                            }
+                        </MudItem>
+
+
+                        @*אם אין תמונה*@
+                        @if (currentAnswerEdite.HaveImge == false)
+                        {
+                            <MudItem xs="2">
+                                <MudText>או</MudText>
+                            </MudItem>
+
+                            <MudItem xs="2">
+
+
+                                <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
+
+                                <MudIconButton HtmlTag="label"
+                                               Color="Color.Info"
+                                               Icon="@Icons.Filled.PhotoCamera"
+                                               for="fileInput2"
+                                               Disabled="@currentAnswerEdite.HaveImge">
                                 </MudIconButton>
-                            </MudCardActions>
-                        </MudCard>
-                    }
+                            </MudItem>
+
+                        }
+
+                    </MudGrid>
 
 
-                    @*אם אין תמונה*@
-                    @if (currentAnswerEdite.HaveImge == false)
+
+
+                    @*שגיאה של תמונה גדולה מדי*@
+                    @if (AlertTooBigImgAnswer == true)
                     {
-                        <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+                        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
                     }
-                </MudItem>
-
-
-                @*אם אין תמונה*@
-                @if (currentAnswerEdite.HaveImge == false)
-                {
-                    <MudItem xs="2">
-                        <MudText>או</MudText>
-                    </MudItem>
-
-                    <MudItem xs="2">
-
-
-                        <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
-
-                        <MudIconButton HtmlTag="label"
-                                       Color="Color.Info"
-                                       Icon="@Icons.Filled.PhotoCamera"
-                                       for="fileInput2"
-                                       Disabled="@currentAnswerEdite.HaveImge">
-                        </MudIconButton>
-                    </MudItem>
-
-                }
-
-            </MudGrid>
+                    @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
+                    @if (AlertEmptyAnswer == true)
+                    {
+                        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+                    }
 
 
 
 
-            @*שגיאה של תמונה גדולה מדי*@
-            @if (AlertTooBigImgAnswer == true)
-            {
-                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
-            }
-            @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
-            @if (AlertEmptyAnswer == true)
-            {
-                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
-            }
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
+                        </MudItem>
+                    </MudGrid>
 
 
 
+                    @*כפתור שמירת פריט*@
+                    <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Large">שמירת פריט</MudButton>
 
-            <MudGrid>
-                <MudItem xs="6">
-                    <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
-                </MudItem>
-                <MudItem xs="2">
-                    <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
-                </MudItem>
-            </MudGrid>
+                    @*בדיקה האם זו ערכית פריט*@
+                    @if (currentAnswerEdite.ID != 0)
+                    {
+                        //כפתור ביטול עריכה
+                        <MudButton @onclick="() => BackToAnswerBeforEditing()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">ביטול עריכה</MudButton>
+                    }
 
-
-
-            @*כפתור שמירת פריט*@
-            <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Large">שמירת פריט</MudButton>
-
-            @*בדיקה האם זו ערכית פריט*@
-            @if (currentAnswerEdite.ID != 0)
-            {
-                //כפתור ביטול עריכה
-                <MudButton @onclick="() => BackToAnswerBeforEditing()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">ביטול עריכה</MudButton>
-            }
-
-        </MudContainer>
+                </MudContainer>
 
             }
         </MudContainer>
@@ -353,49 +368,51 @@
 
 
 @code {
-        //פרמטר המקבל ID של משחר בשורת הכתובה
-        [Parameter]
-        public int gameId { get; set; }
+    //פרמטר המקבל ID של משחר בשורת הכתובה
+    [Parameter]
+    public int gameId { get; set; }
 
-        //פרמטר המקבל ID של משתמש בשורת הכתובת
-        [Parameter]
-        public int userId { get; set; }
+    //פרמטר המקבל ID של משתמש בשורת הכתובת
+    [Parameter]
+    public int userId { get; set; }
 
-        //שומר את המשחק שעליו פועלים
-        Game currentGame;
+    //שומר את המשחק שעליו פועלים
+    Game currentGame;
 
-        //  מחרוזת ששמורת את הערך של הודעת השגיאה
-        string ErorContent;
-        //תוכן כפתור הודעת שגיאה
-        string ErorButtonContent;
+    //  מחרוזת ששמורת את הערך של הודעת השגיאה
+    string ErorContent;
+    //תוכן כפתור הודעת שגיאה
+    string ErorButtonContent;
 
-        //פריט חדש בטעינת עמוד
-        Answer currentAnswerEdite = new Answer();
+    //פריט חדש בטעינת עמוד
+    Answer currentAnswerEdite = new Answer();
 
-        //האם יש צורך בהודעת שגיאה של פריט ריק
-        bool AlertEmptyAnswer = false;
-        //האם יש צורך בהודעת שגיאה של נושא ריק
-        bool AlertEmptyTopic = false;
-        //האם יש צורך בהודעת שגיאה של הנחייה ריק
-        bool AlertEmptyQwastion = false;
-        //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי במשחק
-        bool AlertTooBigImgGame = false;
-        //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי בפריט
-        bool AlertTooBigImgAnswer = false;
+    //האם יש צורך בהודעת שגיאה של פריט ריק
+    bool AlertEmptyAnswer = false;
+    //האם יש צורך בהודעת שגיאה של נושא ריק
+    bool AlertEmptyTopic = false;
+    //האם יש צורך בהודעת שגיאה של הנחייה ריק
+    bool AlertEmptyQwastion = false;
+    //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי במשחק
+    bool AlertTooBigImgGame = false;
+    //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי בפריט
+    bool AlertTooBigImgAnswer = false;
 
-        //של תמונות למשחק
-        string myFileImage;
-        long maxFileSize = 4194304;
-        //מחיקת תמונה מהמשחק
-        List<string> DeletedImages = new List<string>();
+    //של תמונות למשחק
+    string myFileImage;
+    long maxFileSize = 4194304;
+    //מחיקת תמונה מהמשחק
+    List<string> DeletedImages = new List<string>();
 
 
-        //של תמונות לפריט
-        string myFileImage1;
-        //מחיקת תמונה מפריט
-        List<string> DeletedImages1 = new List<string>();
+    //של תמונות לפריט
+    string myFileImage1;
+    //מחיקת תמונה מפריט
+    List<string> DeletedImages1 = new List<string>();
 
-        
+    //שמירת התמונה המקורית בעריכה
+    string OriginalImg;
+
 
 
 
@@ -520,7 +537,6 @@
             //לעדכון מסיח
             else
             {
-
                 //שליחת מידע לבסיס נתונים
                 var updateResponse1 = await Http.PostAsJsonAsync("api/Answers/Update/" + userId + "/" + currentGame.ID, TheAnswer);
                 //אישור ביצוע פעולה
@@ -569,6 +585,40 @@
                     }
                     OpenErorDialog();
 
+                }
+            }
+            //במקרה שהיתה תמונה ומוחקים אותה
+            if (OriginalImg != null)
+            {
+                DeletedImages.Add(OriginalImg);
+                var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/" + userId, DeletedImages);
+
+                if (saveResponse.IsSuccessStatusCode == true)
+                {
+                    Console.WriteLine("original IMG deleted");
+                    OriginalImg = null;
+                }
+                // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                else
+                {
+                    string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                    switch (ErorType)
+                    {
+                        case "User not login":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        case "EmptySession":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        default:
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                            ErorButtonContent = "הבנתי";
+                            break;
+                    }
+                    OpenErorDialog();
                 }
             }
             currentAnswerEdite = new Answer();
@@ -959,8 +1009,6 @@
             myFileImage1 = "";
             currentAnswerEdite.Content = null;
             currentAnswerEdite.HaveImge = false;
-            Console.WriteLine("currentAnswerEdite.HaveImge " + currentAnswerEdite.HaveImge);
-            Console.WriteLine("currentAnswerEdite.Content " + currentAnswerEdite.Content);
             //סנקבר
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
             Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
@@ -999,9 +1047,34 @@
 
 
 
+    //מחיקת תמונה פיקטיבית בעריכת מסיח
+    private async Task FakeDeletImg()
+    {
+        //במידה וזו התמונה המקורית
+        if (OriginalImg == null)
+        {
+            //שמירת הנתיב לתמונה
+            OriginalImg = currentAnswerEdite.Content;
+            //איפוס התוכן
+            currentAnswerEdite.Content = null;
+            currentAnswerEdite.HaveImge = false;
+            myFileImage = "";
 
+            //חיווי כאילו התמונה נמקה
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+            Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
+            {
+                options.CloseAfterNavigation = true;
+            }
+            );
+        }
 
-
+        //אם אלו תמונות נוספות אז הפנייה למחיקה אמיתית
+        else
+        {
+            await DeleteImageAnswer();
+        }
+    }
 
 
 
@@ -1011,15 +1084,25 @@
 
     //שיטה שטוענת את המסיח לאיזור העריכה
     private void AnswerToEditePlace(Answer TheAnswer)
-    {       
+    {
         currentAnswerEdite = TheAnswer;
     }
 
 
-    //שחזור פריט במצב עריכה 
+    //שיטה של ביטול עריכה
     private void BackToAnswerBeforEditing()
     {
+        currentAnswerEdite.Content = OriginalImg;
+        currentAnswerEdite.HaveImge = true;
+        OriginalImg = null;
         currentAnswerEdite = new Answer();
+        //סנקבר
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+        Snackbar.Add("העריכה בוטלה", Severity.Warning, (options) =>
+        {
+            options.CloseAfterNavigation = true;
+        }
+        );
     }
 
 
