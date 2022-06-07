@@ -1,0 +1,70 @@
+﻿@inject NavigationManager nav
+@inject IDialogService DialogService
+@using ThePowerOfKnowledge.Shared.Entities;
+
+
+
+<MudAppBar Color="Color.Primary" Fixed="false" Elevation="15" Style="position: fixed; margin-top:0px">
+
+    @*פה יכנס לגו האתר*@
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" @onclick="@(()=> nav.NavigateTo("./"))" />
+    <MudSpacer />
+
+    <MudButton>
+        <MudText>
+            למשחק
+        </MudText>
+    </MudButton>
+
+    <MudSpacer />
+
+    <MudButton>
+        <MudText>
+            איך משחקים?
+        </MudText>
+    </MudButton>
+
+    <MudSpacer />
+
+    <MudButton>
+        <MudText>
+            אודות
+        </MudText>
+    </MudButton>
+
+
+
+    @*רק לא בעמוד התחברות*@
+    @if (IsLogInPage != true)
+    {
+        <MudSpacer />
+        //אווטר
+        <MudAvatar Color="Color.Secondary">@(CurrentUser.Email.Substring(0, 1))</MudAvatar>
+        
+    }
+
+
+    @*רק לעמוד עריכה*@
+    @if (IsEditPage == true)
+    {
+        <MudSpacer />
+        @*//כפתור המבורגר*@
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+
+    }
+
+</MudAppBar>
+
+
+
+
+@code {
+    //    פרמטר שמקבל האם אנחנו בעמוד עריכה ואם כן נציג המבורגר
+    [Parameter] public bool IsEditPage { get; set; }
+
+    //    פרמטר שמקבל האם אנחנו בעמוד התחברות ואם כן לא נציג אווטר
+    [Parameter] public bool IsLogInPage { get; set; }
+
+    //    פרמטר שמקבל את המשתמש המחובר    
+    [Parameter] public User CurrentUser { get; set; }
+}
