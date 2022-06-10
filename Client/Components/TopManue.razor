@@ -1,16 +1,17 @@
 ﻿@inject NavigationManager nav
 @inject IDialogService DialogService
 @using ThePowerOfKnowledge.Shared.Entities;
+@inject HttpClient Http
 
 
 
 <MudAppBar Color="Color.Primary" Fixed="false" Elevation="15" Style="position: fixed; margin-top:0px">
 
     @*פה יכנס לגו האתר*@
-    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" @onclick="@(()=> nav.NavigateTo("./"))" />
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
     <MudSpacer />
 
-    <MudButton>
+    <MudButton @onclick="@(() => ToGame())">
         <MudText>
             למשחק
         </MudText>
@@ -18,7 +19,7 @@
 
     <MudSpacer />
 
-    <MudButton>
+    <MudButton @onclick="@((e)=> OpenHowToDialog(options))">
         <MudText>
             איך משחקים?
         </MudText>
@@ -26,7 +27,7 @@
 
     <MudSpacer />
 
-    <MudButton>
+    <MudButton @onclick="@((e)=> OpenAboutDialog(options))">
         <MudText>
             אודות
         </MudText>
@@ -39,8 +40,8 @@
     {
         <MudSpacer />
         //אווטר
-        <MudAvatar Color="Color.Secondary">@(CurrentUser.Email.Substring(0, 1))</MudAvatar>
-        
+        <MudAvatar Color="Color.Secondary">@(CurrentUserEmail.Substring(0, 1))</MudAvatar>
+
     }
 
 
@@ -65,6 +66,101 @@
     //    פרמטר שמקבל האם אנחנו בעמוד התחברות ואם כן לא נציג אווטר
     [Parameter] public bool IsLogInPage { get; set; }
 
-    //    פרמטר שמקבל את המשתמש המחובר    
-    [Parameter] public User CurrentUser { get; set; }
+    //    פרמטר שמקבל את המשתמש המחובר
+    [Parameter] public int UserID { get; set; }
+
+    //אופציות לחלוניות בת
+    DialogOptions options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true, Position = DialogPosition.TopCenter };
+
+    //תוכן הודעה ווידוא פעולה
+    string SureContent;
+
+    //מייל משתמש
+    string CurrentUserEmail = "Fail";
+
+
+
+
+    //שליפת המייל של המשתמש
+    protected async override Task OnInitializedAsync()
+    {
+        if (IsLogInPage != true) {
+            var getResponse = await Http.GetAsync("api/Users/EmailbyUserId/" + UserID);
+            //   אם נמצא המשתמש כל המידע שלו נשמש במופע של משתמש
+            if (getResponse.IsSuccessStatusCode)
+            {
+                User FromDB = getResponse.Content.ReadFromJsonAsync<User>().Result;
+                CurrentUserEmail = FromDB.Email;
+            }
+            else
+            {
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(ErorType);
+            }
+        }
+    }
+
+
+
+    //מעבר למשחק
+    private async Task ToGame()
+    {
+        //חלונית ווידוא
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, כל שינוי שביצעת ולא שמרת ימחק.";
+        parameters.Add("ContentText", SureContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", "יציאה מאיזור העריכה");
+        //שליחת צבע כפתור אישור
+        parameters.Add("Color", Color.Warning);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
+
+        //קבלת תשובה מהחלונית
+        var result = await dialog.Result;
+
+        //במידה ולחצו אישור
+        if (!result.Cancelled)
+        {
+            ///פה יהיה קישור לעמוד המשחק
+        }
+    }
+
+
+
+    //פתיחת אודות
+    private void OpenAboutDialog(DialogOptions options)
+    {
+        var dialog = DialogService.Show<AboutPopup>("אודות", options);
+    }
+
+    //פתיחת איך משחקים
+    private void OpenHowToDialog(DialogOptions options)
+    {
+        var dialog = DialogService.Show<HowToPopup>("איך משחקים?", options);
+    }
+
+
+    //פתיחת אווטאר
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

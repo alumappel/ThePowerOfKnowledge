@@ -1,0 +1,24 @@
+﻿@*חלונית פופ אפ*@
+<MudDialog>
+    <DialogContent>
+        Dialog Content
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">הבנתי</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+
+
+
+
+
+@code {
+    //  פרמטר שמקבל את כל ההגדרות והפרמטרים שנתנו בדף
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    //סגירה
+    void Submit() => MudDialog.Cancel();
+
+}

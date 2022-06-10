@@ -2,8 +2,22 @@
 @inject HttpClient Http
 @inject NavigationManager nav
 @inject IDialogService DialogService
+
+
+
+
+
+
+@*//תפריט עליון*@
+<TopManue IsEditPage="false" IsLogInPage="true" UserID="0"></TopManue>
+
+
+
 @*כותרת*@
 <h3>Login</h3>
+
+
+
 @*שורה להכנסת כתובת מייל*@
 <MudTextField @bind-Value="inputMail" Label="כתובת מייל" Variant="Variant.Outlined"></MudTextField>
 
@@ -73,7 +87,7 @@
                 //  אם יש כל שגיאה אחרת חלון שגיאת שרת
                 else
                 {
-                    msg = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";                    
+                    msg = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
                     OpenDialog();
                 }
             }

@@ -60,7 +60,26 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 		}
 
 
-
+		[HttpGet("EmailbyUserId/{userId}")]
+		public async Task<IActionResult> GetUserEmail(int userId)
+		{
+			string sessionContent = HttpContext.Session.GetString("UserId");
+			if (string.IsNullOrEmpty(sessionContent) == false)
+			{
+				int sessionId = Convert.ToInt32(sessionContent);
+				if (sessionId == userId)
+				{
+					User userToReturn = await _context.Users.FirstOrDefaultAsync(u => u.ID == userId);
+					if (userToReturn != null)
+					{
+						return Ok(userToReturn);
+					}
+					return BadRequest("User not found");
+				}
+				return BadRequest("User not login");
+			}
+			return BadRequest("EmptySession");
+		}
 
 
 
