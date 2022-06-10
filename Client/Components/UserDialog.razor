@@ -1,0 +1,34 @@
+﻿@inject NavigationManager nav
+@using ThePowerOfKnowledge.Shared.Entities;
+
+@*חלונית פופ אפ*@
+<MudDialog Class="UserDialog">
+    <DialogContent>       
+        <MudText>@currentUser.FirstName @currentUser.LastName</MudText>
+    </DialogContent>
+    @*פה כל הפעולות של החלונית*@
+<DialogActions>
+    @*כפתור שמתנתק*@
+    <MudIconButton Color="Color.Primary" OnClick="@logOut" Icon="@Icons.Filled.Logout">התנתקות </MudIconButton>
+</DialogActions>
+</MudDialog>
+
+
+@code {
+    //    פרמטר שמקבל האם אנחנו בעמוד עריכה ואם כן נבדוק משחק בהתנתקות
+    [Parameter] public bool IsEditPage { get; set; }    
+
+    //    פרמטר שמקבל את המשתמש המחובר
+    [Parameter] public User currentUser { get; set; }
+
+//    פרמטר שמקבל את ההמשחק שנערך
+[Parameter] public int GameId { get; set; }
+
+
+    private void logOut()
+        {
+
+        }
+
+
+}

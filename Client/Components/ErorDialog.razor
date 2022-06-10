@@ -16,15 +16,16 @@
 
 
 @code {
-    //  פרמטר שמקבל את כל ההגדרות והפרמטרים שנתנו בדף
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+        //  פרמטר שמקבל את כל ההגדרות והפרמטרים שנתנו בדף
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    //    פרמטר שמקבל את הטקסט של התוכן
-    [Parameter] public string ContentText { get; set; }
+        //    פרמטר שמקבל את הטקסט של התוכן
+        [Parameter] public string ContentText { get; set; }
 
-    //פרמטר שמקבל את התוכן של כפתור אישור
-    [Parameter] public string ButtonText { get; set; }
+        //פרמטר שמקבל את התוכן של כפתור אישור
+        [Parameter] public string ButtonText { get; set; }
 
+        DialogOptions disableBackDropClick = new DialogOptions() { DisableBackdropClick = true };
 
     //    פונקצייה שמנווטת לעמוד הבית בלחיצה על הכפתור
     private void Submit()

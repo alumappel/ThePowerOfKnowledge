@@ -59,7 +59,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 			return BadRequest("EmptySession");
 		}
 
-
+//שליפה עמור התפריט העליון
 		[HttpGet("EmailbyUserId/{userId}")]
 		public async Task<IActionResult> GetUserEmail(int userId)
 		{
