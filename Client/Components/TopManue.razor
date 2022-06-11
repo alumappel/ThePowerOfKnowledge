@@ -3,350 +3,452 @@
 @using ThePowerOfKnowledge.Shared.Entities;
 @inject HttpClient Http
 
-    <div id="navComponent">
-        <MudAppBar Color="Color.Primary" Fixed="false" Elevation="15" Style="position: fixed; margin-top:0px">
+<div id="navComponent">
+    <MudAppBar Color="Color.Primary" Fixed="false" Elevation="15" Style="position: fixed; margin-top:0px">
 
-            @*פה יכנס לגו האתר*@
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-            <MudSpacer />
+        @*פה יכנס לגו האתר*@
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
+        <MudSpacer />
 
-            @*//לא בעמוד המשחק*@
-            @if (IsGamePage != true)
-            {
-                <MudButton @onclick="@(() => ToGame())">
-                    <MudText>
-                        למשחק
-                    </MudText>
-                </MudButton>
-                <MudSpacer />
-            }
-
-            @*כן בעמוד המשחק*@
-            @if (IsGamePage == true)
-            {
-                <MudButton @onclick="@(() => nav.NavigateTo("./"))">
-                    <MudText>
-                        כניסת עורכים
-                    </MudText>
-                </MudButton>
-                <MudSpacer />
-            }
-
-
-
-            <MudButton @onclick="@((e)=> OpenHowToDialog(options))">
+        @*//לא בעמוד המשחק*@
+        @if (IsGamePage != true)
+        {
+            <MudButton @onclick="@(() => ToGame())">
                 <MudText>
-                    איך משחקים?
+                    למשחק
                 </MudText>
             </MudButton>
-
             <MudSpacer />
+        }
 
-            <MudButton @onclick="@((e)=> OpenAboutDialog(options))">
+        @*כן בעמוד המשחק*@
+        @if (IsGamePage == true)
+        {
+            <MudButton @onclick="@(() => nav.NavigateTo("./"))">
                 <MudText>
-                    אודות
+                    כניסת עורכים
                 </MudText>
             </MudButton>
+            <MudSpacer />
+        }
 
 
 
-            @*רק לא בעמוד התחברות*@
-            @if (IsLogInPage != true && IsGamePage != true)
-            {
-                <MudSpacer />
-                //אווטר
-                <MudAvatar Color="Color.Secondary" @onclick="ToggleDrawerAvatar">@(CurrentUserFirstName.Substring(0, 1))</MudAvatar>
+        <MudButton @onclick="@((e)=> OpenHowToDialog(options))">
+            <MudText>
+                איך משחקים?
+            </MudText>
+        </MudButton>
 
-            }
+        <MudSpacer />
+
+        <MudButton @onclick="@((e)=> OpenAboutDialog(options))">
+            <MudText>
+                אודות
+            </MudText>
+        </MudButton>
 
 
-            @*רק לעמוד עריכה*@
-            @if (IsEditPage == true)
-            {
-                @*//כפתור המבורגר*@
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
 
-            }
-
-        </MudAppBar>
-
-        @*//מגירה לאווטר*@
+        @*רק לא בעמוד התחברות*@
         @if (IsLogInPage != true && IsGamePage != true)
         {
-            @if (openAvatar == true)
-            {
-                <MudPaper Width="200px" id="AvtarDrawer">
-                    <MudList>
-                        <MudListItem>
-                            @if (UserFromDB != null)
-                            {
-                                <MudText>
-                                    @UserFromDB.FirstName @UserFromDB.LastName
-                                </MudText>
-                            }
-                        </MudListItem>
-                        <MudListItem>
-                            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Filled.Logout" OnClick="@BackHome">התנתקות</MudNavLink>
-                        </MudListItem>
-                    </MudList>
-                </MudPaper>
-            }
+            <MudSpacer />
+            //אווטר
+            <MudAvatar Color="Color.Secondary" @onclick="ToggleDrawerAvatar">@(CurrentUserFirstName.Substring(0, 1))</MudAvatar>
+
         }
 
 
-        @*//תפריט צד*@
+        @*רק לעמוד עריכה*@
         @if (IsEditPage == true)
         {
-            <MudDrawer @bind-Open="@open" ClipMode=" DrawerClipMode.Always" Breakpoint="Breakpoint.Sm" PreserveOpenState="false" Elevation="1" Anchor="Anchor.Left" DisableOverlay="true">
-                <MudNavMenu>
-                    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Filled.Home" OnClick="@BackHome">חזרה לעמוד הבית</MudNavLink>
-                </MudNavMenu>
-                <MudText>
-                    תנאי הסף לפרסום משחק: <br />
-                    נושא למשחק<br />
-                    המשך להנחיית המשחק<br />
-                    לפחות פריט אחד מתאים<br />
-                    לפחות פריט אחד לא מתאים<br />
-                    לפחות חמישה פריטים סך הכל
-                </MudText>
-            </MudDrawer>
-        }
-    </div>
+            @*//כפתור המבורגר*@
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
 
-
-
-    @code {
-        //    פרמטר שמקבל האם אנחנו בעמוד עריכה ואם כן נציג המבורגר
-        [Parameter] public bool IsEditPage { get; set; }
-
-        //    פרמטר שמקבל האם אנחנו בעמוד התחברות ואם כן לא נציג אווטר
-        [Parameter] public bool IsLogInPage { get; set; }
-
-        //    פרמטר שמקבל האם אנחנו בעמוד המשחק
-        [Parameter] public bool IsGamePage { get; set; }
-
-        //    פרמטר שמקבל את המשתמש המחובר
-        [Parameter] public int UserID { get; set; }
-
-        //    פרמטר שמקבל את ההמשחק שנערך
-        [Parameter] public int GameId { get; set; }
-
-        //אופציות לחלוניות בת
-        DialogOptions options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true, Position = DialogPosition.TopCenter };
-
-        //תוכן הודעה ווידוא פעולה
-        string SureContent;
-
-        //מייל משתמש
-        string CurrentUserFirstName = "Fail";
-
-        //  מחרוזת ששמורת את הערך של הודעת השגיאה
-        string ErorContent;
-        //תוכן כפתור הודעת שגיאה
-        string ErorButtonContent;
-
-        //תפריט צד
-        bool open = true;
-
-        //תפריט אווטאר
-        bool openAvatar = false;
-
-
-        //שליפת משתמש מלא
-        User UserFromDB;
-
-        //פתיחת המבורגר
-        void ToggleDrawer()
-        {
-            open = !open;
         }
 
-        //פתיחת אווטאר
-        void ToggleDrawerAvatar()
-        {
-            openAvatar = !openAvatar;
-        }
+    </MudAppBar>
 
-        //שליפת המייל של המשתמש
-        protected async override Task OnInitializedAsync()
+    @*//מגירה לאווטר*@
+    @if (IsLogInPage != true && IsGamePage != true)
+    {
+        @if (openAvatar == true)
         {
-            if (IsLogInPage != true)
+            <MudPaper Width="200px" id="AvtarDrawer">
+                <MudList>
+                    <MudListItem>
+                        @if (UserFromDB != null)
+                        {
+                            <MudText>
+                                @UserFromDB.FirstName @UserFromDB.LastName
+                            </MudText>
+                        }
+                    </MudListItem>
+                    <MudListItem>
+                        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Filled.Logout" OnClick="@LogOut">התנתקות</MudNavLink>
+                    </MudListItem>
+                </MudList>
+            </MudPaper>
+        }
+    }
+
+
+    @*//תפריט צד*@
+    @if (IsEditPage == true)
+    {
+        <MudDrawer @bind-Open="@open" ClipMode=" DrawerClipMode.Always" Breakpoint="Breakpoint.Sm" PreserveOpenState="false" Elevation="1" Anchor="Anchor.Left" DisableOverlay="true">
+            <MudNavMenu>
+                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Filled.Home" OnClick="@BackHome">חזרה לעמוד הבית</MudNavLink>
+            </MudNavMenu>
+            <MudText>
+                תנאי הסף לפרסום משחק: <br />
+                נושא למשחק<br />
+                המשך להנחיית המשחק<br />
+                לפחות פריט אחד מתאים<br />
+                לפחות פריט אחד לא מתאים<br />
+                לפחות חמישה פריטים סך הכל
+            </MudText>
+        </MudDrawer>
+    }
+</div>
+
+
+
+@code {
+    //    פרמטר שמקבל האם אנחנו בעמוד עריכה ואם כן נציג המבורגר
+    [Parameter] public bool IsEditPage { get; set; }
+
+    //    פרמטר שמקבל האם אנחנו בעמוד התחברות ואם כן לא נציג אווטר
+    [Parameter] public bool IsLogInPage { get; set; }
+
+    //    פרמטר שמקבל האם אנחנו בעמוד המשחק
+    [Parameter] public bool IsGamePage { get; set; }
+
+    //    פרמטר שמקבל את המשתמש המחובר
+    [Parameter] public int UserID { get; set; }
+
+    //    פרמטר שמקבל את ההמשחק שנערך
+    [Parameter] public int GameId { get; set; }
+
+    //אופציות לחלוניות בת
+    DialogOptions options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true, Position = DialogPosition.TopCenter };
+
+    //תוכן הודעה ווידוא פעולה
+    string SureContent;
+
+    //מייל משתמש
+    string CurrentUserFirstName = "Fail";
+
+    //  מחרוזת ששמורת את הערך של הודעת השגיאה
+    string ErorContent;
+    //תוכן כפתור הודעת שגיאה
+    string ErorButtonContent;
+
+    //תפריט צד
+    bool open = true;
+
+    //תפריט אווטאר
+    bool openAvatar = false;
+
+
+    //שליפת משתמש מלא
+    User UserFromDB;
+
+    //פתיחת המבורגר
+    void ToggleDrawer()
+    {
+        open = !open;
+    }
+
+    //פתיחת אווטאר
+    void ToggleDrawerAvatar()
+    {
+        openAvatar = !openAvatar;
+    }
+
+    //שליפת המייל של המשתמש
+    protected async override Task OnInitializedAsync()
+    {
+        if (IsLogInPage != true)
+        {
+            var getResponse = await Http.GetAsync("api/Users/EmailbyUserId/" + UserID);
+            //   אם נמצא המשתמש כל המידע שלו נשמש במופע של משתמש
+            if (getResponse.IsSuccessStatusCode)
             {
-                var getResponse = await Http.GetAsync("api/Users/EmailbyUserId/" + UserID);
-                //   אם נמצא המשתמש כל המידע שלו נשמש במופע של משתמש
-                if (getResponse.IsSuccessStatusCode)
-                {
-                    UserFromDB = getResponse.Content.ReadFromJsonAsync<User>().Result;
-                    CurrentUserFirstName = UserFromDB.FirstName;
-                }
-                else
-                {
-                    string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-                    Console.WriteLine(ErorType);
-                }
+                UserFromDB = getResponse.Content.ReadFromJsonAsync<User>().Result;
+                CurrentUserFirstName = UserFromDB.FirstName;
+            }
+            else
+            {
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(ErorType);
             }
         }
+    }
 
 
 
-        //מעבר למשחק
-        private async Task ToGame()
+    //מעבר למשחק
+    private async Task ToGame()
+    {
+        @if (IsEditPage == true)
         {
-            @if (IsEditPage == true)
+            //חלונית ווידוא
+            //   לא נסגר בלחיצה על ESC
+            var options = new DialogOptions { CloseOnEscapeKey = false };
+            //   אי אפשר ללחוץ על העמוד מתחת
+            DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+            //   אפשרות לשללוח פרמטרים
+            var parameters = new DialogParameters();
+            //   שליחה של טקסט תוכן
+            SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, כל שינוי שביצעת ולא שמרת ימחק.";
+            parameters.Add("ContentText", SureContent);
+            //שליחת תוכן כפתור אישור
+            parameters.Add("ButtonText", "יציאה מאיזור העריכה");
+            //שליחת צבע כפתור אישור
+            parameters.Add("Color", Color.Warning);
+            //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+            var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
+
+            //קבלת תשובה מהחלונית
+            var result = await dialog.Result;
+
+            //במידה ולחצו אישור
+            if (!result.Cancelled)
             {
-                //חלונית ווידוא
-                //   לא נסגר בלחיצה על ESC
-                var options = new DialogOptions { CloseOnEscapeKey = false };
-                //   אי אפשר ללחוץ על העמוד מתחת
-                DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-                //   אפשרות לשללוח פרמטרים
-                var parameters = new DialogParameters();
-                //   שליחה של טקסט תוכן
-                SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, כל שינוי שביצעת ולא שמרת ימחק.";
-                parameters.Add("ContentText", SureContent);
-                //שליחת תוכן כפתור אישור
-                parameters.Add("ButtonText", "יציאה מאיזור העריכה");
-                //שליחת צבע כפתור אישור
-                parameters.Add("Color", Color.Warning);
-                //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-                var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
-
-                //קבלת תשובה מהחלונית
-                var result = await dialog.Result;
-
-                //במידה ולחצו אישור
-                if (!result.Cancelled)
+                if (IsEditPage == true)
                 {
-                    if (IsEditPage == true)
+                    var getResponse = await Http.GetAsync("api/Games/byGameId/" + UserID + "/" + GameId);
+                    if (getResponse.IsSuccessStatusCode)
                     {
-                        var getResponse = await Http.GetAsync("api/Games/byGameId/" + UserID + "/" + GameId);
-                        if (getResponse.IsSuccessStatusCode)
+                        Game currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+
+                        if (currentGame.GamePin == 0)
                         {
-                            Game currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-
-                            if (currentGame.GamePin == 0)
+                            //מחיקה מבסיס נתונים
+                            var getResponse1 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
+                            if (getResponse.IsSuccessStatusCode)
                             {
-                                //מחיקה מבסיס נתונים
-                                var getResponse1 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
-                                if (getResponse.IsSuccessStatusCode)
-                                {
-                                    Console.WriteLine("empty Game Delet");
-                                }
-                                else
-                                {
-                                    string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-                                    switch (ErorType)
-                                    {
-                                        case "User not found":
-                                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-                                            ErorButtonContent = "חזרה לעמוד התחברות";
-                                            break;
-                                        case "User not login":
-                                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                                            ErorButtonContent = "חזרה לעמוד התחברות";
-                                            break;
-                                        case "EmptySession":
-                                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                                            ErorButtonContent = "חזרה לעמוד התחברות";
-                                            break;
-                                        default:
-                                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                                            ErorButtonContent = "הבנתי";
-                                            break;
-                                    }
-                                    OpenErorDialog();
-                                }
+                                Console.WriteLine("empty Game Delet");
                             }
-                            nav.NavigateTo("./GamePage");
-                        }
-                        else
-                        {
-                            string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-                            switch (ErorType)
+                            else
                             {
-                                case "User not found":
-                                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-                                    ErorButtonContent = "חזרה לעמוד התחברות";
-                                    break;
-                                case "User not login":
-                                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                                    ErorButtonContent = "חזרה לעמוד התחברות";
-                                    break;
-                                case "EmptySession":
-                                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                                    ErorButtonContent = "חזרה לעמוד התחברות";
-                                    break;
-                                default:
-                                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                                    ErorButtonContent = "הבנתי";
-                                    break;
+                                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+                                switch (ErorType)
+                                {
+                                    case "User not found":
+                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                                        ErorButtonContent = "חזרה לעמוד התחברות";
+                                        break;
+                                    case "User not login":
+                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                        ErorButtonContent = "חזרה לעמוד התחברות";
+                                        break;
+                                    case "EmptySession":
+                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                        ErorButtonContent = "חזרה לעמוד התחברות";
+                                        break;
+                                    default:
+                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                                        ErorButtonContent = "הבנתי";
+                                        break;
+                                }
+                                OpenErorDialog();
                             }
-                            OpenErorDialog();
                         }
+                        nav.NavigateTo("./GamePage");
                     }
                     else
                     {
-                        nav.NavigateTo("./GamePage");
+                        string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType)
+                        {
+                            case "User not found":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
                     }
-
                 }
-
-            }
-            if (IsEditPage != true && IsLogInPage != true)
-            {
-                //חלונית ווידוא
-                //   לא נסגר בלחיצה על ESC
-                var options = new DialogOptions { CloseOnEscapeKey = false };
-                //   אי אפשר ללחוץ על העמוד מתחת
-                DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-                //   אפשרות לשללוח פרמטרים
-                var parameters = new DialogParameters();
-                //   שליחה של טקסט תוכן
-                SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, ולהתנתק מהמערכת.";
-                parameters.Add("ContentText", SureContent);
-                //שליחת תוכן כפתור אישור
-                parameters.Add("ButtonText", "יציאה מאיזור העריכה");
-                //שליחת צבע כפתור אישור
-                parameters.Add("Color", Color.Warning);
-                //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-                var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
-
-                //קבלת תשובה מהחלונית
-                var result = await dialog.Result;
-
-                //במידה ולחצו אישור
-                if (!result.Cancelled)
+                else
                 {
                     nav.NavigateTo("./GamePage");
                 }
 
             }
 
-            nav.NavigateTo("./GamePage");
+        }
+        if (IsEditPage != true && IsLogInPage != true)
+        {
+            //חלונית ווידוא
+            //   לא נסגר בלחיצה על ESC
+            var options = new DialogOptions { CloseOnEscapeKey = false };
+            //   אי אפשר ללחוץ על העמוד מתחת
+            DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+            //   אפשרות לשללוח פרמטרים
+            var parameters = new DialogParameters();
+            //   שליחה של טקסט תוכן
+            SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, ולהתנתק מהמערכת.";
+            parameters.Add("ContentText", SureContent);
+            //שליחת תוכן כפתור אישור
+            parameters.Add("ButtonText", "יציאה מאיזור העריכה");
+            //שליחת צבע כפתור אישור
+            parameters.Add("Color", Color.Warning);
+            //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+            var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
+
+            //קבלת תשובה מהחלונית
+            var result = await dialog.Result;
+
+            //במידה ולחצו אישור
+            if (!result.Cancelled)
+            {
+                nav.NavigateTo("./GamePage");
+            }
 
         }
 
+        nav.NavigateTo("./GamePage");
+
+    }
 
 
 
-        //פתיחת אודות
-        private void OpenAboutDialog(DialogOptions options)
+
+    //פתיחת אודות
+    private void OpenAboutDialog(DialogOptions options)
+    {
+        var dialog = DialogService.Show<AboutPopup>("אודות", options);
+    }
+
+    //פתיחת איך משחקים
+    private void OpenHowToDialog(DialogOptions options)
+    {
+        var dialog = DialogService.Show<HowToPopup>("איך משחקים?", options);
+    }
+
+
+    //חזרה לכל המשחקים
+    private async Task BackHome()
+    {
+        //חלונית ווידוא
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, כל שינוי שביצעת ולא שמרת ימחק.";
+        parameters.Add("ContentText", SureContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", "יציאה מאיזור העריכה");
+        //שליחת צבע כפתור אישור
+        parameters.Add("Color", Color.Warning);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
+
+        //קבלת תשובה מהחלונית
+        var result = await dialog.Result;
+
+        //במידה ולחצו אישור
+        if (!result.Cancelled)
         {
-            var dialog = DialogService.Show<AboutPopup>("אודות", options);
+            var getResponse = await Http.GetAsync("api/Games/byGameId/" + UserID + "/" + GameId);
+            if (getResponse.IsSuccessStatusCode)
+            {
+                Game currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+
+                if (currentGame.GamePin == 0)
+                {
+                    //מחיקה מבסיס נתונים
+                    var getResponse1 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
+                    if (getResponse.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("empty Game Delet");
+                    }
+                    else
+                    {
+                        string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType)
+                        {
+                            case "User not found":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
+                    }
+                }
+                nav.NavigateTo("./UserHomeScreen/" + UserID);
+            }
+            else
+            {
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+                switch (ErorType)
+                {
+                    case "User not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                }
+                OpenErorDialog();
+            }
+
         }
 
-        //פתיחת איך משחקים
-        private void OpenHowToDialog(DialogOptions options)
-        {
-            var dialog = DialogService.Show<HowToPopup>("איך משחקים?", options);
-        }
+    }
 
 
-        //חזרה לכל המשחקים
-        private async Task BackHome()
+
+    //התנתקות
+    private async Task LogOut()
+    {
+        if (IsEditPage == true)
         {
+            Console.WriteLine("edit page true");
             //חלונית ווידוא
             //   לא נסגר בלחיצה על ESC
             var options = new DialogOptions { CloseOnEscapeKey = false };
@@ -379,7 +481,7 @@
                     {
                         //מחיקה מבסיס נתונים
                         var getResponse1 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
-                        if (getResponse.IsSuccessStatusCode)
+                        if (getResponse1.IsSuccessStatusCode)
                         {
                             Console.WriteLine("empty Game Delet");
                         }
@@ -408,13 +510,15 @@
                             }
                             OpenErorDialog();
                         }
+
                     }
-                    nav.NavigateTo("./UserHomeScreen/" + UserID);
+                    nav.NavigateTo("/");
+
                 }
                 else
                 {
                     string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
+                    Console.WriteLine("eror in edite page by game id" + ErorType);
                     switch (ErorType)
                     {
                         case "User not found":
@@ -436,163 +540,12 @@
                     }
                     OpenErorDialog();
                 }
-
             }
-
         }
-
-
-
-        //התנתקות
-        private async Task LogOut()
+        else if (IsEditPage != true && IsLogInPage != true)
         {
-            @if (IsEditPage == true)
-                {
-                    //חלונית ווידוא
-                    //   לא נסגר בלחיצה על ESC
-                    var options = new DialogOptions { CloseOnEscapeKey = false };
-                    //   אי אפשר ללחוץ על העמוד מתחת
-                    DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-                    //   אפשרות לשללוח פרמטרים
-                    var parameters = new DialogParameters();
-                    //   שליחה של טקסט תוכן
-                    SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, כל שינוי שביצעת ולא שמרת ימחק.";
-                    parameters.Add("ContentText", SureContent);
-                    //שליחת תוכן כפתור אישור
-                    parameters.Add("ButtonText", "יציאה מאיזור העריכה");
-                    //שליחת צבע כפתור אישור
-                    parameters.Add("Color", Color.Warning);
-                    //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-                    var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
-
-                    //קבלת תשובה מהחלונית
-                    var result = await dialog.Result;
-
-                    //במידה ולחצו אישור
-                    if (!result.Cancelled)
-                    {
-                        if (IsEditPage == true)
-                        {
-                            var getResponse = await Http.GetAsync("api/Games/byGameId/" + UserID + "/" + GameId);
-                            if (getResponse.IsSuccessStatusCode)
-                            {
-                                Game currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-
-                                if (currentGame.GamePin == 0)
-                                {
-                                    //מחיקה מבסיס נתונים
-                                    var getResponse1 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
-                                    if (getResponse1.IsSuccessStatusCode)
-                                    {
-                                        Console.WriteLine("empty Game Delet");
-                                    }
-                                    else
-                                    {
-                                        string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-                                        switch (ErorType)
-                                        {
-                                            case "User not found":
-                                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-                                                ErorButtonContent = "חזרה לעמוד התחברות";
-                                                break;
-                                            case "User not login":
-                                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                                                ErorButtonContent = "חזרה לעמוד התחברות";
-                                                break;
-                                            case "EmptySession":
-                                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                                                ErorButtonContent = "חזרה לעמוד התחברות";
-                                                break;
-                                            default:
-                                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                                                ErorButtonContent = "הבנתי";
-                                                break;
-                                        }
-                                        OpenErorDialog();
-                                    }
-                                }
-                                nav.NavigateTo("./");
-                            }
-
-                            else
-                            {
-                                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-                                switch (ErorType)
-                                {
-                                    case "User not found":
-                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-                                        ErorButtonContent = "חזרה לעמוד התחברות";
-                                        break;
-                                    case "User not login":
-                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                                        ErorButtonContent = "חזרה לעמוד התחברות";
-                                        break;
-                                    case "EmptySession":
-                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                                        ErorButtonContent = "חזרה לעמוד התחברות";
-                                        break;
-                                    default:
-                                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                                        ErorButtonContent = "הבנתי";
-                                        break;
-                                }
-                                OpenErorDialog();
-                            }
-                        }
-                        else
-                        {
-                            nav.NavigateTo("./");
-                        }
-
-                    }
-                }
-
-                if (IsEditPage != true && IsLogInPage != true)
-                {
-                    //חלונית ווידוא
-                    //   לא נסגר בלחיצה על ESC
-                    var options = new DialogOptions { CloseOnEscapeKey = false };
-                    //   אי אפשר ללחוץ על העמוד מתחת
-                    DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-                    //   אפשרות לשללוח פרמטרים
-                    var parameters = new DialogParameters();
-                    //   שליחה של טקסט תוכן
-                    SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, ולהתנתק מהמערכת.";
-                    parameters.Add("ContentText", SureContent);
-                    //שליחת תוכן כפתור אישור
-                    parameters.Add("ButtonText", "יציאה מאיזור העריכה");
-                    //שליחת צבע כפתור אישור
-                    parameters.Add("Color", Color.Warning);
-                    //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-                    var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
-
-                    //קבלת תשובה מהחלונית
-                    var result = await dialog.Result;
-
-                    //במידה ולחצו אישור
-                    if (!result.Cancelled)
-                    {
-                        var getResponse3 = await Http.GetAsync("api/Users/LogOut");
-                        if (getResponse3.IsSuccessStatusCode)
-                        {
-                            nav.NavigateTo("./");
-                        }
-                    }
-
-                }
-                var getResponse2 = await Http.GetAsync("api/Users/LogOut");
-                if (getResponse2.IsSuccessStatusCode)
-                {
-                    nav.NavigateTo("./");
-                }
-            }
-
-
-        // שיטה שמציגה חלון שגיאה
-        private void OpenErorDialog()
-        {
+            Console.WriteLine("edit page not true and log in page not true");
+            //חלונית ווידוא
             //   לא נסגר בלחיצה על ESC
             var options = new DialogOptions { CloseOnEscapeKey = false };
             //   אי אפשר ללחוץ על העמוד מתחת
@@ -600,23 +553,56 @@
             //   אפשרות לשללוח פרמטרים
             var parameters = new DialogParameters();
             //   שליחה של טקסט תוכן
-            parameters.Add("ContentText", ErorContent);
+            SureContent = "רק רצינו לוודא שברצונך לצאת מאיזור העריכה, ולהתנתק מהמערכת.";
+            parameters.Add("ContentText", SureContent);
             //שליחת תוכן כפתור אישור
-            parameters.Add("ButtonText", ErorButtonContent);
+            parameters.Add("ButtonText", "יציאה מאיזור העריכה");
+            //שליחת צבע כפתור אישור
+            parameters.Add("Color", Color.Warning);
             //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-            DialogService.Show<ErorDialog>
-            ("יוסטון, ווי האב אה פרובלם", parameters, options);
+            var dialog = DialogService.Show<AreUSureDialog>("רגע... זה באמת קורה עכשיו?", parameters, options);
 
+            //קבלת תשובה מהחלונית
+            var result = await dialog.Result;
+
+            //במידה ולחצו אישור
+            if (!result.Cancelled)
+            {
+                nav.NavigateTo("/");
+
+            }
         }
 
+    }
 
 
-
-
-
-
-
-
-
+    // שיטה שמציגה חלון שגיאה
+    private void OpenErorDialog()
+    {
+        //   לא נסגר בלחיצה על ESC
+        var options = new DialogOptions { CloseOnEscapeKey = false };
+        //   אי אפשר ללחוץ על העמוד מתחת
+        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+        //   אפשרות לשללוח פרמטרים
+        var parameters = new DialogParameters();
+        //   שליחה של טקסט תוכן
+        parameters.Add("ContentText", ErorContent);
+        //שליחת תוכן כפתור אישור
+        parameters.Add("ButtonText", ErorButtonContent);
+        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+        DialogService.Show<ErorDialog>
+        ("יוסטון, ווי האב אה פרובלם", parameters, options);
 
     }
+
+
+
+
+
+
+
+
+
+
+
+}
