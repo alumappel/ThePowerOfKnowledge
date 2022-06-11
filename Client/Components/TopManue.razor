@@ -480,14 +480,14 @@
                     if (currentGame.GamePin == 0)
                     {
                         //מחיקה מבסיס נתונים
-                        var getResponse1 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
-                        if (getResponse1.IsSuccessStatusCode)
+                        var getResponse2 = await Http.DeleteAsync("api/Games/" + UserID + "/" + GameId);
+                        if (getResponse2.IsSuccessStatusCode)
                         {
                             Console.WriteLine("empty Game Delet");
                         }
                         else
                         {
-                            string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+                            string ErorType = getResponse2.Content.ReadAsStringAsync().Result;
 
                             switch (ErorType)
                             {
@@ -512,7 +512,12 @@
                         }
 
                     }
-                    nav.NavigateTo("/");
+                    var getResponse1 = await Http.GetAsync("api/Users/logout");
+                    if (getResponse1.IsSuccessStatusCode)
+                    {
+                        nav.NavigateTo("/");
+                    }
+
 
                 }
                 else
@@ -568,7 +573,11 @@
             //במידה ולחצו אישור
             if (!result.Cancelled)
             {
-                nav.NavigateTo("/");
+                var getResponse = await Http.GetAsync("api/Users/logout");
+                if (getResponse.IsSuccessStatusCode)
+                {
+                    nav.NavigateTo("/");
+                }
 
             }
         }

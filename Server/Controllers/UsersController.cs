@@ -37,6 +37,15 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
 		}
 
+		//התנתק
+		[HttpGet("logout")]
+		public async Task<IActionResult> logout()
+		{				
+				HttpContext.Session.SetString("UserId", "");
+				return Ok("logout");			
+
+		}
+
 
 
 		[HttpGet("byUserId/{userId}")]
@@ -82,22 +91,6 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 			return BadRequest("EmptySession");
 		}
 
-
-
-		//מחיקת סשן		
-		public string LogOutSession()
-		{
-			string sessionContent = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrEmpty(sessionContent) == false)
-			{
-				int sessionId = Convert.ToInt32(sessionContent);
-				if (sessionId != 0)
-				{
-					HttpContext.Session.Clear();					
-				}				
-			}
-			return "EmptySession";
-		}
 
 
 
