@@ -38,6 +38,7 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 		}
 
 
+
 		[HttpGet("byUserId/{userId}")]
 		public async Task<IActionResult> GetAllGames(int userId)
 		{
@@ -81,6 +82,22 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 			return BadRequest("EmptySession");
 		}
 
+
+
+		//מחיקת סשן		
+		public string LogOutSession()
+		{
+			string sessionContent = HttpContext.Session.GetString("UserId");
+			if (string.IsNullOrEmpty(sessionContent) == false)
+			{
+				int sessionId = Convert.ToInt32(sessionContent);
+				if (sessionId != 0)
+				{
+					HttpContext.Session.Clear();					
+				}				
+			}
+			return "EmptySession";
+		}
 
 
 

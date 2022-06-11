@@ -49,3 +49,19 @@ a, .btn-link {
         top: 0.5rem;
     }
 
+#AvtarDrawer {
+    margin-top: 60px;   
+    position: fixed;
+    display: inline-block;
+    float: inline-start;
+}
+
+#navComponent {
+    width: 100%;
+    display: flex;
+    z-index: var(--mud-zindex-appbar);
+    position: relative;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    flex-direction: column;    
+}
