@@ -14,247 +14,253 @@
 {
     @*//תפריט עליון*@
     <TopManue IsEditPage="true" IsLogInPage="false" UserID="userId" GameId="gameId" IsGamePage="false"></TopManue>
-
         @*הגדרות משחק כלליות*@
         ////מכיל את כל איזור העריכה
-        <MudContainer Width="70%" Fixed="true">
+<MudContainer Width="70%" Fixed="true">
 
-            @*//מכיל את הגדרות המשחק*@
-            <MudContainer>
-                <MudText Typo="Typo.h2">הגדרות משחק</MudText>
-                <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
-                @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
-                @if (AlertEmptyTopic == true)
+    @*//מכיל את הגדרות המשחק*@
+    <MudContainer>
+        <MudText Typo="Typo.h2">הגדרות משחק</MudText>
+        <MudPaper Class="Edit1">
+
+            <MudTextField T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
+            <br />
+            @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
+            @if (AlertEmptyTopic == true)
+            {
+                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
+            }
+
+        </MudPaper>
+
+
+
+        <MudText Typo="Typo.h2">הנחייה</MudText>
+        @*שורה של הנחייה*@
+    <MudGrid>
+        <MudItem xs="3">
+            <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
+        </MudItem>
+            <MudItem xs="6">
+
+
+                @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
+                @if (currentGame.GameQuestionImge != null)
                 {
-                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
+
+
+                    <MudTextField T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+
                 }
 
-                <MudText Typo="Typo.h2">הנחייה</MudText>
+                @*במידה והתמונה ריקה*@
+                @if (currentGame.GameQuestionImge == null)
+                {
+
+                    <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+                }
+            </MudItem>
 
 
-                @*שורה של הנחייה*@
-                <MudGrid>
-                    <MudItem xs="3">
-                        <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
-                    </MudItem>
-                    <MudItem xs="6">
-                        @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
-                        @if (currentGame.GameQuestionImge != null)
-                        {
+            <MudItem xs="3">
+                @*אם אין תמונה*@
+                @if (currentGame.GameQuestionImge == null)
+                {
+                    <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
 
+                    <MudIconButton HtmlTag="label"
+                                   Color="Color.Info"
+                                   Icon="@Icons.Filled.PhotoCamera"
+                                   for="fileInput1"
+                                   Disabled="@imgIsOnGame()">
+                    </MudIconButton>
+                }
 
-                            <MudTextField T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-
-                        }
-
-                        @*במידה והתמונה ריקה*@
-                        @if (currentGame.GameQuestionImge == null)
-                        {
-
-                            <MudTextField T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-                        }
-                    </MudItem>
-
-
-                    <MudItem xs="3">
-                        @*אם אין תמונה*@
-                        @if (currentGame.GameQuestionImge == null)
-                        {
-                            <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
-
-                            <MudIconButton HtmlTag="label"
-                                           Color="Color.Info"
-                                           Icon="@Icons.Filled.PhotoCamera"
-                                           for="fileInput1"
-                                           Disabled="@imgIsOnGame()">
+                @*אם יש תמונה*@
+                @if (currentGame.GameQuestionImge != null)
+                {
+                    <MudCard>
+                        <MudCardContent>
+                            <img src="@currentGame.GameQuestionImge" width="150" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudIconButton Color="Color.Info"
+                                           Icon="@Icons.Filled.Delete"
+                                           @onclick="DeleteImageGame"
+                                           Disabled="@imgIsOffGame()">
                             </MudIconButton>
-                        }
 
+                        </MudCardActions>
+                    </MudCard>
+                }
+
+
+            </MudItem>
+    </MudGrid>
+
+
+
+        @*שגיאה של תמונה גדולה מדי*@
+        @if (AlertTooBigImgGame == true)
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+        }
+        @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
+        @if (AlertEmptyQwastion == true)
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
+        }
+
+
+
+        @*//שמירת הגדרות המשחק*@
+        <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת הגדרות משחק</MudButton>
+
+    </MudContainer>
+
+
+
+
+    @*//איזור עריכת פריט*@
+    <MudContainer>
+
+        @*אם יש יותר מדי פריטים*@
+        @if (reachMaxItemNum() == true && currentAnswerEdite.ID == 0)
+        {
+            @*שגיאה של יותר מדי פריטים*@
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">הגעת למגבלת הפריטים האפשריים במשחק, לא ניתן להזין למשחק יותר מ30 פריטים.</MudAlert>
+
+        }
+
+
+        @*אם לא הגענו למגבלת פריטים*@
+        @if (reachMaxItemNum() == false || currentAnswerEdite.ID != 0)
+        {
+            <MudContainer>
+                @if (currentAnswerEdite.ID == 0)
+                {
+                    <MudText Typo="Typo.h2">הוספת פריט</MudText>
+                }
+                @if (currentAnswerEdite.ID != 0)
+                {
+                    <MudText Typo="Typo.h2">עריכת פריט</MudText>
+                }
+
+
+                <MudGrid>
+                    <MudItem xs="6">
                         @*אם יש תמונה*@
-                        @if (currentGame.GameQuestionImge != null)
+                        @if (currentAnswerEdite.HaveImge == true)
                         {
                             <MudCard>
+                                <MudCardHeader>
+                                    <MudText>תוכן הפריט: </MudText>
+                                </MudCardHeader>
                                 <MudCardContent>
-                                    <img src="@currentGame.GameQuestionImge" width="150" />
+                                    <img src="@currentAnswerEdite.Content" width="150" />
                                 </MudCardContent>
                                 <MudCardActions>
-                                    <MudIconButton Color="Color.Info"
-                                                   Icon="@Icons.Filled.Delete"
-                                                   @onclick="DeleteImageGame"
-                                                   Disabled="@imgIsOffGame()">
-                                    </MudIconButton>
+                                    @*אם זו ערכית פריט אז מחיקה פיקטיבית*@
+                                    @if (currentAnswerEdite.ID != 0)
+                                    {
+                                        <MudIconButton Color="Color.Info"
+                                                       Icon="@Icons.Filled.Delete"
+                                                       @onclick="FakeDeletImg"
+                                                       Disabled="@imgIsOffAnswer()">
+                                        </MudIconButton>
+                                    }
+
+                                    @*אם זה מסיח חדש אז מחיקה אמיתית*@
+                                    @if (currentAnswerEdite.ID == 0)
+                                    {
+                                        <MudIconButton Color="Color.Info"
+                                                       Icon="@Icons.Filled.Delete"
+                                                       @onclick="DeleteImageAnswer"
+                                                       Disabled="@imgIsOffAnswer()">
+                                        </MudIconButton>
+                                    }
 
                                 </MudCardActions>
                             </MudCard>
                         }
 
 
+                        @*אם אין תמונה*@
+                        @if (currentAnswerEdite.HaveImge == false)
+                        {
+                            <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
+                        }
+                    </MudItem>
+
+
+                    @*אם אין תמונה*@
+                    @if (currentAnswerEdite.HaveImge == false)
+                    {
+                        <MudItem xs="2">
+                            <MudText>או</MudText>
+                        </MudItem>
+
+                        <MudItem xs="2">
+
+
+                            <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
+
+                            <MudIconButton HtmlTag="label"
+                                           Color="Color.Info"
+                                           Icon="@Icons.Filled.PhotoCamera"
+                                           for="fileInput2"
+                                           Disabled="@currentAnswerEdite.HaveImge">
+                            </MudIconButton>
+                        </MudItem>
+
+                    }
+
+                </MudGrid>
+
+
+
+
+                @*שגיאה של תמונה גדולה מדי*@
+                @if (AlertTooBigImgAnswer == true)
+                {
+                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+                }
+                @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
+                @if (AlertEmptyAnswer == true)
+                {
+                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+                }
+
+
+
+
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
                     </MudItem>
                 </MudGrid>
 
 
 
-                @*שגיאה של תמונה גדולה מדי*@
-                @if (AlertTooBigImgGame == true)
+                @*כפתור שמירת פריט*@
+                <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Large">שמירת פריט</MudButton>
+
+                @*בדיקה האם זו ערכית פריט*@
+                @if (currentAnswerEdite.ID != 0)
                 {
-                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+                    //כפתור ביטול עריכה
+                    <MudButton @onclick="() => BackToAnswerBeforEditing()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">ביטול עריכה</MudButton>
                 }
-                @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
-                @if (AlertEmptyQwastion == true)
-                {
-                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
-                }
-
-
-
-                @*//שמירת הגדרות המשחק*@
-                <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת הגדרות משחק</MudButton>
 
             </MudContainer>
 
+        }
+    </MudContainer>
 
-
-
-            @*//איזור עריכת פריט*@
-            <MudContainer>
-
-                @*אם יש יותר מדי פריטים*@
-                @if (reachMaxItemNum() == true && currentAnswerEdite.ID == 0)
-                {
-                    @*שגיאה של יותר מדי פריטים*@
-                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">הגעת למגבלת הפריטים האפשריים במשחק, לא ניתן להזין למשחק יותר מ30 פריטים.</MudAlert>
-
-                }
-
-
-                @*אם לא הגענו למגבלת פריטים*@
-                @if (reachMaxItemNum() == false || currentAnswerEdite.ID != 0)
-                {
-                    <MudContainer>
-                        @if (currentAnswerEdite.ID == 0)
-                        {
-                            <MudText Typo="Typo.h2">הוספת פריט</MudText>
-                        }
-                        @if (currentAnswerEdite.ID != 0)
-                        {
-                            <MudText Typo="Typo.h2">עריכת פריט</MudText>
-                        }
-
-
-                        <MudGrid>
-                            <MudItem xs="6">
-                                @*אם יש תמונה*@
-                                @if (currentAnswerEdite.HaveImge == true)
-                                {
-                                    <MudCard>
-                                        <MudCardHeader>
-                                            <MudText>תוכן הפריט: </MudText>
-                                        </MudCardHeader>
-                                        <MudCardContent>
-                                            <img src="@currentAnswerEdite.Content" width="150" />
-                                        </MudCardContent>
-                                        <MudCardActions>
-                                            @*אם זו ערכית פריט אז מחיקה פיקטיבית*@
-                                            @if (currentAnswerEdite.ID != 0)
-                                            {
-                                                <MudIconButton Color="Color.Info"
-                                                               Icon="@Icons.Filled.Delete"
-                                                               @onclick="FakeDeletImg"
-                                                               Disabled="@imgIsOffAnswer()">
-                                                </MudIconButton>
-                                            }
-
-                                            @*אם זה מסיח חדש אז מחיקה אמיתית*@
-                                            @if (currentAnswerEdite.ID == 0)
-                                            {
-                                                <MudIconButton Color="Color.Info"
-                                                               Icon="@Icons.Filled.Delete"
-                                                               @onclick="DeleteImageAnswer"
-                                                               Disabled="@imgIsOffAnswer()">
-                                                </MudIconButton>
-                                            }
-
-                                        </MudCardActions>
-                                    </MudCard>
-                                }
-
-
-                                @*אם אין תמונה*@
-                                @if (currentAnswerEdite.HaveImge == false)
-                                {
-                                    <MudTextField T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
-                                }
-                            </MudItem>
-
-
-                            @*אם אין תמונה*@
-                            @if (currentAnswerEdite.HaveImge == false)
-                            {
-                                <MudItem xs="2">
-                                    <MudText>או</MudText>
-                                </MudItem>
-
-                                <MudItem xs="2">
-
-
-                                    <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
-
-                                    <MudIconButton HtmlTag="label"
-                                                   Color="Color.Info"
-                                                   Icon="@Icons.Filled.PhotoCamera"
-                                                   for="fileInput2"
-                                                   Disabled="@currentAnswerEdite.HaveImge">
-                                    </MudIconButton>
-                                </MudItem>
-
-                            }
-
-                        </MudGrid>
-
-
-
-
-                        @*שגיאה של תמונה גדולה מדי*@
-                        @if (AlertTooBigImgAnswer == true)
-                        {
-                            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
-                        }
-                        @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
-                        @if (AlertEmptyAnswer == true)
-                        {
-                            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
-                        }
-
-
-
-
-                        <MudGrid>
-                            <MudItem xs="6">
-                                <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
-                            </MudItem>
-                            <MudItem xs="2">
-                                <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
-                            </MudItem>
-                        </MudGrid>
-
-
-
-                        @*כפתור שמירת פריט*@
-                        <MudButton @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Large">שמירת פריט</MudButton>
-
-                        @*בדיקה האם זו ערכית פריט*@
-                        @if (currentAnswerEdite.ID != 0)
-                        {
-                            //כפתור ביטול עריכה
-                            <MudButton @onclick="() => BackToAnswerBeforEditing()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">ביטול עריכה</MudButton>
-                        }
-
-                    </MudContainer>
-
-                }
-            </MudContainer>
-
-        </MudContainer>
+</MudContainer>
 
 
 
@@ -353,336 +359,83 @@
 
 
         </MudContainer>
-   
 
 
 
 
-}
+
+        }
 
 
 
-@code {
-    //פרמטר המקבל ID של משחר בשורת הכתובה
-    [Parameter]
-    public int gameId { get; set; }
+        @code {
+            //פרמטר המקבל ID של משחר בשורת הכתובה
+            [Parameter]
+            public int gameId { get; set; }
 
-    //פרמטר המקבל ID של משתמש בשורת הכתובת
-    [Parameter]
-    public int userId { get; set; }
+            //פרמטר המקבל ID של משתמש בשורת הכתובת
+            [Parameter]
+            public int userId { get; set; }
 
-    //שומר את המשחק שעליו פועלים
-    Game currentGame;
+            //שומר את המשחק שעליו פועלים
+            Game currentGame;
 
-    //  מחרוזת ששמורת את הערך של הודעת השגיאה
-    string ErorContent;
-    //תוכן כפתור הודעת שגיאה
-    string ErorButtonContent;
+            //  מחרוזת ששמורת את הערך של הודעת השגיאה
+            string ErorContent;
+            //תוכן כפתור הודעת שגיאה
+            string ErorButtonContent;
 
-    //פריט חדש בטעינת עמוד
-    Answer currentAnswerEdite = new Answer();
+            //פריט חדש בטעינת עמוד
+            Answer currentAnswerEdite = new Answer();
 
-    //האם יש צורך בהודעת שגיאה של פריט ריק
-    bool AlertEmptyAnswer = false;
-    //האם יש צורך בהודעת שגיאה של נושא ריק
-    bool AlertEmptyTopic = false;
-    //האם יש צורך בהודעת שגיאה של הנחייה ריק
-    bool AlertEmptyQwastion = false;
-    //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי במשחק
-    bool AlertTooBigImgGame = false;
-    //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי בפריט
-    bool AlertTooBigImgAnswer = false;
+            //האם יש צורך בהודעת שגיאה של פריט ריק
+            bool AlertEmptyAnswer = false;
+            //האם יש צורך בהודעת שגיאה של נושא ריק
+            bool AlertEmptyTopic = false;
+            //האם יש צורך בהודעת שגיאה של הנחייה ריק
+            bool AlertEmptyQwastion = false;
+            //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי במשחק
+            bool AlertTooBigImgGame = false;
+            //האם יש צורך בהודעת שגיאה של תמונה גדולה מדי בפריט
+            bool AlertTooBigImgAnswer = false;
 
-    //של תמונות למשחק
-    string myFileImage;
-    long maxFileSize = 4194304;
-    //מחיקת תמונה מהמשחק
-    List<string> DeletedImages = new List<string>();
+            //של תמונות למשחק
+            string myFileImage;
+            long maxFileSize = 4194304;
+            //מחיקת תמונה מהמשחק
+            List<string> DeletedImages = new List<string>();
 
 
-    //של תמונות לפריט
-    string myFileImage1;
-    //מחיקת תמונה מפריט
-    List<string> DeletedImages1 = new List<string>();
+            //של תמונות לפריט
+            string myFileImage1;
+            //מחיקת תמונה מפריט
+            List<string> DeletedImages1 = new List<string>();
 
-    //שמירת התמונה המקורית בעריכה
-    string OriginalImg;
+            //שמירת התמונה המקורית בעריכה
+            string OriginalImg;
 
 
 
 
     //שליפת המשחק המדובר מבסיס הנתונים בטעינת עמוד
-    protected async override Task OnInitializedAsync()
-    {
-        var getResponse = await Http.GetAsync("api/Games/byGameId/" + userId + "/" + gameId);
-        if (getResponse.IsSuccessStatusCode)
+        protected async override Task OnInitializedAsync()
         {
-            currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-
-        }
-        //   אם חזרה שגיאה אז נפתח פופ אפ עם הודעת שגיאה מותאמת
-        else
-        {
-            string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-            switch (ErorType)
+            var getResponse = await Http.GetAsync("api/Games/byGameId/" + userId + "/" + gameId);
+            if (getResponse.IsSuccessStatusCode)
             {
-                case "User not found":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                case "User not login":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                case "EmptySession":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                default:
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                    ErorButtonContent = "הבנתי";
-                    break;
-            }
-            OpenErorDialog();
-        }
-    }
-
-
-
-
-
-
-
-
-
-    //שיטה של עדכון מסיח או שמירת מסיח חדש
-    private async Task SaveAnswer(Answer TheAnswer)
-    {
-        //איפוס התראות
-        AlertEmptyAnswer = false;
-
-
-        //תנאי לשמירה
-        if (TheAnswer.Content != null)
-        {
-
-            //הוספה של מספר משחק
-            if (TheAnswer.GameID != currentGame.ID)
-            {
-                TheAnswer.GameID = currentGame.ID;
-            }
-
-            //למסיח חדש
-            if (TheAnswer.ID == 0)
-            {
-                //שליחת משחק חדש לבסיס נתונים
-                var postResponse = await Http.PostAsJsonAsync("api/Answers/NewAnswer/" + userId + "/" + currentGame.ID, TheAnswer);
-                //קבלת אישור פעולה
-                if (postResponse.IsSuccessStatusCode == true)
-                {
-                    //עדכון המידע בעמוד
-                    Game tempGame = postResponse.Content.ReadFromJsonAsync<Game>().Result;
-                    currentGame.GameAnswers = tempGame.GameAnswers;
-
-                    //סנקבר
-                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                    Snackbar.Add("המסיח נשמר", Severity.Success, (options) =>
-                    {
-                        options.CloseAfterNavigation = true;
-                    }
-                    );
-                }
-                //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-                else
-                {
-                    //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
-                    string ErorType = postResponse.Content.ReadAsStringAsync().Result;
-
-                    switch (ErorType)
-                    {
-                        case "Answer not found":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את הפריט המדהים שלך.";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                        case "GameId Not Match":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש שגיאה במשחק אליו משוייך המסיח. ";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                        case "User not login":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        case "EmptySession":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        default:
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                    }
-                    OpenErorDialog();
-
-                }
-
+                currentGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
 
             }
-
-            //לעדכון מסיח
+            //   אם חזרה שגיאה אז נפתח פופ אפ עם הודעת שגיאה מותאמת
             else
             {
-                //שליחת מידע לבסיס נתונים
-                var updateResponse1 = await Http.PostAsJsonAsync("api/Answers/Update/" + userId + "/" + currentGame.ID, TheAnswer);
-                //אישור ביצוע פעולה
-                if (updateResponse1.IsSuccessStatusCode == true)
-                {
-                    //עדכון המידע בעמוד
-                    Game tempGame = updateResponse1.Content.ReadFromJsonAsync<Game>().Result;
-                    currentGame.GameAnswers = tempGame.GameAnswers;
-                    //סנקבר
-                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                    Snackbar.Add("המסיח נשמר", Severity.Success, (options) =>
-                    {
-                        options.CloseAfterNavigation = true;
-                    }
-                    );
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
 
-                }
-                //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-                else
-                {
-                    //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
-                    string ErorType1 = updateResponse1.Content.ReadAsStringAsync().Result;
-
-                    switch (ErorType1)
-                    {
-                        case "Answer not found":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את הפריט המדהים שלך.";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                        case "GameId Not Match":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש שגיאה במשחק אליו משוייך המסיח. ";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                        case "User not login":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        case "EmptySession":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        default:
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                    }
-                    OpenErorDialog();
-
-                }
-            }
-            //במקרה שהיתה תמונה ומוחקים אותה
-            if (OriginalImg != null)
-            {
-                DeletedImages.Add(OriginalImg);
-                var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/" + userId, DeletedImages);
-
-                if (saveResponse.IsSuccessStatusCode == true)
-                {
-                    Console.WriteLine("original IMG deleted");
-                    OriginalImg = null;
-                }
-                // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-                else
-                {
-                    string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
-
-                    switch (ErorType)
-                    {
-                        case "User not login":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        case "EmptySession":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        default:
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
-                            ErorButtonContent = "הבנתי";
-                            break;
-                    }
-                    OpenErorDialog();
-                }
-            }
-            currentAnswerEdite = new Answer();
-        }
-        else
-        {
-            //הצגת אלרט שגיאה מסיח ריק
-            AlertEmptyAnswer = true;
-            //סנקבר
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-            Snackbar.Add("המסיח לא נשמר", Severity.Error, (options) =>
-            {
-                options.CloseAfterNavigation = true;
-            }
-            );
-        }
-    }
-
-
-
-
-
-    //שיטה של עדכון משחק
-    private async Task SaveGame(Game GameToChack)
-    {
-        //איפוס התראות
-        AlertEmptyQwastion = false;
-        AlertEmptyTopic = false;
-
-        //בדיקה שהמשחק לא ריק
-        if (GameToChack.GameTopic != null && GameToChack.GameQuestionText != null && GameToChack.GameTopic.Length > 0 && GameToChack.GameQuestionText.Length > 0)
-        {
-            //בדיקה שיש למשחק קוד משחק ובמידה ואין הזנה של אחד
-            if (GameToChack.GamePin == 0)
-            {
-                GameToChack.GamePin = GameToChack.ID + 100;
-            }
-
-            //שליחת מידע לבסיס נתונים
-            var updateResponse = await Http.PostAsJsonAsync("api/Games/Update/" + userId, GameToChack);
-            //אישור ביצוע פעולה
-            if (updateResponse.IsSuccessStatusCode == true)
-            {
-                //עדכון המידע בעמוד
-                currentGame = updateResponse.Content.ReadFromJsonAsync<Game>().Result;
-
-                //סנקבר
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                Snackbar.Add("המשחק נשמר", Severity.Success, (options) =>
-                {
-                    options.CloseAfterNavigation = true;
-                }
-                );
-
-            }
-            else
-            {
-                //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
-                string ErorType1 = updateResponse.Content.ReadAsStringAsync().Result;
-
-                switch (ErorType1)
+                switch (ErorType)
                 {
                     case "User not found":
                         ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
                         ErorButtonContent = "חזרה לעמוד התחברות";
-                        break;
-                    case "Game not found":
-                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך. ";
-                        ErorButtonContent = "הבנתי";
                         break;
                     case "User not login":
                         ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
@@ -699,146 +452,244 @@
                 }
                 OpenErorDialog();
             }
-
         }
-        else
-        {
 
-            //לא עומד בתנאי שמירה
-            //חסר טקסט להנחייה
-            if (GameToChack.GameQuestionText == null || GameToChack.GameQuestionText.Length <= 0)
+
+
+
+
+
+
+
+
+        //שיטה של עדכון מסיח או שמירת מסיח חדש
+        private async Task SaveAnswer(Answer TheAnswer)
+        {
+            //איפוס התראות
+            AlertEmptyAnswer = false;
+
+
+            //תנאי לשמירה
+            if (TheAnswer.Content != null)
             {
 
-                //הודעת שגיאה
-                AlertEmptyQwastion = true;
+                //הוספה של מספר משחק
+                if (TheAnswer.GameID != currentGame.ID)
+                {
+                    TheAnswer.GameID = currentGame.ID;
+                }
+
+                //למסיח חדש
+                if (TheAnswer.ID == 0)
+                {
+                    //שליחת משחק חדש לבסיס נתונים
+                    var postResponse = await Http.PostAsJsonAsync("api/Answers/NewAnswer/" + userId + "/" + currentGame.ID, TheAnswer);
+                    //קבלת אישור פעולה
+                    if (postResponse.IsSuccessStatusCode == true)
+                    {
+                        //עדכון המידע בעמוד
+                        Game tempGame = postResponse.Content.ReadFromJsonAsync<Game>().Result;
+                        currentGame.GameAnswers = tempGame.GameAnswers;
+
+                        //סנקבר
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                        Snackbar.Add("המסיח נשמר", Severity.Success, (options) =>
+                        {
+                            options.CloseAfterNavigation = true;
+                        }
+                        );
+                    }
+                    //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                    else
+                    {
+                        //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
+                        string ErorType = postResponse.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType)
+                        {
+                            case "Answer not found":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את הפריט המדהים שלך.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                            case "GameId Not Match":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש שגיאה במשחק אליו משוייך המסיח. ";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
+
+                    }
+
+
+                }
+
+                //לעדכון מסיח
+                else
+                {
+                    //שליחת מידע לבסיס נתונים
+                    var updateResponse1 = await Http.PostAsJsonAsync("api/Answers/Update/" + userId + "/" + currentGame.ID, TheAnswer);
+                    //אישור ביצוע פעולה
+                    if (updateResponse1.IsSuccessStatusCode == true)
+                    {
+                        //עדכון המידע בעמוד
+                        Game tempGame = updateResponse1.Content.ReadFromJsonAsync<Game>().Result;
+                        currentGame.GameAnswers = tempGame.GameAnswers;
+                        //סנקבר
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                        Snackbar.Add("המסיח נשמר", Severity.Success, (options) =>
+                        {
+                            options.CloseAfterNavigation = true;
+                        }
+                        );
+
+                    }
+                    //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                    else
+                    {
+                        //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
+                        string ErorType1 = updateResponse1.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType1)
+                        {
+                            case "Answer not found":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את הפריט המדהים שלך.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                            case "GameId Not Match":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש שגיאה במשחק אליו משוייך המסיח. ";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
+
+                    }
+                }
+                //במקרה שהיתה תמונה ומוחקים אותה
+                if (OriginalImg != null)
+                {
+                    DeletedImages.Add(OriginalImg);
+                    var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/" + userId, DeletedImages);
+
+                    if (saveResponse.IsSuccessStatusCode == true)
+                    {
+                        Console.WriteLine("original IMG deleted");
+                        OriginalImg = null;
+                    }
+                    // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                    else
+                    {
+                        string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType)
+                        {
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
+                    }
+                }
+                currentAnswerEdite = new Answer();
+            }
+            else
+            {
+                //הצגת אלרט שגיאה מסיח ריק
+                AlertEmptyAnswer = true;
                 //סנקבר
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                Snackbar.Add("המשחק לא נשמר", Severity.Error, (options) =>
+                Snackbar.Add("המסיח לא נשמר", Severity.Error, (options) =>
                 {
                     options.CloseAfterNavigation = true;
                 }
                 );
             }
-            //חסר נושא משחק
-            if (GameToChack.GameTopic == null || GameToChack.GameTopic.Length <= 0)
+        }
+
+
+
+
+
+        //שיטה של עדכון משחק
+        private async Task SaveGame(Game GameToChack)
+        {
+            //איפוס התראות
+            AlertEmptyQwastion = false;
+            AlertEmptyTopic = false;
+
+            //בדיקה שהמשחק לא ריק
+            if (GameToChack.GameTopic != null && GameToChack.GameQuestionText != null && GameToChack.GameTopic.Length > 0 && GameToChack.GameQuestionText.Length > 0)
             {
-                //הודעת שגיאה
-                AlertEmptyTopic = true;
-                //סנקבר
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                Snackbar.Add("המשחק לא נשמר", Severity.Error, (options) =>
+                //בדיקה שיש למשחק קוד משחק ובמידה ואין הזנה של אחד
+                if (GameToChack.GamePin == 0)
                 {
-                    options.CloseAfterNavigation = true;
+                    GameToChack.GamePin = GameToChack.ID + 100;
                 }
-                );
 
-            }
-        }
-    }
-
-
-
-
-
-
-    //שיטה של מחיקת פריט
-    private async Task DeleteAnswer(Answer TheAnswer)
-    {
-
-        //מחיקה מבסיס נתונים
-        var getResponse = await Http.DeleteAsync("api/Answers/" + userId + "/" + currentGame.ID + "/" + TheAnswer.GameID + "/" + TheAnswer.ID);
-        if (getResponse.IsSuccessStatusCode)
-        {
-            //   עדכון נתוני המשתמש שנמצאים בעמוד
-            Game tempGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
-            currentGame.GameAnswers = tempGame.GameAnswers;
-
-            //הודעה שהפעולה בוצעה
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-            Snackbar.Add("הפריט נמחק", Severity.Success, (options) =>
-            {
-                options.CloseAfterNavigation = true;
-            }
-            );
-        }
-        //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-        else
-        {
-            string ErorType = getResponse.Content.ReadAsStringAsync().Result;
-
-
-            switch (ErorType)
-            {
-                case "Game not found":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                case "Answer not found":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המסיח המדהים שלך. ";
-                    ErorButtonContent = "הבנתי";
-                    break;
-                case "User not login":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                case "EmptySession":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                default:
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
-                    ErorButtonContent = "הבנתי";
-                    break;
-            }
-            OpenErorDialog();
-        }
-
-    }
-
-
-
-
-
-
-
-
-
-    // העלאת תמונה להנחייה
-    private async Task UploadFileGame(InputFileChangeEventArgs e)
-    {
-        AlertTooBigImgGame = false;
-
-        var imageFiles = e.GetMultipleFiles();
-        foreach (var file in imageFiles)
-        {
-            if (file.Size <= maxFileSize)
-            {
-                var buffer = new byte[file.Size];
-                await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
-                var imageBase64 = Convert.ToBase64String(buffer);
-                var saveResponse = await Http.PostAsJsonAsync("api/Games/upload/" + userId, imageBase64);
-
-                if (saveResponse.IsSuccessStatusCode == true)
+                //שליחת מידע לבסיס נתונים
+                var updateResponse = await Http.PostAsJsonAsync("api/Games/Update/" + userId, GameToChack);
+                //אישור ביצוע פעולה
+                if (updateResponse.IsSuccessStatusCode == true)
                 {
-                    string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
-                    myFileImage = resizeUrl;
-                    currentGame.GameQuestionImge = resizeUrl;
+                    //עדכון המידע בעמוד
+                    currentGame = updateResponse.Content.ReadFromJsonAsync<Game>().Result;
+
                     //סנקבר
                     Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                    Snackbar.Add("התמונה עלתה בהצלחה", Severity.Success, (options) =>
+                    Snackbar.Add("המשחק נשמר", Severity.Success, (options) =>
                     {
                         options.CloseAfterNavigation = true;
                     }
                     );
 
                 }
-                //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
                 else
                 {
-                    string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+                    //במידה והיתה שגיאה בדרך הצגת חלום שגיאה מתאים
+                    string ErorType1 = updateResponse.Content.ReadAsStringAsync().Result;
 
-                    switch (ErorType)
+                    switch (ErorType1)
                     {
+                        case "User not found":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשתמש המדהים שלך.";
+                            ErorButtonContent = "חזרה לעמוד התחברות";
+                            break;
+                        case "Game not found":
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך. ";
+                            ErorButtonContent = "הבנתי";
+                            break;
                         case "User not login":
                             ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
                             ErorButtonContent = "חזרה לעמוד התחברות";
@@ -848,364 +699,519 @@
                             ErorButtonContent = "חזרה לעמוד התחברות";
                             break;
                         default:
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענן את העמוד.";
                             ErorButtonContent = "הבנתי";
                             break;
                     }
                     OpenErorDialog();
                 }
+
             }
             else
             {
-                AlertTooBigImgGame = true;
-                //סנקבר
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                Snackbar.Add("תמונה כבדה מדי", Severity.Error, (options) =>
+
+                //לא עומד בתנאי שמירה
+                //חסר טקסט להנחייה
+                if (GameToChack.GameQuestionText == null || GameToChack.GameQuestionText.Length <= 0)
                 {
-                    options.CloseAfterNavigation = true;
-                }
-                );
 
-            }
-        }
-    }
-
-
-    //מחיקת תמונה מהנחייה
-    private async Task DeleteImageGame()
-    {
-        DeletedImages.Add(currentGame.GameQuestionImge);
-        var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/" + userId, DeletedImages);
-
-        if (saveResponse.IsSuccessStatusCode == true)
-        {
-            myFileImage = "";
-            currentGame.GameQuestionImge = null;
-            //סנקבר
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-            Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
-            {
-                options.CloseAfterNavigation = true;
-            }
-            );
-
-        }
-        // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-        else
-        {
-            string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
-
-            switch (ErorType)
-            {
-                case "User not login":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                case "EmptySession":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                default:
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
-                    ErorButtonContent = "הבנתי";
-                    break;
-            }
-            OpenErorDialog();
-        }
-    }
-
-
-
-
-
-
-
-
-
-    // העלאת תמונה לפריט
-    private async Task UploadFileAnswer(InputFileChangeEventArgs e)
-    {
-        AlertTooBigImgAnswer = false;
-
-        var imageFiles = e.GetMultipleFiles();
-        foreach (var file in imageFiles)
-        {
-            if (file.Size <= maxFileSize)
-            {
-                var buffer = new byte[file.Size];
-                await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
-                var imageBase64 = Convert.ToBase64String(buffer);
-                var saveResponse = await Http.PostAsJsonAsync("api/Answers/upload/" + userId, imageBase64);
-
-                if (saveResponse.IsSuccessStatusCode == true)
-                {
-                    string resizeUrl1 = saveResponse.Content.ReadAsStringAsync().Result;
-                    myFileImage1 = resizeUrl1;
-                    currentAnswerEdite.Content = resizeUrl1;
-                    currentAnswerEdite.HaveImge = true;
-
+                    //הודעת שגיאה
+                    AlertEmptyQwastion = true;
                     //סנקבר
                     Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                    Snackbar.Add("התמונה עלתה בהצלחה", Severity.Success, (options) =>
+                    Snackbar.Add("המשחק לא נשמר", Severity.Error, (options) =>
                     {
                         options.CloseAfterNavigation = true;
                     }
-                );
-
+                    );
                 }
-                //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-                else
+                //חסר נושא משחק
+                if (GameToChack.GameTopic == null || GameToChack.GameTopic.Length <= 0)
                 {
-                    string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
-
-                    switch (ErorType)
+                    //הודעת שגיאה
+                    AlertEmptyTopic = true;
+                    //סנקבר
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                    Snackbar.Add("המשחק לא נשמר", Severity.Error, (options) =>
                     {
-                        case "User not login":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        case "EmptySession":
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                            ErorButtonContent = "חזרה לעמוד התחברות";
-                            break;
-                        default:
-                            ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
-                            ErorButtonContent = "הבנתי";
-                            break;
+                        options.CloseAfterNavigation = true;
                     }
-                    OpenErorDialog();
+                    );
+
                 }
             }
+        }
+
+
+
+
+
+
+        //שיטה של מחיקת פריט
+        private async Task DeleteAnswer(Answer TheAnswer)
+        {
+
+            //מחיקה מבסיס נתונים
+            var getResponse = await Http.DeleteAsync("api/Answers/" + userId + "/" + currentGame.ID + "/" + TheAnswer.GameID + "/" + TheAnswer.ID);
+            if (getResponse.IsSuccessStatusCode)
+            {
+                //   עדכון נתוני המשתמש שנמצאים בעמוד
+                Game tempGame = getResponse.Content.ReadFromJsonAsync<Game>().Result;
+                currentGame.GameAnswers = tempGame.GameAnswers;
+
+                //הודעה שהפעולה בוצעה
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                Snackbar.Add("הפריט נמחק", Severity.Success, (options) =>
+                {
+                    options.CloseAfterNavigation = true;
+                }
+                );
+            }
+            //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
             else
             {
-                AlertTooBigImgAnswer = true;
+                string ErorType = getResponse.Content.ReadAsStringAsync().Result;
+
+
+                switch (ErorType)
+                {
+                    case "Game not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המשחק המדהים שלך.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "Answer not found":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא מצאנו את המסיח המדהים שלך. ";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                }
+                OpenErorDialog();
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+        // העלאת תמונה להנחייה
+        private async Task UploadFileGame(InputFileChangeEventArgs e)
+        {
+            AlertTooBigImgGame = false;
+
+            var imageFiles = e.GetMultipleFiles();
+            foreach (var file in imageFiles)
+            {
+                if (file.Size <= maxFileSize)
+                {
+                    var buffer = new byte[file.Size];
+                    await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
+                    var imageBase64 = Convert.ToBase64String(buffer);
+                    var saveResponse = await Http.PostAsJsonAsync("api/Games/upload/" + userId, imageBase64);
+
+                    if (saveResponse.IsSuccessStatusCode == true)
+                    {
+                        string resizeUrl = saveResponse.Content.ReadAsStringAsync().Result;
+                        myFileImage = resizeUrl;
+                        currentGame.GameQuestionImge = resizeUrl;
+                        //סנקבר
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                        Snackbar.Add("התמונה עלתה בהצלחה", Severity.Success, (options) =>
+                        {
+                            options.CloseAfterNavigation = true;
+                        }
+                        );
+
+                    }
+                    //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                    else
+                    {
+                        string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType)
+                        {
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
+                    }
+                }
+                else
+                {
+                    AlertTooBigImgGame = true;
+                    //סנקבר
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                    Snackbar.Add("תמונה כבדה מדי", Severity.Error, (options) =>
+                    {
+                        options.CloseAfterNavigation = true;
+                    }
+                    );
+
+                }
+            }
+        }
+
+
+        //מחיקת תמונה מהנחייה
+        private async Task DeleteImageGame()
+        {
+            DeletedImages.Add(currentGame.GameQuestionImge);
+            var saveResponse = await Http.PostAsJsonAsync("api/Games/deleteImages/" + userId, DeletedImages);
+
+            if (saveResponse.IsSuccessStatusCode == true)
+            {
+                myFileImage = "";
+                currentGame.GameQuestionImge = null;
                 //סנקבר
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-                Snackbar.Add("תמונה כבדה מדי", Severity.Error, (options) =>
+                Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
                 {
                     options.CloseAfterNavigation = true;
                 }
                 );
 
             }
+            // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+            else
+            {
+                string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                switch (ErorType)
+                {
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                }
+                OpenErorDialog();
+            }
         }
-    }
 
 
 
-    //מחיקת תמונה מפריט
-    private async Task DeleteImageAnswer()
-    {
-        DeletedImages1.Add(currentAnswerEdite.Content);
-        var saveResponse = await Http.PostAsJsonAsync("api/Answers/deleteImages/" + userId, DeletedImages);
 
-        if (saveResponse.IsSuccessStatusCode == true)
+
+
+
+
+
+        // העלאת תמונה לפריט
+        private async Task UploadFileAnswer(InputFileChangeEventArgs e)
         {
-            myFileImage1 = "";
-            currentAnswerEdite.Content = null;
-            currentAnswerEdite.HaveImge = false;
+            AlertTooBigImgAnswer = false;
+
+            var imageFiles = e.GetMultipleFiles();
+            foreach (var file in imageFiles)
+            {
+                if (file.Size <= maxFileSize)
+                {
+                    var buffer = new byte[file.Size];
+                    await file.OpenReadStream(maxFileSize).ReadAsync(buffer);
+                    var imageBase64 = Convert.ToBase64String(buffer);
+                    var saveResponse = await Http.PostAsJsonAsync("api/Answers/upload/" + userId, imageBase64);
+
+                    if (saveResponse.IsSuccessStatusCode == true)
+                    {
+                        string resizeUrl1 = saveResponse.Content.ReadAsStringAsync().Result;
+                        myFileImage1 = resizeUrl1;
+                        currentAnswerEdite.Content = resizeUrl1;
+                        currentAnswerEdite.HaveImge = true;
+
+                        //סנקבר
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                        Snackbar.Add("התמונה עלתה בהצלחה", Severity.Success, (options) =>
+                        {
+                            options.CloseAfterNavigation = true;
+                        }
+                    );
+
+                    }
+                    //במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+                    else
+                    {
+                        string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                        switch (ErorType)
+                        {
+                            case "User not login":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            case "EmptySession":
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                                ErorButtonContent = "חזרה לעמוד התחברות";
+                                break;
+                            default:
+                                ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                                ErorButtonContent = "הבנתי";
+                                break;
+                        }
+                        OpenErorDialog();
+                    }
+                }
+                else
+                {
+                    AlertTooBigImgAnswer = true;
+                    //סנקבר
+                    Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                    Snackbar.Add("תמונה כבדה מדי", Severity.Error, (options) =>
+                    {
+                        options.CloseAfterNavigation = true;
+                    }
+                    );
+
+                }
+            }
+        }
+
+
+
+        //מחיקת תמונה מפריט
+        private async Task DeleteImageAnswer()
+        {
+            DeletedImages1.Add(currentAnswerEdite.Content);
+            var saveResponse = await Http.PostAsJsonAsync("api/Answers/deleteImages/" + userId, DeletedImages);
+
+            if (saveResponse.IsSuccessStatusCode == true)
+            {
+                myFileImage1 = "";
+                currentAnswerEdite.Content = null;
+                currentAnswerEdite.HaveImge = false;
+                //סנקבר
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
+                {
+                    options.CloseAfterNavigation = true;
+                }
+                );
+
+            }
+            // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
+            else
+            {
+                string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
+
+                switch (ErorType)
+                {
+                    case "User not login":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    case "EmptySession":
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
+                        ErorButtonContent = "חזרה לעמוד התחברות";
+                        break;
+                    default:
+                        ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
+                        ErorButtonContent = "הבנתי";
+                        break;
+                }
+                OpenErorDialog();
+            }
+        }
+
+
+
+
+
+
+        //מחיקת תמונה פיקטיבית בעריכת מסיח
+        private async Task FakeDeletImg()
+        {
+            //במידה וזו התמונה המקורית
+            if (OriginalImg == null)
+            {
+                //שמירת הנתיב לתמונה
+                OriginalImg = currentAnswerEdite.Content;
+                //איפוס התוכן
+                currentAnswerEdite.Content = null;
+                currentAnswerEdite.HaveImge = false;
+                myFileImage = "";
+
+                //חיווי כאילו התמונה נמקה
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
+                {
+                    options.CloseAfterNavigation = true;
+                }
+                );
+            }
+
+            //אם אלו תמונות נוספות אז הפנייה למחיקה אמיתית
+            else
+            {
+                await DeleteImageAnswer();
+            }
+        }
+
+
+
+
+        //שיטות קטנות וכלליות בתוך העמוד
+
+
+        //שיטה שטוענת את המסיח לאיזור העריכה
+        private void AnswerToEditePlace(Answer TheAnswer)
+        {
+            currentAnswerEdite = TheAnswer;
+        }
+
+
+        //שיטה של ביטול עריכה
+        private void BackToAnswerBeforEditing()
+        {
+            currentAnswerEdite.Content = OriginalImg;
+            currentAnswerEdite.HaveImge = true;
+            OriginalImg = null;
+            currentAnswerEdite = new Answer();
             //סנקבר
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-            Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
-            {
-                options.CloseAfterNavigation = true;
-            }
-            );
-
-        }
-        // במקרה של שגיאה פתיחת פופ אפ שגיאה מתאים
-        else
-        {
-            string ErorType = saveResponse.Content.ReadAsStringAsync().Result;
-
-            switch (ErorType)
-            {
-                case "User not login":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שלא התחברת למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                case "EmptySession":
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן ששעבר יותר מדי זמן ללא פעולה באתר ועליך להתחבר שוב למערכת.";
-                    ErorButtonContent = "חזרה לעמוד התחברות";
-                    break;
-                default:
-                    ErorContent = "החדשות הטובות הן שסוף העולם עוד לא הגיע, החדשות הרעות הן שיש לנו תקלה בשרת. חכה מספר דקות ורענ ן את העמוד.";
-                    ErorButtonContent = "הבנתי";
-                    break;
-            }
-            OpenErorDialog();
-        }
-    }
-
-
-
-
-
-
-    //מחיקת תמונה פיקטיבית בעריכת מסיח
-    private async Task FakeDeletImg()
-    {
-        //במידה וזו התמונה המקורית
-        if (OriginalImg == null)
-        {
-            //שמירת הנתיב לתמונה
-            OriginalImg = currentAnswerEdite.Content;
-            //איפוס התוכן
-            currentAnswerEdite.Content = null;
-            currentAnswerEdite.HaveImge = false;
-            myFileImage = "";
-
-            //חיווי כאילו התמונה נמקה
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-            Snackbar.Add("התמונה נמחקה בהצלחה", Severity.Success, (options) =>
+            Snackbar.Add("העריכה בוטלה", Severity.Warning, (options) =>
             {
                 options.CloseAfterNavigation = true;
             }
             );
         }
 
-        //אם אלו תמונות נוספות אז הפנייה למחיקה אמיתית
-        else
+
+
+        // שיטה שמציגה חלון שגיאה
+        private void OpenErorDialog()
         {
-            await DeleteImageAnswer();
+            //   לא נסגר בלחיצה על ESC
+            var options = new DialogOptions { CloseOnEscapeKey = false };
+            //   אי אפשר ללחוץ על העמוד מתחת
+            DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
+            //   אפשרות לשללוח פרמטרים
+            var parameters = new DialogParameters();
+            //   שליחה של טקסט תוכן
+            parameters.Add("ContentText", ErorContent);
+            //שליחת תוכן כפתור אישור
+            parameters.Add("ButtonText", ErorButtonContent);
+            //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
+            DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
+
         }
-    }
 
-
-
-
-    //שיטות קטנות וכלליות בתוך העמוד
-
-
-    //שיטה שטוענת את המסיח לאיזור העריכה
-    private void AnswerToEditePlace(Answer TheAnswer)
-    {
-        currentAnswerEdite = TheAnswer;
-    }
-
-
-    //שיטה של ביטול עריכה
-    private void BackToAnswerBeforEditing()
-    {
-        currentAnswerEdite.Content = OriginalImg;
-        currentAnswerEdite.HaveImge = true;
-        OriginalImg = null;
-        currentAnswerEdite = new Answer();
-        //סנקבר
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-        Snackbar.Add("העריכה בוטלה", Severity.Warning, (options) =>
+        //שיטות שסופרות מגבלת תווים ומחזירות תיבה אדומה במידה ועוברים על המגבלה
+        private IEnumerable<string> MaxCharacters20(string ch)
         {
-            options.CloseAfterNavigation = true;
+            if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
         }
-        );
-    }
-
-
-
-    // שיטה שמציגה חלון שגיאה
-    private void OpenErorDialog()
-    {
-        //   לא נסגר בלחיצה על ESC
-        var options = new DialogOptions { CloseOnEscapeKey = false };
-        //   אי אפשר ללחוץ על העמוד מתחת
-        DialogOptions disableBackdropClick = new DialogOptions() { DisableBackdropClick = true };
-        //   אפשרות לשללוח פרמטרים
-        var parameters = new DialogParameters();
-        //   שליחה של טקסט תוכן
-        parameters.Add("ContentText", ErorContent);
-        //שליחת תוכן כפתור אישור
-        parameters.Add("ButtonText", ErorButtonContent);
-        //   קריאה לפופ אפ ושליחה של כל המידע פלוס כותרת
-        DialogService.Show<ErorDialog>("יוסטון, ווי האב אה פרובלם", parameters, options);
-
-    }
-
-    //שיטות שסופרות מגבלת תווים ומחזירות תיבה אדומה במידה ועוברים על המגבלה
-    private IEnumerable<string> MaxCharacters20(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 20 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
-    private IEnumerable<string> MaxCharacters50(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
-    private IEnumerable<string> MaxCharacters25(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
-    private IEnumerable<string> MaxCharacters35(string ch)
-    {
-        if (!string.IsNullOrEmpty(ch) && 35 < ch?.Length)
-            yield return "הגעת למדבלת התווים האפשרית";
-    }
-
-
-
-    //שיטות שמשנות את כפתורי העלאת ומחיקת תמונה במשחק ללא פעילים
-    private bool imgIsOnGame()
-    {
-        if (currentGame.GameQuestionImge != null)
+        private IEnumerable<string> MaxCharacters50(string ch)
         {
-            return true;
+            if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
         }
-        return false;
-    }
-    private bool imgIsOffGame()
-    {
-        bool ToReturn = !imgIsOnGame();
-        return ToReturn;
-    }
-    private bool imgIsOffAnswer()
-    {
-        bool ToReturn = !currentAnswerEdite.HaveImge;
-        return ToReturn;
-    }
-
-
-
-    //בודק מגבלת פריטים
-    private bool reachMaxItemNum()
-    {
-        if (currentGame.GameAnswers.Count >= 30)
+        private IEnumerable<string> MaxCharacters25(string ch)
         {
-            return true;
+            if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
         }
-        return false;
-    }
-
-
-    //בודקת אם זה הפריט שעורכים
-    private bool EditingThisNow(Answer TheAnswer)
-    {
-        if (TheAnswer.ID == currentAnswerEdite.ID)
+        private IEnumerable<string> MaxCharacters35(string ch)
         {
-            return true;
+            if (!string.IsNullOrEmpty(ch) && 35 < ch?.Length)
+                yield return "הגעת למדבלת התווים האפשרית";
         }
-        return false;
-    }
 
 
-    //ספירת פריטים נכונים ולא נכונים
-    private int boolAnswerCount(bool direction)
-    {
-        int count = 0;
 
-        foreach (Answer a in currentGame.GameAnswers)
+        //שיטות שמשנות את כפתורי העלאת ומחיקת תמונה במשחק ללא פעילים
+        private bool imgIsOnGame()
         {
-            if (a.CorrectAnswer == direction)
+            if (currentGame.GameQuestionImge != null)
             {
-                count++;
+                return true;
             }
+            return false;
         }
-        return count;
-    }
+        private bool imgIsOffGame()
+        {
+            bool ToReturn = !imgIsOnGame();
+            return ToReturn;
+        }
+        private bool imgIsOffAnswer()
+        {
+            bool ToReturn = !currentAnswerEdite.HaveImge;
+            return ToReturn;
+        }
 
 
 
-}
+        //בודק מגבלת פריטים
+        private bool reachMaxItemNum()
+        {
+            if (currentGame.GameAnswers.Count >= 30)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        //בודקת אם זה הפריט שעורכים
+        private bool EditingThisNow(Answer TheAnswer)
+        {
+            if (TheAnswer.ID == currentAnswerEdite.ID)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        //ספירת פריטים נכונים ולא נכונים
+        private int boolAnswerCount(bool direction)
+        {
+            int count = 0;
+
+            foreach (Answer a in currentGame.GameAnswers)
+            {
+                if (a.CorrectAnswer == direction)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+
+
+        }
 
 
 
