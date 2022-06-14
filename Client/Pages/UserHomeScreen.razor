@@ -15,67 +15,74 @@
     //כותרת
     <h1>המשחקים של @(currentUser.FirstName)</h1>
 
+
+
     //קונטיינר המכיל את כל הכרטיסיות
     <MudContainer Width="90%" Fixed="true">
-        @*//כרטיסיה ריקה של חדש*@
-        <MudCard Outlined="true" Class="cardGame">
-            <MudCardActions>
-                <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" @onclick="()=>AddNewGame()" />
-            </MudCardActions>
-        </MudCard>
+    @*//כרטיסיה ריקה של חדש*@
+        <MudCard Outlined="true" Class="cardGame1">
+    <MudCardActions>
+        <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" @onclick="()=>AddNewGame()" />
+    </MudCardActions>
+    </MudCard>
 
 
-        @*לולאה שמציגה את כל המשחקים הקיימים של המתשמש*@
-        @foreach (Game currentGame in currentUser.UserGames)
+
+
+
+    @*לולאה שמציגה את כל המשחקים הקיימים של המתשמש*@
+    @foreach (Game currentGame in currentUser.UserGames)
+    {
+        if (currentGame.GameTopic != null)
         {
-            if (currentGame.GameTopic != null)
-            {
-                //כרטיסייה עם משחק קיים
-                <MudCard Outlined="true" Class="cardGame">
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
-                            @*מציג רק אם המשחק מפורסם*@
-                            @if (currentGame.IsPublish == true)
-                            {
-                                <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
-                            }
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
-                        <MudText Typo="Typo.body2">
-                            <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => ChangeInSwich(currentGame))" Label="פרסום משחק" Color="Color.Info" Disabled="@GameNotInPublishCretiria(currentGame)" />
-                            @*מציג רק אם המשחק לא עומד בתנאי פרסום*@
-                            @if (GameNotInPublishCretiria(currentGame) == true)
-                            {
-                                <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left">
-                                    <ChildContent>
-                                        <MudIconButton Icon="@Icons.Outlined.Info" />
-                                    </ChildContent>
-                                    <TooltipContent>
-                                        <MudText Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
-                                        @*לולאה להצגת כל הבעיות*@
-                                        @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
-                                        {
-                                            <MudText Typo="Typo.body2">@s</MudText>
-                                            <br />
-                                        }
 
-                                    </TooltipContent>
-                                </MudTooltip>
-                            }
-                        </MudText>
-                    </MudCardContent>
-                    <MudCardActions>
+
+            //כרטיסייה עם משחק קיים
+            <MudCard Outlined="true" Class="cardGame2">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
+                        @*מציג רק אם המשחק מפורסם*@
+                        @if (currentGame.IsPublish == true)
+                        {
+                            <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+                        }
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body2">מספר מסיחים: @currentGame.GameAnswers.Count</MudText>
+                    <MudText Typo="Typo.body2">
+                        <MudSwitch Checked="@currentGame.IsPublish" CheckedChanged="@((bool newState) => ChangeInSwich(currentGame))" Label="פרסום משחק" Color="Color.Info" Disabled="@GameNotInPublishCretiria(currentGame)" />
+                        @*מציג רק אם המשחק לא עומד בתנאי פרסום*@
+                        @if (GameNotInPublishCretiria(currentGame) == true)
+                        {
+                            <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left">
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Outlined.Info" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
+                                    @*לולאה להצגת כל הבעיות*@
+                                    @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
+                                    {
+                                        <MudText Typo="Typo.body2">@s</MudText>
+                                        <br />
+                                    }
+
+                                </TooltipContent>
+                            </MudTooltip>
+                        }
+                    </MudText>
+                </MudCardContent>
+                <MudCardActions>
                         <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="() => EditGame(currentGame)" />
-                        <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
-                    </MudCardActions>
-                </MudCard>
-            }
+                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
+                </MudCardActions>
+            </MudCard>
         }
+    }
 
-    </MudContainer>
+</MudContainer>
 
 
 

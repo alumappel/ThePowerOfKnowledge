@@ -3,12 +3,19 @@
 @using ThePowerOfKnowledge.Shared.Entities;
 @inject HttpClient Http
 
+
 <div id="navComponent">
     <MudAppBar Color="Color.Primary" Fixed="false" Elevation="15" Style="position: fixed; margin-top:0px">
 
-        @*פה יכנס לגו האתר*@
+
+
+        @*פה יכנס לוגו האתר*@
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
         <MudSpacer />
+
+        @* זאת התמונה שאמורה להיות *@
+        @*<MudIconButton = img src="~/Img/logo.png" />*@
+
 
         @*//לא בעמוד המשחק*@
         @if (IsGamePage != true)
