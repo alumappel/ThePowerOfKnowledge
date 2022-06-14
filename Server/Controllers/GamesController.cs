@@ -85,9 +85,29 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
                 int sessionId = Convert.ToInt32(sessionContent);
                 if (sessionId == userId)
                 {
-                    Game DeleteGame = await _context.Games.FirstOrDefaultAsync(g => g.ID == gameId);
+                    Game DeleteGame = await _context.Games.Include(g => g.GameAnswers).FirstOrDefaultAsync(g => g.ID == gameId);
                     if (DeleteGame != null)
                     {
+                        //מחיקת תמונה מנהחייה
+                        if (DeleteGame.GameQuestionImge != null)
+                        {
+                            string ImgToDelete = DeleteGame.GameQuestionImge;
+                            await _fileStorage.DeleteFile(ImgToDelete, "uploadedFiles");
+                        }
+
+                        //מחיקת תמונה ממסיחים
+                        //ומחיקת מסיח
+                        foreach(Answer a in DeleteGame.GameAnswers)
+                        {
+                            if (a.HaveImge == true)
+                            {
+                                string ImgToDelete = a.Content;
+                                await _fileStorage.DeleteFile(ImgToDelete, "uploadedFiles");
+                            }
+
+                            _context.Answers.Remove(a);
+                        }
+
                         _context.Games.Remove(DeleteGame);
                         await _context.SaveChangesAsync();
                         User userToReturn = await _context.Users.Include(u => u.UserGames).ThenInclude(g => g.GameAnswers).FirstOrDefaultAsync(u => u.ID == userId);
