@@ -37,10 +37,10 @@
 
         <MudText Typo="Typo.h2">הנחייה</MudText>
         @*שורה של הנחייה*@
-    <MudGrid>
-        <MudItem xs="3">
-            <MudText>איספו בגירירה את כל התפוחים שעליהם </MudText>
-        </MudItem>
+        <MudGrid>
+            <MudItem xs="3">
+                <MudText Class="CatchTheApple">איספו בגירירה את כל התפוחים שעליהם </MudText>
+            </MudItem>
             <MudItem xs="6">
 
 
@@ -96,7 +96,7 @@
 
 
             </MudItem>
-    </MudGrid>
+        </MudGrid>
 
 
 
@@ -114,8 +114,7 @@
 
 
         @*//שמירת הגדרות המשחק*@
-        <MudButton @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת הגדרות משחק</MudButton>
-
+        <MudButton Class="SaveTheGameIcon" @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת הגדרות משחק</MudButton>
     </MudContainer>
 
 

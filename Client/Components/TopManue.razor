@@ -7,14 +7,19 @@
 <div id="navComponent">
     <MudAppBar Color="Color.Primary" Fixed="false" Elevation="15" Style="position: fixed; margin-top:0px">
 
-
-
         @*פה יכנס לוגו האתר*@
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
+        <MudButton  Color="Color.Inherit">
+
+            <img />
+        </MudButton>
         <MudSpacer />
 
-        @* זאת התמונה שאמורה להיות *@
+
+        @* זה האייקון שאמור להיות *@
         @*<MudIconButton = img src="~/Img/logo.png" />*@
+
+
+
 
 
         @*//לא בעמוד המשחק*@
@@ -109,7 +114,7 @@
                 <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Filled.Home" OnClick="@BackHome">חזרה לעמוד הבית</MudNavLink>
             </MudNavMenu>
             <MudText>
-                תנאי הסף לפרסום משחק: <br />
+                <p class="IfTheGame"> תנאי הסף לפרסום משחק: </p> <br />
                 נושא למשחק<br />
                 המשך להנחיית המשחק<br />
                 לפחות פריט אחד מתאים<br />

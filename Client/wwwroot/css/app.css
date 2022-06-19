@@ -1,11 +1,19 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
     /*הרקע עם הילד והעץ*/
-    background-image: url(/Img/background1.png);
+    /*background-image: url(/Img/background1.png);*/
     background-size: 100%;
     background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Rubik', sans-serif;
 }
+
+
+    body * {
+        font-family: 'Rubik', sans-serif;
+    }
 
 
 a, .btn-link {
@@ -61,11 +69,12 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-
+/*פופאפ המשתמש וההתנתקות*/
 #AvtarDrawer {
-    margin-top: 60px;   
+    margin-top: 4px;
     position: fixed;
     display: inline-block;
+    left: 1px;
     float: inline-start;
 }
 
@@ -147,13 +156,14 @@ a, .btn-link {
     transition: box-shadow 300ms cubic-bezier(.4,0,.2,1) 0ms;
 }
 
-
+/*הודעת שגיאה המייל לא מתאים*/
 .mud-alert-outlined-error {
     color: var(--mud-palette-error-darken);
     margin-right: 900px;
-    margin-left: 700px;
     width: 270px;
+    margin-left: 980px;
 }
+
 
 
 /*הודעת שגיאה שלא הוזן מייל*/
@@ -164,19 +174,19 @@ a, .btn-link {
 }
 
 
+/*הערה כשלא הוזן מייל*/
+.mud-alert-outlined-error {
+    border: none;
+    padding-right: -800px;
+}
+
+
 
 /*האייקון של סימן קריאה כשלא הוזן מייל*/
     .mud-alert-outlined-warning .mud-alert-icon {
         color: #f44336;
     }
 
-
-/*הערה כשהמשתמש נכנס אם מייל לא תקין*/
-.mud-alert-outlined-error {
-    color: var(--mud-palette-error-darken);
-    border: none;
-    margin-right: 563px;
-}
 
 
 /*הכיתוב "כתובת מייל"*/
@@ -186,30 +196,91 @@ a, .btn-link {
     margin-right: -13px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*UserHomeScreen*/
-/*קונטיינר של 2 הכרטיסיות במשחקים*/
-.mud-container {
-    width: 100%;
-    display: block;
-    box-sizing: border-box;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 16px;
-    padding-right: 16px;
+/*עובי המסגרת וצבע המסגרת בכניסה*/
+.mud-input.mud-input-outlined:focus-within .mud-input-outlined-border {
+    border-width: 2px;
+    border-color: #513414;
 }
+
+
+/*כפתור האבר - צבע ורוד בהיר*/
+.mud-button-filled.mud-button-filled-primary:hover, .mud-button-filled.mud-button-filled-primary:focus-visible {
+    background-color: #f2b391;
+}
+
+/*לא נמצא מייל תואם*/
+.mud-alert-outlined-error {
+    color: var(--mud-palette-error-darken);
+    /* border: 1px solid var(--mud-palette-error); */
+}
+
+
+
+
+/*הכתובת מייל בצבע חום אחריי שהתיבת נלחצה והכיתוב עלה למעלה*/
+.mud-input:focus-within ~ label.mud-input-label.mud-input-label-inputcontrol {
+    color: #513414;
+}
+
+
+
+
+/*המסגרת הכחולה ממתחת לשדה הטקסט*/
+/*.mud-elevation-1 {
+    box-shadow: var(--mud-elevation-1);
+    background-color: #8ccfd2;
+    border: 2px solid #513414;
+    border-radius: 30px;
+    height: 120px;
+    width: 250px;
+}
+*/
+
+
+
+/*כשהעברתי הכי למעלה - מופיע אך הכיתוב לא מופיע*/
+/*הודעת שגיאה שלא הוזן מייל*/
+.mud-alert-outlined-warning {
+    color: #f44336;
+    margin-left: 770px;
+    border: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*כרטיסיית הפלוס*/
@@ -234,7 +305,6 @@ a, .btn-link {
 }
 
 
-
 /*טולבר*/
 .mud-toolbar {
     background-color: #eee;
@@ -246,12 +316,150 @@ a, .btn-link {
     background-color: #513414;
 }
 
+/*אייקון של המשתמש בטולבר - מיקום*/
+.mud-avatar.mud-avatar-medium {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    left: 20px;
+}
+
+
+
+/*הטולבר*/
+.mud-typography-body1 {
+    font-size: var(--mud-typography-body1-size);
+    font-family: 'Rubik', sans-serif;
+    line-height: var(--mud-typography-body1-lineheight);
+    letter-spacing: var(--mud-typography-body1-letterspacing);
+    text-transform: var(--mud-typography-body1-text-transform);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*עמוד הכרטיסיות*/
+/*כרטיסיית הכדורים*/
+.mud-typography-body2 {
+    font-size: var(--mud-typography-body2-size);
+    font-family: var(--mud-typography-body2-family);
+    font-weight: var(--mud-typography-body2-weight);
+    line-height: var(--mud-typography-body2-lineheight);
+    letter-spacing: var(--mud-typography-body2-letterspacing);
+    text-transform: var(--mud-typography-body2-text-transform);
+    font-family: 'Rubik', sans-serif;
+}
+
+
+/*הכותרת "כדורים"*/
+.mud-card-header .mud-card-header-content .mud-typography {
+    margin-bottom: 0;
+    font-family: 'Rubik', sans-serif;
+}
+
+
+/*כל האייקונים*/
+/*אדום בכוונה - לבדוק איך אפשר לפרק את כל האייקון משל עצמו*/
+.mud-icon-button-label {
+    width: 100%;
+    display: flex;
+    align-items: inherit;
+    justify-content: inherit;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*עמוד עריכת המשחק*/
 /*קלאס ראשון של נושא המשחק*/
 .Edit1 {
-    background-color: #f5f5f5c4;
-    height: 55px;
+    background-color: #f5f5f5;
+    height: 56px;
+    padding-right: 20px;
 }
 
 
@@ -273,9 +481,8 @@ a, .btn-link {
 /*אורך הקלאס הראשון של נושא המשחק*/
 .mud-elevation-1 {
     box-shadow: var(--mud-elevation-1);
-    width: 280px;
+    width: 230px;
 }
-
 
 
 
@@ -289,3 +496,139 @@ a, .btn-link {
     margin-right: -10px;
 }
 
+
+/*הכותרות בדף העריכה*/
+.mud-typography-h2 {
+    font-size: 40px;
+    font-family:'Rubik', sans-serif;
+    line-height: var(--mud-typography-h2-lineheight);
+    letter-spacing: var(--mud-typography-h2-letterspacing);
+    text-transform: var(--mud-typography-h2-text-transform);
+    padding: 15px;
+    text-indent: -45px;
+}
+
+
+/*התיבות עצמם בדף העריכה*/
+.mud-input-control-input-container {
+    left: 20px;
+}
+
+
+
+/*הכפתור של שמירת ההגדרות משחק*/
+.SaveTheGameIcon {
+    right: 900px;
+    bottom: -30px;
+}
+
+
+
+/*פריטים מתאימים/פריטים לא מתאימים*/
+.mud-typography-h3 {
+    font-size: 40px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: var(--mud-typography-h3-weight);
+    line-height: var(--mud-typography-h3-lineheight);
+    letter-spacing: var(--mud-typography-h3-letterspacing);
+    text-transform: var(--mud-typography-h3-text-transform);
+}
+
+
+
+/*תפריט הצד - מה עומד בתנאי הסף*/
+.mud-nav-item {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    text-decoration: none;
+    margin: 20px;
+}
+
+
+/* הטקסט הפנימי - תפריט הצד - מה עומד בתנאי הסף*/
+.mud-drawer {
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 1;
+    flex: 0 0 auto;
+    outline: 0;
+    position: fixed;
+    z-index: var(--mud-zindex-drawer);
+    overflow-y: auto;
+    flex-direction: column;
+    color: #513414;
+    background-color: var(--mud-palette-drawer-background);
+    --mud-drawer-content-height: 0;
+}
+
+/*הדגשה של הכותרת מה עומד בתנאי הסף*/
+.IfTheGame {
+    font-weight: bold;
+}
+
+
+/*ה"חזרה לעמוד הבית" בתנאי הסף בצד*/
+.mud-navmenu {
+    margin: 0;
+    position: relative;
+    list-style: none;
+    overscroll-behavior-y: contain;
+    background: lightpink;
+    height: 70px;
+}
+
+
+
+/*ה"חזרה לעמוד הבית" בתנאי הסף בצד*/
+.mud-nav-link {
+    width: 100%;
+    font-weight: 400;
+    padding: 5px 9px;
+    color: inherit;
+    line-height: 1.75;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-transform: inherit;
+    background-color: transparent;
+    transition: background-color 250ms cubic-bezier(.4,0,.2,1) 0ms,box-shadow 250ms cubic-bezier(.4,0,.2,1) 0ms,border 250ms cubic-bezier(.4,0,.2,1) 0ms,padding 250ms cubic-bezier(.4,0,.2,1) 0ms;
+    align-items: flex-start;
+    font-weight: bold;
+}
+
+
+
+
+/*האייקונים של העלת תמונה*/
+.mud-icon-button-color-info {
+    color: #513414;
+}
+
+
+
+
+/*הצ'קבוקס כשהמסיח מתאים*/
+.mud-checkbox {
+    cursor: pointer;
+    display: inline-flex;
+    margin-top: -12px;
+    margin-right: -330px;
+    margin-bottom: 10px
+}
+
+
+
+/*הכותרת "תפוחים מתאימים" ו"תפוחים לא מתאימים"*/
+h3.mud-typography.mud-typography-h3.mud-inherit-text {
+    margin-top: 60px;
+    margin-right: 25px;
+}
+
+
+
+/*החץ בצד שגולל כלפיי מעלה בלחיצה*/
+.mud-fab-tertiary {
+    color: var(--mud-palette-tertiary-text);
+    background-color: #513414;
+}

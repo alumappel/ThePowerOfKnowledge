@@ -75,8 +75,12 @@
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
-                        <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Default" @onclick="() => EditGame(currentGame)" />
+                    <MudPaper Class="EditIcon">
+                        <MudIconButton Icon="@Icons.Filled.Edit" @onclick="() => EditGame(currentGame)" />
+                    </MudPaper>
+
                     <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
+
                 </MudCardActions>
             </MudCard>
         }
