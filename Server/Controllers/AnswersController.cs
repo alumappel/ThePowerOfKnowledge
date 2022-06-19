@@ -125,6 +125,11 @@ namespace ThePowerOfKnowledge.Server.Controllers
                         Answer DeleteAnswer = await _context.Answers.FirstOrDefaultAsync(a => a.ID == answerId);
                         if (DeleteAnswer != null)
                         {
+                            if (DeleteAnswer.HaveImge == true)
+                            {
+                                string ImgToDelete = DeleteAnswer.Content;
+                                await _fileStorage.DeleteFile(ImgToDelete, "uploadedFiles");
+                            }
                             _context.Answers.Remove(DeleteAnswer);
                             await _context.SaveChangesAsync();
                             Game gameToReturn = await _context.Games.Include(g => g.GameAnswers).FirstOrDefaultAsync(g => g.ID == gameId);

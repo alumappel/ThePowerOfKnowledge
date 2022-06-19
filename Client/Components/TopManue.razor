@@ -184,7 +184,7 @@
     //שליפת המייל של המשתמש
     protected async override Task OnInitializedAsync()
     {
-        if (IsLogInPage != true)
+        if (IsLogInPage != true && IsGamePage!= true)
         {
             var getResponse = await Http.GetAsync("api/Users/EmailbyUserId/" + UserID);
             //   אם נמצא המשתמש כל המידע שלו נשמש במופע של משתמש
