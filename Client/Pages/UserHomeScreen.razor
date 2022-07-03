@@ -22,7 +22,7 @@
     @*//כרטיסיה ריקה של חדש*@
         <MudCard Outlined="true" Class="cardGame1">
     <MudCardActions>
-        <MudIconButton Icon="@Icons.Filled.Add" Color="Color.Default" @onclick="()=>AddNewGame()" />
+        <MudIconButton Class="addNewGame" Icon="@Icons.Filled.Add" Color="Color.Default" @onclick="()=>AddNewGame()" />
     </MudCardActions>
     </MudCard>
 
@@ -44,9 +44,12 @@
                         <MudText Typo="Typo.body1">@currentGame.GameTopic</MudText>
                         @*מציג רק אם המשחק מפורסם*@
                         @if (currentGame.IsPublish == true)
-                        {
-                            <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
+
+                        {                  
+                        <MudText Typo="Typo.body2">קוד משחק: @currentGame.GamePin</MudText>
                         }
+
+
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent>
@@ -74,13 +77,12 @@
                         }
                     </MudText>
                 </MudCardContent>
-                <MudCardActions>
-                    <MudPaper Class="EditIcon">
-                        <MudIconButton Icon="@Icons.Filled.Edit" @onclick="() => EditGame(currentGame)" />
-                    </MudPaper>
 
-                    <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
 
+
+                <MudCardActions Class="TheIconsOfTheGame">      
+                        <MudIconButton Class="editGame" Icon="@Icons.Filled.Edit" @onclick="() => EditGame(currentGame)" />
+                    <MudIconButton Class="deleteGame" Icon="@Icons.Filled.Delete" Color="Color.Default" @onclick="() => DeleteGame(currentGame)" />
                 </MudCardActions>
             </MudCard>
         }
