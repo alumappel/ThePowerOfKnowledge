@@ -247,7 +247,7 @@
 
         <MudGrid>
             <MudItem xs="6">
-                <MudText>סמנו <MudIcon Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
+                <MudText>סמנו <MudIcon Class="CheckifCorrect" Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
             </MudItem>
             <MudItem xs="2">
                 <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
@@ -274,6 +274,9 @@
     </MudContainer>
 
 </MudContainer>
+
+
+
 
 
 
@@ -318,14 +321,18 @@
 
                                         @*כפתורים בתחתית הכרטיסייה*@
                                         <MudCardActions>
-                                            <MudIconButton @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
-                                            <MudIconButton @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                                            <MudIconButton Class="edititem" @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
+                                            <MudIconButton Class="deleteitem" @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
                                         </MudCardActions>
                                     </MudCard>
                                 }
                             }
 
                         </MudContainer>
+
+
+
+
 
 
 
@@ -361,8 +368,8 @@
                                         }
                                         @*כפתורים*@
                                         <MudCardActions>
-                                            <MudIconButton @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
-                                            <MudIconButton @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                                            <MudIconButton Class="edititem2" @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
+                                            <MudIconButton Class="deleteitem2" @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
                                         </MudCardActions>
                                     </MudCard>
                                 }

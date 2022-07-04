@@ -112,10 +112,10 @@
     {
         <MudDrawer @bind-Open="@open" ClipMode=" DrawerClipMode.Always" Breakpoint="Breakpoint.Sm" PreserveOpenState="false" Elevation="1" Anchor="Anchor.Left" DisableOverlay="true">
             <MudNavMenu>
-                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Filled.Home" OnClick="@BackHome">חזרה לעמוד הבית</MudNavLink>
+                <MudNavLink Class="backToTheHomeScreen" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home" OnClick="@BackHome">חזרה לעמוד הבית</MudNavLink>
             </MudNavMenu>
-            <MudText>
-                <p class="IfTheGame"> תנאי הסף לפרסום משחק: </p> <br />
+            <MudText Class="GameConditions">
+                תנאי הסף לפרסום משחק: <br />
                 נושא למשחק<br />
                 המשך להנחיית המשחק<br />
                 לפחות פריט אחד מתאים<br />

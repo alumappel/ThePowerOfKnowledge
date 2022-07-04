@@ -4,7 +4,7 @@
 html, body {
     /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
     /*הרקע עם הילד והעץ*/
-    /*background-image: url(/Img/FinalBackground111.png);*/
+    background-image: url(/Img/background0.png);
     background-size: 100%;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -261,6 +261,29 @@ a, .btn-link {
 }
 
 
+/*המסגרת מסביב לכתובת המייל*/
+.mud-input.mud-input-outlined .mud-input-outlined-border {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    text-align: start;
+    pointer-events: none;
+    border-radius: var(--mud-default-borderradius);
+    border-color: #513414;
+    border-width: 2px;
+    border-style: solid;
+    transition: border-width,border-color 200ms cubic-bezier(.4,0,.2,1) 0ms;
+}
+
+
+
+
 /*/**/ /**/ /**/ /**/ /**/ /**/
 
 
@@ -270,7 +293,7 @@ a, .btn-link {
     width: 100px;
     margin: 15px;
     border: 3px solid #513414;
-    border-radius: 12px;
+    border-radius: 25px;
     padding: 15px;
 }
 
@@ -281,10 +304,10 @@ a, .btn-link {
     width: 179px;
     margin: 15px;
     border: 3px solid #513414;
-    border-radius: 12px;
+    border-radius: 25px;
     padding: 9px;
     margin-top: -114px;
-    margin-bottom: 100px;
+    margin-bottom: 140px;
     margin-right: 150px;
     margin-left: 80px;
 }
@@ -399,7 +422,11 @@ a, .btn-link {
 }
 
 
-
+/*קצת ריווח ופונט של מספר מסיחים*/
+.mud-typography-body2 {
+    font-family: 'Rubik', sans-serif;
+    padding: 2px;
+}
 
 
 
@@ -511,8 +538,9 @@ a, .btn-link {
     position: relative;
     list-style: none;
     overscroll-behavior-y: contain;
-    background: lightpink;
-    height: 70px;
+    background: transparent;
+    height: 56px;
+    left: -15px;
 }
 
 
@@ -532,6 +560,29 @@ a, .btn-link {
     align-items: flex-start;
     font-weight: bold;
 }
+
+
+
+/*האייקון של הבית בתפרט*/
+    .mud-nav-link:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
+        color: #fafafa;
+    }
+
+
+
+
+
+    /*הכיתוב הלבן בתפריט צד -  חזרה לעמוד הבית*/
+    .mud-nav-link .mud-nav-link-text {
+        width: 100%;
+        text-align: start;
+        margin-left: 12px;
+        margin-inline-start: 12px;
+        margin-inline-end: unset;
+        letter-spacing: 0;
+        color: #513414;
+    }
+
 
 
 /*האייקונים של העלת תמונה*/
@@ -728,11 +779,16 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
-.correctAnswer {
-    background: pink;
-    width: 400px;
-    margin-right: 30px;
+/*צבע התפריט*/
+.mud-icon-button-color-inherit {
+    color: #513414;
 }
+
+
+
+
+
+
 
 
 
@@ -752,3 +808,100 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 }
 
 
+
+
+
+
+/*הקוביות הקטנות בפריטים נכונים*/
+.correctAnswer {
+    width: 400px;
+    margin-right: 5px;
+}
+
+
+
+
+
+
+/*אייקון עריכה במסיחים מתאימים*/
+.edititem {
+    color:#513414;
+}
+
+
+/*אייקון מחיקה במסיחים מתאימים*/
+.deleteitem {
+    color: #513414;
+}
+
+
+/*אייקון עריכה במסיחים לא מתאימים*/
+.edititem2 {
+    color: #513414;
+}
+
+/*אייקון מחיקה במסיחים לא מתאימים*/
+.deleteitem2 {
+    color: #513414;
+}
+
+
+/*התנאים לסף פרסום של המשחק, התנאים עצמם*/
+.GameConditions {
+    padding: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.2px;
+    line-height: 1.7;
+}
+
+
+
+
+
+
+/*המלבן עצמו של התנאים לסף פרסום*/
+.mud-drawer {
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 1;
+    flex: 0 0 auto;
+    outline: 0;
+    position: fixed;
+    z-index: var(--mud-zindex-drawer);
+    overflow-y: auto;
+    flex-direction: column;
+    color: #513414;
+    background-color: transparent;
+    --mud-drawer-content-height: 0;
+}
+
+
+
+/*המסגרת של תנאי הסף*/
+.mud-elevation-1 {
+    box-shadow: none;
+}
+
+
+/*אייקון של היציאה מהמשתמש*/
+.mud-nav-link:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
+    color: #513414;
+    margin-right: -10px;
+}
+
+
+/*חזרה לעמוד הבית*/
+.backToTheHomeScreen {
+    background: transparent;
+    font-size: 16px;
+    border: 2px solid #513414;
+    width: 168px;
+    border-radius: 10px;
+}
+
+
+
+.CheckifCorrect{
+
+}
