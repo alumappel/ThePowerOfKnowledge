@@ -89,7 +89,7 @@
                 {
                     <MudCard Class="theimgfromuser">
                         <MudCardContent Class="TheImage">
-                            <img src="@currentGame.GameQuestionImge" width="120"/>
+                            <img src="@currentGame.GameQuestionImge" width="120" height="120"/>
                         </MudCardContent>
 
 
@@ -149,7 +149,7 @@
     <MudContainer>
         @if (currentAnswerEdite.ID == 0)
         {
-            <MudText Typo="Typo.h2">הוספת פריט</MudText>
+            <MudText Class="AddItemH2" Typo="Typo.h2">הוספת פריט</MudText>
         }
         @if (currentAnswerEdite.ID != 0)
         {
@@ -283,52 +283,53 @@
 
 
         @*טבלת פריטים*@
-        <MudContainer Class="abc" >
-            <MudPaper Height="100%" Width="100%" Outlined="true">
-                @*מחלק לשתי עמודות*@
+    <MudContainer Class="abc">
+    @*<MudPaper Height="100%" Width="100%" Outlined="true">*@
+       <MudPaper Class="TableItems">
+        @*מחלק לשתי עמודות*@
                 <MudGrid>
                     @*פריטים נכונים*@
                     <MudItem xs="6">
                         <MudText Typo="Typo.h3">פריטים מתאימים</MudText>
 
-                        <MudText>מספר פריטים: @boolAnswerCount(true) </MudText>
+                        <MudText Class="numberOfRightItems">מספר פריטים: @boolAnswerCount(true) </MudText>
 
                         @*מכיל את כל הפריטים*@
-                        <MudContainer Class="correctAnswer">
-                            @*חוזר לכל התשובות*@
-                            @foreach (Answer currentAnswer in currentGame.GameAnswers)
+                    <MudContainer Class="correctAnswer">
+                        @*חוזר לכל התשובות*@
+                        @foreach (Answer currentAnswer in currentGame.GameAnswers)
+                        {
+                            //מציג רק אם התשובה נכונה
+                            @if (currentAnswer.CorrectAnswer == true)
                             {
-                                //מציג רק אם התשובה נכונה
-                                @if (currentAnswer.CorrectAnswer == true)
-                                {
-                                    //כרטיסייה
-                                    <MudCard Outlined="@EditingThisNow(currentAnswer)">
-                                        @*במידה ואין תמונה*@
-                                        @if (currentAnswer.HaveImge == false)
-                                        {
-                                            <MudCardContent>
-                                                <MudText>
-                                                    @currentAnswer.Content
-                                                </MudText>
-                                            </MudCardContent>
+                                //כרטיסייה
+                                <MudCard Outlined="@EditingThisNow(currentAnswer)">
+                                    @*במידה ואין תמונה*@
+                                    @if (currentAnswer.HaveImge == false)
+                                    {
+                                        <MudCardContent>
+                                            <MudText>
+                                                @currentAnswer.Content
+                                            </MudText>
+                                        </MudCardContent>
 
-                                        }
-                                        @*//במידה ויש תמונה*@
-                                        @if (currentAnswer.HaveImge == true)
-                                        {
-                                            <img src="@currentAnswer.Content" width="150" />
-                                        }
+                                    }
+                                    @*//במידה ויש תמונה*@
+                                    @if (currentAnswer.HaveImge == true)
+                                    {
+                                        <img src="@currentAnswer.Content" width="150" />
+                                    }
 
-                                        @*כפתורים בתחתית הכרטיסייה*@
-                                        <MudCardActions>
-                                            <MudIconButton Class="edititem" @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
-                                            <MudIconButton Class="deleteitem" @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
-                                        </MudCardActions>
-                                    </MudCard>
-                                }
+                                    @*כפתורים בתחתית הכרטיסייה*@
+                                    <MudCardActions>
+                                        <MudIconButton Class="edititem" @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
+                                        <MudIconButton Class="deleteitem" @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                                    </MudCardActions>
+                                </MudCard>                      
                             }
+                        }
 
-                        </MudContainer>
+                    </MudContainer>
 
 
 
@@ -340,9 +341,9 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudText Typo="Typo.h3">פריטים לא מתאימים</MudText>
-                        <MudText>מספר פריטים: @boolAnswerCount(false) </MudText>
+                        <MudText Class="numberOfWrongItems">מספר פריטים: @boolAnswerCount(false) </MudText>
 
-                        <MudContainer>
+                        <MudContainer Class="WrongAnswers">
                             @*חוזר לכל התשובות*@
                             @foreach (Answer currentAnswer in currentGame.GameAnswers)
                             {
@@ -379,9 +380,8 @@
                     </MudItem>
 
                 </MudGrid>
-
             </MudPaper>
-        </MudContainer>
+</MudContainer>
 
 
 
