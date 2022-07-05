@@ -29,17 +29,16 @@ namespace TriangleProject_AlumaAppel_AnastasiaZolotoohin.Server.Controllers
 
         //שליפה עם קוד משחק עמור האנימייט
         [HttpGet("byCode/{gameCode}")]
-        public async Task<IActionResult> GetGameByCode(int gamePin)
+        public async Task<IActionResult> GetGameByCode(int gameCode)
         {
-            ///Game gameToReturn = await _context.Games.FirstOrDefaultAsync(g => g.GamePin == gamePin);
+            //Game gameToReturn = await _context.Games.FirstOrDefaultAsync(g => g.GamePin == gameCode);
             /// שיטה כשיש עוד טבלאות
-            Game gameToReturn = await _context.Games.Include(g => g.GameAnswers).FirstOrDefaultAsync(g => g.GamePin == gamePin);
-
+            Game gameToReturn = await _context.Games.Include(g => g.GameAnswers).FirstOrDefaultAsync(g => g.GamePin == gameCode);           
             if (gameToReturn != null)
             {
                 if (gameToReturn.IsPublish == true)
                 {
-                    return Ok(gameToReturn);
+                    return Ok(gameToReturn);                    
                 }
                 return BadRequest("game not publish");
             }
