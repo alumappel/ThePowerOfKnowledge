@@ -483,9 +483,10 @@ a, .btn-link {
 
 /*הכפתור של שמירת ההגדרות משחק*/
 .SaveTheGameIcon {
-    right: 900px;
+    right: 915px;
     bottom: -30px;
 }
+
 
 
 
@@ -602,10 +603,10 @@ a, .btn-link {
 
 
 
-/*הכותרת "תפוחים מתאימים" ו"תפוחים לא מתאימים"*/
+/*הכותרות "תפוחים מתאימים" ו"תפוחים לא מתאימים"*/
 h3.mud-typography.mud-typography-h3.mud-inherit-text {
-    margin-top: 60px;
-    margin-right: 25px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 
@@ -636,7 +637,9 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 /*כפתור שמירת מסיח*/
 .saveSetting {
     color: #f5f5f5;
-    background-color: #513414
+    background-color: #513414;
+    left: 35px;
+    bottom: 10px;
 }
 
 
@@ -704,35 +707,37 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
-
-
 /*אורך תיבת הוספת פריט*/
 .newAnswer {
     width: 250px;
+    right: -25px;
+    top: -10px
 }
 
 
 
 /*המילה "או" בהוספת פריט*/
 .or {
-    font-size: 40px;
+    font-size: 46px;
     font-weight: bold;
+    margin-top: -15px;
     margin-bottom: 20px;
-    margin-right: -315px;
+    margin-right: -340px;
 }
 
 
 
 /*האייקון של התמונה בהוספת מסיח*/
 .updatephoto {
-    margin-bottom: 20px;
-    margin-right: -450px;
+    margin-bottom: -7px;
+    left: 470px;
+    bottom: 10px;
 }
 
 
 
-/*האייקון של התמונה בהנחייה*/
-.updatephoto2 {
+    /*האייקון של התמונה בהנחייה*/
+    .updatephoto2 {
     margin-bottom: 20px;
     margin-right: -100px;
 }
@@ -752,7 +757,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 {
     margin-top: -25px;
     margin-bottom: -15px;
-    margin-left: 670px;
+    margin-left: 630px;
 }
 
 
@@ -767,22 +772,35 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 /*מסגרת של התמונה שמקבלים מהמשתמש*/
 .theimgfromuser {
     width: 150px;
-    background: pink;
     height: 200px;
-    margin-right: -10px;
-    object-fit: cover;
+    margin-right: 40px;
+    background: yellowgreen;
 }
+
 
 
 
 /*הקוביות הקטנות בפריטים נכונים*/
 .correctAnswer {
-    width: 400px;
+    width: 250px;
     margin-right: 5px;
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-columns: auto auto;
+    gap: 20px 70px;
 }
 
 
 
+/*הקוביות הקטנות בפריטים הלא נכונים*/
+.WrongAnswers {
+    width: 250px;
+    margin-right: 5px;
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-columns: auto auto;
+    gap: 20px 70px;
+}
 
 
 
@@ -872,13 +890,13 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 /*אייקון ביטול של התמונה*/
-/*לבדוק שוב!!!!*/
 .deletetheimagefromuser {
-    height: 30px;
-    margin-right: 40px;
-    margin:auto;
+    margin-top: -158px;
+    /* margin-bottom: 105px; */
+    margin-right: 132px;
+    margin-left: 107px;
+    /* margin: auto; */
 }
-
 
 
 
@@ -929,8 +947,14 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 /*/**//**//**//**//**//**//**//**//**//**//**//**/
 
 
-.CheckifCorrect{
 
+
+/*מיקום הכיתוב של איספו בעזרת תנועת חיצים את כל התפוחים שעליהם*/
+.CatchTheApple {
+    background: transparent;
+    margin-bottom: 5px;
+    margin-right: -20px;
+    margin-left: -40px;
 }
 
 
@@ -946,13 +970,31 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
+/*תת כותרת מספר פריטים בתפוחים המתאימים*/
+.numberOfRightItems{
+    text-align:center;
+}
+
+
+/*תת כותרת מספר פריטים בתפוחים הלא מתאימים*/
+.numberOfWrongItems {
+    text-align: center;
+}
 
 
 
+/*"הכותרת "הוספת מסיח*/
+.AddItemH2 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    margin-right: -23px;
+}
 
-.CatchTheApple {
-    background: aqua;
-    margin-bottom: 5px;
-    margin-right: -20px;
-    margin-left: -40px;
+
+
+/*טבלת המסיחים*/
+.TableItems {
+    background: transparent;
+    border: 4px solid #513414;
+    border-radius: 20px;
 }
