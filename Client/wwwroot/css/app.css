@@ -697,7 +697,11 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 /*אורך תיבת ההנחייה*/
 .textDirective {
     width: 470px;
+    margin-top: -5px;
+    margin-right: 38px;
+    margin-left: 9px;
 }
+
 
 
 
@@ -766,6 +770,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     background: pink;
     height: 200px;
     margin-right: -10px;
+    object-fit: cover;
 }
 
 
@@ -919,6 +924,11 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
+
+
+/*/**//**//**//**//**//**//**//**//**//**//**//**/
+
+
 .CheckifCorrect{
 
 }
@@ -932,4 +942,17 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     width: 200px;
     height: 300px;
     object-fit: contain;
+}
+
+
+
+
+
+
+
+.CatchTheApple {
+    background: aqua;
+    margin-bottom: 5px;
+    margin-right: -20px;
+    margin-left: -40px;
 }
