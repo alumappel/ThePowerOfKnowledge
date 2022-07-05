@@ -769,48 +769,6 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 }
 
 
-/*אייקון ביטול של התמונה*/
-/*לבדוק שוב!!!!*/
-.deletetheimagefromuser {
-    height: 30px;
-    margin-right: 40px;
-    margin:auto;
-}
-
-
-
-/*צבע התפריט*/
-.mud-icon-button-color-inherit {
-    color: #513414;
-}
-
-
-
-
-
-
-
-
-
-
-/*/**/ /**/ /**/ /**/ /**/ /**/
-/*אודות ואיך משחקים*/
-/*כפתור בחלונית אודות ואיך משחקים*/
-.mud-button-text.mud-button-text-primary {
-    color: #fafafa;
-    background: #523410;
-}
-
-
- /*כפתור בחלונית אודות ואיך משחקים האבר*/
-.mud-button-text.mud-button-text-primary:hover {
-    background: #f2b391;
-}
-
-
-
-
-
 
 /*הקוביות הקטנות בפריטים נכונים*/
 .correctAnswer {
@@ -825,7 +783,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 /*אייקון עריכה במסיחים מתאימים*/
 .edititem {
-    color:#513414;
+    color: #513414;
 }
 
 
@@ -839,6 +797,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 .edititem2 {
     color: #513414;
 }
+
 
 /*אייקון מחיקה במסיחים לא מתאימים*/
 .deleteitem2 {
@@ -891,6 +850,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 }
 
 
+
 /*חזרה לעמוד הבית*/
 .backToTheHomeScreen {
     background: transparent;
@@ -902,6 +862,74 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
+
+
+
+
+/*אייקון ביטול של התמונה*/
+/*לבדוק שוב!!!!*/
+.deletetheimagefromuser {
+    height: 30px;
+    margin-right: 40px;
+    margin:auto;
+}
+
+
+
+
+/*צבע התפריט*/
+.mud-icon-button-color-inherit {
+    color: #513414;
+}
+
+
+
+/*צבע הרקע של הצ'קבוקס*/
+.NoHover > span:hover {
+    background: transparent;
+}
+
+
+
+
+
+
+/*/**/ /**/ /**/ /**/ /**/ /**/
+/*אודות ואיך משחקים*/
+/*כפתור בחלונית אודות ואיך משחקים*/
+.mud-button-text.mud-button-text-primary {
+    color: #fafafa;
+    background: #523410;
+}
+
+
+ /*כפתור בחלונית אודות ואיך משחקים האבר*/
+.mud-button-text.mud-button-text-primary:hover {
+    background: #f2b391;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .CheckifCorrect{
 
+}
+
+
+
+
+
+/*ניסיונות של התמונה*/
+.TheImage {
+    width: 200px;
+    height: 300px;
+    object-fit: contain;
 }

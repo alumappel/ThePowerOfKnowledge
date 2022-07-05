@@ -88,7 +88,7 @@
                 @if (currentGame.GameQuestionImge != null)
                 {
                     <MudCard Class="theimgfromuser">
-                        <MudCardContent>
+                        <MudCardContent Class="TheImage">
                             <img src="@currentGame.GameQuestionImge" width="120" />
                         </MudCardContent>
 
@@ -167,7 +167,7 @@
                             <MudText>תוכן הפריט: </MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <img src="@currentAnswerEdite.Content" width="150" />
+                            <img src="@currentAnswerEdite.Content" height="150"/>
                         </MudCardContent>
                         <MudCardActions>
                             @*אם זו ערכית פריט אז מחיקה פיקטיבית*@
@@ -250,7 +250,7 @@
                 <MudText>סמנו <MudIcon Class="CheckifCorrect" Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
             </MudItem>
             <MudItem xs="2">
-                <MudCheckBox @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
+                <MudCheckBox Class="NoHover" @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
             </MudItem>
         </MudGrid>
 
