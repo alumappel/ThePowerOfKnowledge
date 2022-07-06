@@ -21,7 +21,7 @@
     @*//כרטיסיה ריקה של חדש*@
         <MudCard Outlined="true" Class="cardGame1">
     <MudCardActions>
-        <MudIconButton Class="addNewGame" Icon="@Icons.Filled.Add" Color="Color.Default" @onclick="()=>AddNewGame()" />
+        <MudIconButton Class="addNewGame" Icon="@Icons.Filled.Add" Size="Size.Large" Color="Color.Default" @onclick="()=>AddNewGame()" />
     </MudCardActions>
     </MudCard>
 
@@ -60,14 +60,14 @@
                         {
                             <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left">
                                 <ChildContent>
-                                    <MudIconButton Icon="@Icons.Outlined.Info" />
+                                    <MudIconButton Class="info" Icon="@Icons.Outlined.Info" />
                                 </ChildContent>
                                 <TooltipContent>
-                                    <MudText Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
+                                    <MudText Class="TheGameNotPublic" Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
                                     @*לולאה להצגת כל הבעיות*@
                                     @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
                                     {
-                                        <MudText Typo="Typo.body2">@s</MudText>
+                                        <MudText Class="WhyNotPublic" Typo="Typo.body2">@s</MudText>
                                         <br />
                                     }
 
