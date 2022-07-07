@@ -167,10 +167,8 @@ a, .btn-link {
 
 /*הודעת שגיאה המייל לא מתאים*/
 .mud-alert-outlined-error {
-    color: var(--mud-palette-error-darken);
-    margin-right: 900px;
-    width: 270px;
-    margin-left: 980px;
+    position: relative;
+    left: 1100px;
 }
 
 
@@ -603,7 +601,7 @@ a, .btn-link {
     display: inline-flex;
     position: relative;
     left: 330px;
-    bottom: 10px;
+    bottom: 12px;
 }
 
 
@@ -934,6 +932,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     width: 200px;
     height: 300px;
     object-fit: contain;
+    display: flex
 }
 
 
@@ -1067,7 +1066,6 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 }
 
     /*פופאפ בהאבר במחיקת משחק בעמוד המשחקים שלי*/
-
     .mud-button-filled.mud-button-filled-error:hover, .mud-button-filled.mud-button-filled-error:focus-visible {
         background-color: #f2b391;
     }
@@ -1078,3 +1076,71 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     color: #fafafa !important;
 }
 
+
+
+/*כפתור שמוודא מחיקת משחק בעמוד המשחקים שלי*/
+.mud-button-filled.mud-button-filled-success {
+    color: var(--mud-palette-success-text);
+    background-color: #513414;
+}
+
+
+
+/*כפתור שמוודא מחיקת משחק בעמוד המשחקים שלי בהאבר */
+    .mud-button-filled.mud-button-filled-success:hover, .mud-button-filled.mud-button-filled-success:focus-visible {
+        background-color: #f2b391;
+    }
+
+
+
+/*הכותרת "תוכן הפריט" בהוספת פריט כשמוסיפים תמונה */
+.TheImgInItems {
+    background: pink;
+    position: relative;
+    width: 150px;
+    height: 10px;
+    object-fit: contain;
+}
+
+
+
+/*המסביב לתמונה - הורוד */
+.TheWidthOfTheImageItem {
+    background: pink;
+    width: 150px;
+    height:200px;
+}
+
+
+
+
+/*הרקע הלבן של התמונה במסיח*/
+.CardImage {
+    background: transparent;
+    position: relative;
+    left: 30px;
+}
+
+
+
+/*המסביב לאייקון של פח אשפה בהוספת תמונה כמסיח*/
+.imgimgimg {
+    background: transparent;
+    position: relative;
+    width: 200px;
+}
+
+
+
+/*מיקום האייקון של פח אשפה בהוספת תמונה כמסיח*/
+.DeleteTheimagefromuser2 {
+    position: relative;
+    bottom: 60px;
+    right: 40px;
+}
+
+
+/*השגיאה האדומה שהוזנו מעל 30 מסיחים*/
+.mud-alert-message {
+    white-space: nowrap;
+}

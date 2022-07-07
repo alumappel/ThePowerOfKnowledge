@@ -162,14 +162,14 @@
                 @*אם יש תמונה*@
                 @if (currentAnswerEdite.HaveImge == true)
                 {
-                    <MudCard>
-                        <MudCardHeader>
+                    <MudCard Class="CardImage">
+                        <MudCardHeader Class="TheImgInItems">
                             <MudText>תוכן הפריט: </MudText>
                         </MudCardHeader>
-                        <MudCardContent>
-                            <img src="@currentAnswerEdite.Content" height="150"/>
+                        <MudCardContent Class="TheWidthOfTheImageItem">
+                            <img src="@currentAnswerEdite.Content" width="120" height="120"/>
                         </MudCardContent>
-                        <MudCardActions>
+                        <MudCardActions Class="imgimgimg">
                             @*אם זו ערכית פריט אז מחיקה פיקטיבית*@
                             @if (currentAnswerEdite.ID != 0)
                             {
@@ -183,7 +183,7 @@
                             @*אם זה מסיח חדש אז מחיקה אמיתית*@
                             @if (currentAnswerEdite.ID == 0)
                             {
-                                <MudIconButton Color="Color.Info"
+                                <MudIconButton Class="DeleteTheimagefromuser2" Color="Color.Info"
                                                Icon="@Icons.Filled.Delete"
                                                @onclick="DeleteImageAnswer"
                                                Disabled="@imgIsOffAnswer()">
