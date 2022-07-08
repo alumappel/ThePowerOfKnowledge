@@ -5,12 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\components\sdk\anwidget.js" />
-    <None Include="wwwroot\components\ui\src\textinput.js" />
-    <None Include="wwwroot\images\loadJSON_atlas_1.png" />
     <None Include="wwwroot\Img\logo.png" />
-    <None Include="wwwroot\loadJSON.html" />
-    <None Include="wwwroot\loadJSON.js" />
   </ItemGroup>
 
   <ItemGroup>
