@@ -4,7 +4,7 @@
 html, body {
     /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
     /*הרקע עם הילד והעץ*/
-    background-image: url(/Img/background0.png);
+    /*background-image: url(/Img/background0.png);*/
     background-size: 100%;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -303,7 +303,7 @@ a, .btn-link {
 /*כרטיסיית המשחק*/
 .cardGame2 {
     background-color: #fafafa;
-    width: 184px;
+    width: 190px;
     margin: 15px;
     border: 3px solid #513414;
     border-radius: 25px;
@@ -961,6 +961,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     background: transparent;
     border: 4px solid #513414;
     border-radius: 20px;
+    padding-bottom: 20px;
 }
 
 
@@ -970,7 +971,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-rows: 120px;
+    grid-auto-rows: 180px;
 }
 
 
@@ -980,7 +981,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-rows: 120px;
+    grid-auto-rows: 180px;
 }
 
 
@@ -1139,4 +1140,67 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     font-weight: bold;
     position: relative;
     left: 20px;
+}
+
+
+
+
+
+/*התמונות בתוך המסיחים המתאימים*/
+.TheImageimItem1 {
+    margin: 0 auto;
+    object-fit: contain;
+    display: flex
+}
+
+
+
+
+
+/*התמונות בתוך המסיחים הלא מתאימים*/
+.TheImageimItem2 {
+    margin: 0 auto;
+    object-fit: contain;
+    display: flex
+}
+
+
+
+
+/*האייקונים בתוך המסיחים הלא נכונים*/
+.mud-card-actions.IconsInTheWrongAnswers {
+    /* display: flex; */
+    float: left;
+    max-width: 10px;
+    display: block;
+    margin: -20px -22px -33px 44px;
+}
+
+
+
+
+/*האייקונים בתוך המסיחים הנכונים*/
+.mud-card-actions.IconsInTheCorrectAnswers {
+    /* display: flex; */
+    float: left;
+    max-width: 10px;
+    display: block;
+    margin: -20px -22px -33px 44px;
+}
+
+
+
+/*מה שעוטף את התמונה ואחראי על המיקום שלה בתוך המסיחים הלא נכונים*/
+.wrapperTheImg {
+    position: relative;
+    top: 20px;
+    right: 40px;
+}
+
+
+
+.wrapperTheImg2 {
+    position: relative;
+    top: 20px;
+    right: 40px;
 }
