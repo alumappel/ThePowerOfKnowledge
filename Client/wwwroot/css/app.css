@@ -965,7 +965,6 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
-
 /*הקוביות הקטנות בפריטים הלא נכונים*/
 .WrongAnswers {
     display: grid;
@@ -973,7 +972,6 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-auto-rows: 120px;
 }
-
 
 
 
@@ -1039,11 +1037,9 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
-
 .mud-button-filled.mud-button-filled-warning:hover, .mud-button-filled.mud-button-filled-warning:focus-visible {
         background-color: #f2b391;
     }
-
 
 
 
@@ -1103,14 +1099,12 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 }
 
 
-
 /*המסביב לתמונה - הורוד */
 .TheWidthOfTheImageItem {
     background: pink;
     width: 150px;
     height:200px;
 }
-
 
 
 
@@ -1122,14 +1116,12 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 }
 
 
-
 /*המסביב לאייקון של פח אשפה בהוספת תמונה כמסיח*/
 .imgimgimg {
     background: transparent;
     position: relative;
     width: 200px;
 }
-
 
 
 /*מיקום האייקון של פח אשפה בהוספת תמונה כמסיח*/
@@ -1141,6 +1133,10 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 /*השגיאה האדומה שהוזנו מעל 30 מסיחים*/
-.mud-alert-message {
+.NoMoreItems {
     white-space: nowrap;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+    left: 20px;
 }

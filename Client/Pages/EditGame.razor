@@ -137,7 +137,7 @@
             @if (reachMaxItemNum() == true && currentAnswerEdite.ID == 0)
             {
                 @*שגיאה של יותר מדי פריטים*@
-                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">הגעת למגבלת הפריטים האפשריים במשחק, לא ניתן להזין למשחק יותר מ30 פריטים.</MudAlert>
+                <MudAlert Class="NoMoreItems" Severity ="Severity.Warning" Variant="Variant.Outlined">הגעת למגבלת הפריטים האפשריים במשחק, לא ניתן להזין למשחק יותר מ30 פריטים.</MudAlert>
 
             }
 
