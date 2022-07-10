@@ -168,7 +168,7 @@ a, .btn-link {
 /*הודעת שגיאה המייל לא מתאים*/
 .mud-alert-outlined-error {
     position: relative;
-    left: 1100px;
+    left: 710px;
 }
 
 
@@ -295,8 +295,8 @@ a, .btn-link {
     padding: 75px;
     display: inline-block;
     position: relative;
-    bottom: 125px;
-    height: 280px;
+    bottom: 130px;
+    height: 287px;
 }
 
 
@@ -1172,8 +1172,10 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     /* display: flex; */
     float: left;
     max-width: 10px;
-    display: block;
-    margin: -20px -22px -33px 44px;
+    /*display: block;*/
+    position:relative;
+    bottom:-59px;
+    left:170px;
 }
 
 
@@ -1184,8 +1186,11 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     /* display: flex; */
     float: left;
     max-width: 10px;
-    display: block;
-    margin: -20px -22px -33px 44px;
+    /* display: block; */
+    /* margin: 60px 21px -52px 144px; */
+    position: relative;
+    left: 170px;
+    top: 60px;
 }
 
 
@@ -1199,8 +1204,53 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
+/*התמונות במסיחים עצמם*/
+.wrapperTheImg {
+    max-height: 60px;
+    display: block;
+    margin-left: 30px;
+    margin-right: 38px;
+    /* width: 50%; */
+}
+
+
+
+/*אורך תיבת הטקסט בהנחייה כולל תמונה*/
+.CountOfWithImg {
+    position:relative;
+    right: 40px;
+    width: 300px;
+}
+
+
+
+
 .wrapperTheImg2 {
+    max-height: 60px;
+    display: block;
+    margin-left: 30px;
+    margin-right: 38px;
+    /* width: 50%; */
     position: relative;
     top: 20px;
     right: 40px;
+}
+
+
+/*אייקון ולוגו האתר*/
+.LogoSite {
+    font-size: 16px;
+    font-family: Rubik;
+    margin-right: 6px
+}
+
+/*אייקון ולוגו האתר*/
+#AppleLogo .mud-button-label {
+    width: 200px;
+}
+
+
+/*מרחק קטן מהכיתוב ללוגו עצמו*/
+h4#logotext {
+    padding: 8px;
 }

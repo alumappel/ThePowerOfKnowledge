@@ -55,7 +55,7 @@
                     {
 
 
-                        <MudTextField T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" AutoFocus="shortInputQwastion" />
+                        <MudTextField Class="CountOfWithImg" T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" AutoFocus="shortInputQwastion" />
 
                     }
 
@@ -80,9 +80,9 @@
                                        for="fileInput1"
                                        Disabled="@imgIsOnGame()"
                                        Size="Size.Large">
-
                         </MudIconButton>
                     }
+
 
                     @*אם יש תמונה*@
                     @if (currentGame.GameQuestionImge != null)
@@ -297,6 +297,7 @@
                                 //כרטיסייה
                         <MudCard Class="Bdikabdika" Outlined="@EditingThisNow(currentAnswer)">
                             @*במידה ואין תמונה*@
+
                             @if (currentAnswer.HaveImge == false)
                             {
                                 <MudCardContent>
@@ -309,22 +310,22 @@
 
 
                             @*//במידה ויש תמונה*@
-                            <div class="wrapperTheImg2">
-                                @if (currentAnswer.HaveImge == true)
-                                {
+                            @*<div class="wrapperTheImg2">*@
+                            @if (currentAnswer.HaveImge == true)
+                            {
+                        <div class="wrapperTheImg2">
+                            <img src="@currentAnswer.Content" width="100" height="100" />
+                        </div>
+                                    }
+                                    @*</div>*@
 
-                                    <img src="@currentAnswer.Content" width="140" height="140" />
 
-                                }
-                           </div>
-
-
-                                @*כפתורים בתחתית הכרטיסייה*@
-                                <MudCardActions Class="IconsInTheCorrectAnswers">
-                                    <MudIconButton Class="edititem" @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
-                                    <MudIconButton Class="deleteitem" @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
-                                </MudCardActions>
-                        </MudCard>
+                                    @*כפתורים בתחתית הכרטיסייה*@
+                                    <MudCardActions Class="IconsInTheCorrectAnswers">
+                                        <MudIconButton Class="edititem" @onclick="() => AnswerToEditePlace(currentAnswer)" Icon="@Icons.Filled.Edit" Color="Color.Default" />
+                                        <MudIconButton Class="deleteitem" @onclick="() => DeleteAnswer(currentAnswer)" Icon="@Icons.Filled.Delete" Color="Color.Default" />
+                                    </MudCardActions>
+                            </MudCard>
                             }
                         }
 
@@ -363,12 +364,14 @@
                             }
                             @*במידה ויש תמונה*@
 
-                            <div class="wrapperTheImg">
-                                @if (currentAnswer.HaveImge == true)
-                                {
-                                    <img src="@currentAnswer.Content" width="140" height="140" />
-                                }
-                            </div>
+
+                            @if (currentAnswer.HaveImge == true)
+                            {
+                                <div class="wrapperTheImg">
+                                    <img src="@currentAnswer.Content" width="100" height="100"/>
+                                </div>
+                            }
+
 
                             @*כפתורים*@
                             <MudCardActions Class="IconsInTheWrongAnswers">
