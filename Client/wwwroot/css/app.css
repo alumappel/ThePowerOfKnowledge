@@ -168,7 +168,9 @@ a, .btn-link {
 /*הודעת שגיאה המייל לא מתאים*/
 .mud-alert-outlined-error {
     position: relative;
-    left: 710px;
+    left: 650px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 
@@ -185,20 +187,27 @@ a, .btn-link {
     color: #f44336;
     margin-left: 770px;
     border: none;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    right: 35px;
 }
+
+
 
 
 /*הערה כשלא הוזן מייל*/
 .mud-alert-outlined-error {
     border: none;
     padding-right: -800px;
+
 }
 
 
 /*האייקון של סימן קריאה כשלא הוזן מייל*/
-    .mud-alert-outlined-warning .mud-alert-icon {
-        color: #f44336;
-    }
+.mud-alert-outlined-warning .mud-alert-icon {
+    color: #d43b1a;
+}
 
 
 /*הכיתוב "כתובת מייל"*/
@@ -225,7 +234,7 @@ a, .btn-link {
 
 /*לא נמצא מייל תואם*/
 .mud-alert-outlined-error {
-    color: var(--mud-palette-error-darken);
+    color: #d43b1a;
     /* border: 1px solid var(--mud-palette-error); */
 }
 
@@ -254,9 +263,10 @@ a, .btn-link {
 /*הודעת שגיאה שלא הוזן מייל*/
 .mud-alert-outlined-warning {
     color: #f44336;
-    margin-left: 770px;
+    margin-left: 500px;
     border: none;
 }
+
 
 
 /*המסגרת מסביב לכתובת המייל*/
@@ -688,7 +698,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 /*השגיאה כשלא מזינים נושא משחק*/
 .mud-alert-outlined-warning {
-    color: #f44336;
+    color: #d43b1a;
     border: none;
     position: relative;
 }
@@ -722,10 +732,13 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 /*המילה "או" בהוספת פריט*/
 .or {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
     font-size: 46px;
     font-weight: bold;
     position: relative;
-    left: 300px;
+    left: 41px;
     bottom: 5px;
 }
 
@@ -750,15 +763,15 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 /*מיקום של הערה אדומה -  יש להזין נושא למשחק*/
 .typetopicgame {
     position: relative;
-    left: 250px;
-    bottom: 30px
+    bottom: 30px;
+    right: -483px;
 }
 
 
 /*מיקום של הערה אדומה - יש להזין טקסט להמשך ההנחייה*/
 .typedirective {
     position: relative;
-    right: 140px;
+    right: -76px;
     bottom: 15px;
 }
 
@@ -767,8 +780,8 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 .typeitem {
     position: relative;
     white-space: nowrap;
-    left: 115px;
     bottom: 5px;
+    right: -320px;
 }
 
 
@@ -818,6 +831,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     position:relative;
     bottom:15px;
     left:5px;
+    color: black;
 }
 
 
@@ -1273,6 +1287,7 @@ h4#logotext {
     right: 18px;
     max-width: 240px;
     height: 165px;
+    border-radius:15px;
 }
 
 
@@ -1320,4 +1335,42 @@ h4#logotext {
 /*הצבע רקע של הI בהאובר בעמוד המשחקים שלי*/
 .BgHoverI {
     background-color: #f2b391;
+}
+
+
+.mud-typography-h6 {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Rubik';
+}
+
+
+
+.About {
+    font-size: 20px;
+    line-height: 2;
+    text-align: center;
+}
+
+
+a, .btn-link {
+    color: #0000ee;
+}
+
+
+
+.LinkToHit {
+    border-bottom: 2px solid #0000ee;
+    /* padding-bottom: 5px; */
+    position: relative;
+    width: 280px;
+    /* text-align: center; */
+    right: 300px;
+}
+
+
+.LogoOfHit{
+    width:200px;
+    height:200px;
 }
