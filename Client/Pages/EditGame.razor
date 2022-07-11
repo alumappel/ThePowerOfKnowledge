@@ -301,7 +301,7 @@
                             @if (currentAnswer.HaveImge == false)
                             {
                                 <MudCardContent>
-                                    <MudText>
+                                    <MudText Class="CorrectAns">
                                         @currentAnswer.Content
                                     </MudText>
                                 </MudCardContent>
@@ -356,7 +356,7 @@
                             @if (currentAnswer.HaveImge == false)
                             {
                                 <MudCardContent>
-                                    <MudText>
+                                    <MudText Class="WrongAns">
                                         @currentAnswer.Content
                                     </MudText>
                                 </MudCardContent>
