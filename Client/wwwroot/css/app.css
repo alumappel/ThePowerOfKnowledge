@@ -120,6 +120,7 @@ a, .btn-link {
     POSITION: RELATIVE;
     COLOR: WHITE;
     top: 340px;
+    background: #523410;
 }
 
 
@@ -305,8 +306,8 @@ a, .btn-link {
     padding: 75px;
     display: inline-block;
     position: relative;
-    bottom: 130px;
-    height: 287px;
+    bottom: 91px;
+    height: 295px;
 }
 
 
@@ -319,6 +320,8 @@ a, .btn-link {
     border-radius: 25px;
     padding: 9px;
     display: inline-block;
+    position:relative;
+    top:47px;
 }
 
 
@@ -732,13 +735,12 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 /*המילה "או" בהוספת פריט*/
 .or {
-    display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
     font-size: 46px;
     font-weight: bold;
     position: relative;
-    left: 41px;
+    left: 300px;
     bottom: 5px;
 }
 
@@ -789,10 +791,10 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 /*מסגרת של התמונה שמקבלים מהמשתמש*/
 .theimgfromuser {
-    width: 150px;
+    width: 176px;
     height: 200px;
     margin-right: 40px;
-    background: pink;
+    background: #F2B391;
 }
 
 
@@ -887,7 +889,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 .deletetheimagefromuser {
     position: relative;
     bottom: 160px;
-    right: 40px;
+    right: 56px;
 }
 
 
@@ -945,14 +947,14 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 
 
-/*ניסיונות של התמונה*/
+/*התמונה בהנחייה*/
 .TheImage {
     width: 200px;
     height: 300px;
     object-fit: contain;
-    display: flex
+    display: flex;
+    transform: scale(1,1);
 }
-
 
 
 /*תת כותרת מספר פריטים בתפוחים המתאימים*/
@@ -1114,21 +1116,21 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 
 /*הכותרת "תוכן הפריט" בהוספת פריט כשמוסיפים תמונה */
 .TheImgInItems {
-    background: pink;
+    background: #F2B391;
     position: relative;
-    width: 150px;
-    height: 10px;
+    width: 250px;
+    height: 34px;
     object-fit: contain;
 }
 
 
 /*המסביב לתמונה - הורוד */
 .TheWidthOfTheImageItem {
-    background: pink;
-    width: 150px;
-    height:200px;
+    background: #F2B391;
+    width: 250px;
+    height: 222px;
+    text-align: center;
 }
-
 
 
 /*הרקע הלבן של התמונה במסיח*/
@@ -1151,7 +1153,7 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
 .DeleteTheimagefromuser2 {
     position: relative;
     bottom: 60px;
-    right: 40px;
+    right: 87px;
 }
 
 
@@ -1229,8 +1231,11 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     max-height: 60px;
     display: block;
     margin-left: 30px;
-    margin-right: 38px;
+    margin-right: 23px;
     /* width: 50%; */
+    position: relative;
+    /* bottom: -8px; */
+    top: 4px;
 }
 
 
@@ -1251,8 +1256,8 @@ h3.mud-typography.mud-typography-h3.mud-inherit-text {
     margin-right: 38px;
     /* width: 50%; */
     position: relative;
-    top: 20px;
-    right: 40px;
+    top: 5px;
+    right: 29px;
 }
 
 
@@ -1337,7 +1342,7 @@ h4#logotext {
     background-color: #f2b391;
 }
 
-
+/*הכותרת בפופאפ אודות*/
 .mud-typography-h6 {
     font-size: 28px;
     font-weight: bold;
@@ -1346,20 +1351,21 @@ h4#logotext {
 }
 
 
-
+/*הכיתוב בתוך הפופאפ*/
 .About {
     font-size: 20px;
     line-height: 2;
     text-align: center;
 }
 
-
+/*צבע הלינק בחלונית אודות*/
 a, .btn-link {
     color: #0000ee;
 }
 
 
 
+/*הלינק להיכנס לאתר הפקולטה*/
 .LinkToHit {
     border-bottom: 2px solid #0000ee;
     /* padding-bottom: 5px; */
@@ -1370,7 +1376,43 @@ a, .btn-link {
 }
 
 
+
+
 .LogoOfHit{
     width:200px;
     height:200px;
+}
+
+
+/*התמונות במסיחים הלא נכונים - אי פגיעה באיכות התמונה*/
+.ScaledWrong {
+    transform: scale(1);
+}
+
+
+/*התמונות במסיחים הנכונים - אי פגיעה באיכות התמונה*/
+.ScaledRight {
+    transform: scale(1);
+}
+
+
+/*הערה אדומה - תמונה חורגת בהנחייה*/
+.imgTooBig {
+    position: relative;
+    right: 430px;
+}
+
+
+/*הערה אדומה - תמונה חורגת במסיחים*/
+.ImgTooBig2 {
+    position: relative;
+    left: 400px;
+}
+
+
+/*הטקסט בפוטר*/
+..TxtOfTheFooter {
+    font-size: 16px;
+    position: relative;
+    height: 30px;
 }

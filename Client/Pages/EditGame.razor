@@ -87,10 +87,13 @@
                     @*אם יש תמונה*@
                     @if (currentGame.GameQuestionImge != null)
                     {
+
                         <MudCard Class="theimgfromuser">
                             <MudCardContent Class="TheImage">
-                                <img src="@currentGame.GameQuestionImge" width="120" height="120" />
-                            </MudCardContent>                          
+
+                                <img src="@currentGame.GameQuestionImge" width="140" height="140" />
+
+                            </MudCardContent>
 
                             <MudCardActions Class="deletetheimagefromuser">
                                 <MudIconButton Color="Color.Info"
@@ -102,6 +105,7 @@
 
                             </MudCardActions>
                         </MudCard>
+
                     }
 
 
@@ -111,10 +115,15 @@
 
 
             @*שגיאה של תמונה גדולה מדי*@
+            <div Class="imgTooBig">
             @if (AlertTooBigImgGame == true)
             {
-                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+                   <MudAlert Severity ="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל </MudAlert>
+
             }
+            </div>
+
+
             @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
             @if (AlertEmptyQwastion == true)
             {
@@ -145,118 +154,119 @@
             @*אם לא הגענו למגבלת פריטים*@
             @if (reachMaxItemNum() == false || currentAnswerEdite.ID != 0)
             {
-                <MudContainer>
-                    @if (currentAnswerEdite.ID == 0)
+        <MudContainer>
+            @if (currentAnswerEdite.ID == 0)
+            {
+                <MudText Class="AddItemH2" Typo="Typo.h2">הוספת פריט</MudText>
+            }
+            @if (currentAnswerEdite.ID != 0)
+            {
+                <MudText Typo="Typo.h2">עריכת פריט</MudText>
+            }
+
+
+            <MudGrid>
+                <MudItem xs="6">
+                    @*אם יש תמונה*@
+                    @if (currentAnswerEdite.HaveImge == true)
                     {
-                        <MudText Class="AddItemH2" Typo="Typo.h2">הוספת פריט</MudText>
-                    }
-                    @if (currentAnswerEdite.ID != 0)
-                    {
-                        <MudText Typo="Typo.h2">עריכת פריט</MudText>
-                    }
+                        <MudCard Class="CardImage">
+                            <MudCardHeader Class="TheImgInItems">
+                                <MudText>תוכן הפריט: </MudText>
+                            </MudCardHeader>
+                            <MudCardContent Class="TheWidthOfTheImageItem">
+                                <img src="@currentAnswerEdite.Content" width="150" height="150" />
+                            </MudCardContent>
+                            <MudCardActions Class="imgimgimg">
+                                @*מחיקה פיקטיבית*@
 
-
-                    <MudGrid>
-                        <MudItem xs="6">
-                            @*אם יש תמונה*@
-                            @if (currentAnswerEdite.HaveImge == true)
-                            {
-                                <MudCard Class="CardImage">
-                                    <MudCardHeader Class="TheImgInItems">
-                                        <MudText>תוכן הפריט: </MudText>
-                                    </MudCardHeader>
-                                    <MudCardContent Class="TheWidthOfTheImageItem">
-                                        <img src="@currentAnswerEdite.Content" width="120" height="120" />
-                                    </MudCardContent>
-                                    <MudCardActions Class="imgimgimg">
-                                        @*מחיקה פיקטיבית*@
-                                        
-                                            <MudIconButton Class="DeleteTheimagefromuser2"
-                                                           Color="Color.Info"
-                                                           Icon="@Icons.Filled.Delete"
-                                                           @onclick="@(()=>FakeDeletImgAnswer(currentAnswerEdite.Content))"
-                                                           Disabled="@imgIsOffAnswer()">
-                                            </MudIconButton>
-                                       
-                                    </MudCardActions>
-                                </MudCard>
-                            }
-
-
-                            @*אם אין תמונה*@
-                            @if (currentAnswerEdite.HaveImge == false)
-                            {
-                                <MudTextField Class="newAnswer" T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
-                            }
-                        </MudItem>
-
-
-                        @*אם אין תמונה*@
-                        @if (currentAnswerEdite.HaveImge == false)
-                        {
-                            <MudItem xs="2">
-                                <MudText Class="or">או</MudText>
-                            </MudItem>
-
-                            <MudItem xs="2">
-
-
-                                <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
-
-                                <MudIconButton Class="updatephoto" HtmlTag="label"
+                                <MudIconButton Class="DeleteTheimagefromuser2"
                                                Color="Color.Info"
-                                               Icon="@Icons.Filled.PhotoCamera"
-                                               for="fileInput2"
-                                               Disabled="@currentAnswerEdite.HaveImge"
-                                               Size="Size.Large">
+                                               Icon="@Icons.Filled.Delete"
+                                               @onclick="@(()=>FakeDeletImgAnswer(currentAnswerEdite.Content))"
+                                               Disabled="@imgIsOffAnswer()">
                                 </MudIconButton>
-                            </MudItem>
 
-                        }
-
-                    </MudGrid>
-
-
-
-
-                    @*שגיאה של תמונה גדולה מדי*@
-                    @if (AlertTooBigImgAnswer == true)
-                    {
-                        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
-                    }
-                    @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
-                    @if (AlertEmptyAnswer == true)
-                    {
-                        <MudAlert Class="typeitem" Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+                            </MudCardActions>
+                        </MudCard>
                     }
 
 
-
-
-                    <MudGrid>
-                        <MudItem xs="6">
-                            <MudText>סמנו <MudIcon Class="CheckifCorrect" Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudCheckBox Class="NoHover" @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
-                        </MudItem>
-                    </MudGrid>
-
-
-
-                    @*כפתור שמירת פריט*@
-                    <MudButton Class="saveSetting" @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Large">שמירת פריט</MudButton>
-
-
-
-                    @*בדיקה האם זו ערכית פריט*@
-                    @if (currentAnswerEdite.ID != 0)
+                    @*אם אין תמונה*@
+                    @if (currentAnswerEdite.HaveImge == false)
                     {
-                        //כפתור ביטול עריכה
-                        <MudButton Class="DeleteEdit" @onclick="() => BackToAnswerBeforEditing()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">ביטול עריכה</MudButton>
+                        <MudTextField Class="newAnswer" T="string" Counter="25" MaxLength="25" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters25))" Label="תוכן הפריט: " Variant="Variant.Outlined" @bind-Value="currentAnswerEdite.Content" Disabled="@currentAnswerEdite.HaveImge" />
                     }
+                </MudItem>
 
-                </MudContainer>
+
+                @*אם אין תמונה*@
+                @if (currentAnswerEdite.HaveImge == false)
+                {
+                    <MudItem xs="2">
+                        <MudText Class="or">או</MudText>
+                    </MudItem>
+
+                    <MudItem xs="2">
+
+
+                        <InputFile id="fileInput2" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileAnswer" />
+
+                        <MudIconButton Class="updatephoto" HtmlTag="label"
+                                       Color="Color.Info"
+                                       Icon="@Icons.Filled.PhotoCamera"
+                                       for="fileInput2"
+                                       Disabled="@currentAnswerEdite.HaveImge"
+                                       Size="Size.Large">
+                        </MudIconButton>
+                    </MudItem>
+
+                }
+
+            </MudGrid>
+
+
+
+
+            @*שגיאה של תמונה גדולה מדי*@
+            <div class="ImgTooBig2">
+            @if (AlertTooBigImgAnswer == true)
+            {
+                <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל</MudAlert>
+            }
+            @*שגיאה של לא הוכנס שום ערך לתוכן פריט*@
+            @if (AlertEmptyAnswer == true)
+            {
+                <MudAlert Class="typeitem" Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט או תמונה לתוכן הפריט</MudAlert>
+            }
+            </div>
+
+
+
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudText>סמנו <MudIcon Class="CheckifCorrect" Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon> במידה והפריט מתאים להנחייה</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudCheckBox Class="NoHover" @bind-Checked="@currentAnswerEdite.CorrectAnswer" Color="Color.Success" Size="Size.Large"></MudCheckBox>
+                </MudItem>
+            </MudGrid>
+
+
+
+            @*כפתור שמירת פריט*@
+            <MudButton Class="saveSetting" @onclick="() => SaveAnswer(currentAnswerEdite)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Large">שמירת פריט</MudButton>
+
+
+
+            @*בדיקה האם זו ערכית פריט*@
+            @if (currentAnswerEdite.ID != 0)
+            {
+                //כפתור ביטול עריכה
+                <MudButton Class="DeleteEdit" @onclick="() => BackToAnswerBeforEditing()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">ביטול עריכה</MudButton>
+            }
+
+        </MudContainer>
 
             }
         </MudContainer>
@@ -314,7 +324,9 @@
                             @if (currentAnswer.HaveImge == true)
                             {
                         <div class="wrapperTheImg2">
-                            <img src="@currentAnswer.Content" width="100" height="100" />
+                            <div class="ScaledRight">
+                                <img src="@currentAnswer.Content" width="130" height="130" />
+                            </div>
                         </div>
                                     }
                                     @*</div>*@
@@ -367,9 +379,10 @@
 
                             @if (currentAnswer.HaveImge == true)
                             {
-                                <div class="wrapperTheImg">
-                                    <img src="@currentAnswer.Content" width="100" height="100"/>
-                                </div>
+                                <div class="wrapperTheImg"> <div class="ScaledWrong">
+                                   <img src="@currentAnswer.Content" width="130" height="130" />
+                                         </div>
+                                    </div>
                             }
 
 
