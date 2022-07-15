@@ -10,7 +10,9 @@
 
 @*כותרת*@
 <h3>Login</h3>
-<MudPaper Class="TheBox"> </MudPaper>
+@*<MudPaper Class="TheBox"> </MudPaper>*@
+
+<div class="TheAll">
 
     @*שורה להכנסת כתובת מייל*@
     <MudPaper Class="login-paper" Elevation="0">
@@ -30,7 +32,7 @@
     @*שגיאה של לא הוכנס שום ערך לתיבה*@
     @if (alrtEmail == true)
     {
-        <MudAlert Class="mailLogin" Severity ="Severity.Warning" Variant="Variant.Outlined">יש להקליד כתובת מייל</MudAlert>
+        <MudAlert Class="mailLogin" Severity="Severity.Warning" Variant="Variant.Outlined">יש להקליד כתובת מייל</MudAlert>
     }
 
 
@@ -38,6 +40,7 @@
         @*כפתור שליחה*@
         <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="loginUser">התחברות</MudButton>
     </MudPaper>
+</div>
 
 
 

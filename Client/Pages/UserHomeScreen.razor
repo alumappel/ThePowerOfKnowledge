@@ -58,19 +58,21 @@
                         @*מציג רק אם המשחק לא עומד בתנאי פרסום*@
                         @if (GameNotInPublishCretiria(currentGame) == true)
                         {
-                            <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left">
+                            <MudTooltip Duration="1000" Arrow="true" Placement="Placement.Left" >
                                 <ChildContent>
                                     <MudIconButton Class="info" Icon="@Icons.Outlined.Info" />
                                 </ChildContent>
                                 <TooltipContent>
-                                    <MudText Class="TheGameNotPublic" Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
-                                    @*לולאה להצגת כל הבעיות*@
-                                    @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
-                                    {
-                                        <MudText Class="WhyNotPublic" Typo="Typo.body2">@s</MudText>
-                                        <br />
-                                    }
+                                    <div class="BgHoverI">
+                                        <MudText Class="TheGameNotPublic" Typo="Typo.h6">משחקך לא עומד בתנאי הסף לפרסום</MudText>
+                                        @*לולאה להצגת כל הבעיות*@
 
+                                        @foreach (string s in WhyGameNotInPublishCretiria(currentGame))
+                                        {
+                                            <MudText Class="WhyNotPublic" Typo="Typo.body2">@s</MudText>
+                                            <br />
+                                        }
+                                    </div>
                                 </TooltipContent>
                             </MudTooltip>
                         }
