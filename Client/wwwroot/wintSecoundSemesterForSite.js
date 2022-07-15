@@ -6010,37 +6010,46 @@ if (reversed == null) { reversed = false; }
 		                return true;
 		            }
 		
-		
-		            //מגדיל ומקטין תמונה בלחיצה עליה
-		            function scalePhoto(evt) {
-					var Oscale=evt.currentTarget.scale;
-					var evtNominal=	evt.currentTarget.getBounds ();	
-					var XPlace=evt.currentTarget.x;
-					var XPlaceChange=	evt.currentTarget.x- evtNominal.width/2;
-					var YPlace=evt.currentTarget.y;
-					var YPlaceChange=	evt.currentTarget.y- evtNominal.height/2;
-		                createjs.Tween.get(evt.currentTarget).to({
-		                   x:XPlaceChange,
-							y:YPlaceChange,
-							scale: 2*Oscale                   
-		                }
-					, 500).wait(700).to({
-						x:XPlace,
-						y:YPlace,
-		                    scale: Oscale                    
-		                }, 500);					
-		            }
+
+        //מגדיל ומקטין תמונה בלחיצה עליה
+        function scalePhoto(evt) {
+            var Oscale = evt.currentTarget.scale;
+            //var evtNominal=	evt.currentTarget.getBounds ();	
+            var evtNominal = evt.target.image;
+            var XPlace = evt.currentTarget.x;
+            //var XPlaceChange = evt.currentTarget.x + evtNominal.width / 2;
+            var XPlaceChange = evt.currentTarget.x - 50;
+            console.log(XPlaceChange);
+            var YPlace = evt.currentTarget.y;
+            //var YPlaceChange = evt.currentTarget.y + evtNominal.height / 2;
+            var YPlaceChange = evt.currentTarget.y - 50;
+            createjs.Tween.get(evt.currentTarget).to({
+                x: XPlaceChange,
+                y: YPlaceChange,
+                scale: 2 * Oscale
+            }
+                , 500).wait(700).to({
+                    x: XPlace,
+                    y: YPlace,
+                    scale: Oscale
+                }, 500);
+        }
 				
 				
 				 //מגדיל ומקטין תמונה בלחיצה על רווח לתפוחים במהלך משחק
 		            function scalePhotoSpace() {					
-					var target=cont1.getChildByName("myApple" + choosenApple).getChildByName("myAppleTxt" );				
-					var Oscale=target.scale;
-					var evtNominal=		target.nominalBounds;				
+						var target = cont1.getChildByName("myApple" + choosenApple).children[1];
+						console.log(target);
+						var Oscale = target.scale;
+						console.log(Oscale);
+					//var evtNominal=		target.nominalBounds;	
+					var evtNominal = target.image;
 					var XPlace=target.x;
-					var XPlaceChange=	target.x- evtNominal.width/2;
+						//var XPlaceChange = target.x - evtNominal.width / 2;
+						var XPlaceChange = target.x - 50;
 					var YPlace=target.y;
-					var YPlaceChange=	target.y- evtNominal.height/2;
+						//var YPlaceChange = target.y - evtNominal.height / 2;
+						var YPlaceChange = target.y - 50;
 		                createjs.Tween.get(target).to({
 		                   x:XPlaceChange,
 							y:YPlaceChange,
