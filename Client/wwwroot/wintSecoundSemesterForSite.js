@@ -6019,7 +6019,7 @@ if (reversed == null) { reversed = false; }
             var XPlace = evt.currentTarget.x;
             //var XPlaceChange = evt.currentTarget.x + evtNominal.width / 2;
             var XPlaceChange = evt.currentTarget.x - 50;
-            console.log(XPlaceChange);
+            //console.log(XPlaceChange);
             var YPlace = evt.currentTarget.y;
             //var YPlaceChange = evt.currentTarget.y + evtNominal.height / 2;
             var YPlaceChange = evt.currentTarget.y - 50;
@@ -6039,9 +6039,9 @@ if (reversed == null) { reversed = false; }
 				 //מגדיל ומקטין תמונה בלחיצה על רווח לתפוחים במהלך משחק
 		            function scalePhotoSpace() {					
 						var target = cont1.getChildByName("myApple" + choosenApple).children[1];
-						console.log(target);
+						//console.log(target);
 						var Oscale = target.scale;
-						console.log(Oscale);
+						//console.log(Oscale);
 					//var evtNominal=		target.nominalBounds;	
 					var evtNominal = target.image;
 					var XPlace=target.x;

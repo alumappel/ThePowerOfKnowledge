@@ -1,7 +1,11 @@
 ﻿@*חלונית פופ אפ*@
 <MudDialog>
     <DialogContent>
-        <iframe width="200" height="200" src="https://www.youtube.com/embed/F1B9Fk_SgI0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <MudContainer width="1280">
+            <div class="responsiveIframe">
+                <iframe src="https://www.youtube.com/embed/IxBsbzUKnAs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </MudContainer>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Primary" OnClick="Submit">הבנתי</MudButton>
