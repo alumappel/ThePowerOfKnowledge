@@ -4,13 +4,13 @@
 html, body {
     /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
     /*הרקע עם הילד והעץ*/
-    background-image: url(/Img/background0.png);
+    background-image: url('svgWave1.svg');
     background-size: 100%;
     background-attachment: fixed;
     background-repeat: no-repeat;
     font-family: 'Rubik', sans-serif;
+    background-color: #c1d777;
 }
-
 
     body * {
         font-family: 'Rubik', sans-serif;
@@ -137,18 +137,34 @@ a, .btn-link {
 
 /*תיבת הטקסט של ההתחברות בדף הראשי*/
 .login-paper {
-    width: 350px;
-    margin-top: 200px;
-    margin-right: 580px;
-    margin-left: 550px;
+    width: 350px;    
+    position:center;
+    margin:auto;
+    margin-top: 20%;
+/*    margin-right: 580px;
+    margin-left: 550px;*/
     background: none;
 }
 
+/*//כותרת כניסת עורכים*/
+    .login-paper .mud-inherit-text {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 20px;
+        color: #503317;
+    }
+
+
 
 /*הלבן שמסביב לכפתור*/
-.login-button {
-    width:0px;
-}
+    .login-paper .mud-button-filled.mud-button-filled-primary {
+        padding-right: 20px;
+        padding-left: 20px;
+      /*  position: center;
+        margin-left: 0px;
+        margin-right: 0px;*/
+        margin:auto;
+    }
 
 
 .mud-button-filled.mud-button-filled-primary {
@@ -167,31 +183,22 @@ a, .btn-link {
 
 
 /*הודעת שגיאה המייל לא מתאים*/
-.mud-alert-outlined-error {
-    position: relative;
-    left: 650px;
+.login-paper .mud-alert-outlined-error {
     font-size: 18px;
     font-weight: bold;
 }
 
-
-/*המיקום של הודעת שגיאה המייל לא מתאים*/
-.mailLogin {
-    margin-right: 490px;
-    width: 260px;
-    margin-left: 980px;
-}
 
 
 /*הודעת שגיאה שלא הוזן מייל*/
 .mud-alert-outlined-warning {
-    color: #f44336;
+/*    color: #f44336;
     margin-left: 770px;
-    border: none;
+    border: none;*/
     font-size: 18px;
     font-weight: bold;
-    position: relative;
-    right: 35px;
+    /*position: relative;
+    right: 35px;*/
 }
 
 
@@ -200,7 +207,7 @@ a, .btn-link {
 /*הערה כשלא הוזן מייל*/
 .mud-alert-outlined-error {
     border: none;
-    padding-right: -800px;
+    /*padding-right: -800px;*/
 
 }
 
@@ -236,7 +243,7 @@ a, .btn-link {
 /*לא נמצא מייל תואם*/
 .mud-alert-outlined-error {
     color: #d43b1a;
-    /* border: 1px solid var(--mud-palette-error); */
+/*     border: 1px solid var(--mud-palette-error); */
 }
 
 
@@ -264,7 +271,7 @@ a, .btn-link {
 /*הודעת שגיאה שלא הוזן מייל*/
 .mud-alert-outlined-warning {
     color: #f44336;
-    margin-left: 500px;
+    /*margin-left: 500px;*/
     border: none;
 }
 
@@ -1413,9 +1420,43 @@ a, .btn-link {
 /*הטקסט בפוטר*/
 ..TxtOfTheFooter {
     font-size: 16px;
-    position: relative;
-    height: 30px;
+ /*   position: relative;*/
+/*    height: 30px;*/
 }
+
+
+/*פוטר*/
+#footer {
+    padding: 50px;
+    background-color: #503317;
+    width: 100%;
+    max-width: none;
+    top: 0px;
+    margin-top: 120px;
+    /*position: absolute;*/
+    bottom: 0;
+    
+
+}
+
+.footer {
+    background-color: #503317;
+    width: 100%;
+  /*  position: absolute;*/
+  /*  bottom: 0;*/
+}
+
+#footerImg{
+background-image: url('kid.svg');
+background-repeat:no-repeat;
+display:inline-block;
+position:absolute;
+height:200px;
+width:200px;
+bottom:50px;
+padding-right:95%;
+}
+
 
 /*דברים של אלומה בשביל iframe רספונסיבי*/
 .responsiveIframe {
@@ -1423,6 +1464,7 @@ a, .btn-link {
     height: 0;
     position: relative;
     padding-bottom: 56.25%;
+    padding-top:40px;
 }
 
     .responsiveIframe iframe {
@@ -1430,3 +1472,10 @@ a, .btn-link {
         width: 100%;
         height: 100%;
     }
+
+#GamePage{
+    width:100%;
+    height:100%;
+    background-color:white;
+    padding-bottom:10%;
+}

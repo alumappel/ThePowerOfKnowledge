@@ -9,36 +9,38 @@
 
 
 @*כותרת*@
-<h3>Login</h3>
+@*<h3>Login</h3>*@
 @*<MudPaper Class="TheBox"> </MudPaper>*@
 
 <div class="TheAll">
-
+   
     @*שורה להכנסת כתובת מייל*@
     <MudPaper Class="login-paper" Elevation="0">
+        <MudText>כניסת עורכים</MudText>
         <MudTextField @bind-Value="inputMail" Label="כתובת מייל" Variant="Variant.Outlined"></MudTextField>
-    </MudPaper>
 
 
 
-    @*הודעות שמוצגות במקרה של שגיאה
+
+        @*הודעות שמוצגות במקרה של שגיאה
         שגיאה של אין כזה משתמש*@
-    @if (alrtUser == true)
-    {
-        <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">לא נמצא משתמש תואם למייל שהוזן</MudAlert>
-    }
+        @if (alrtUser == true)
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" >לא נמצא משתמש תואם למייל שהוזן</MudAlert>
+        }
 
 
-    @*שגיאה של לא הוכנס שום ערך לתיבה*@
-    @if (alrtEmail == true)
-    {
-        <MudAlert Class="mailLogin" Severity="Severity.Warning" Variant="Variant.Outlined">יש להקליד כתובת מייל</MudAlert>
-    }
+        @*שגיאה של לא הוכנס שום ערך לתיבה*@
+        @if (alrtEmail == true)
+        {
+            <MudAlert Class="mailLogin" Severity="Severity.Warning" Variant="Variant.Outlined">יש להקליד כתובת מייל</MudAlert>
+        }
 
 
-    <MudPaper Class="login-button" Elevation="0">
-        @*כפתור שליחה*@
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="loginUser">התחברות</MudButton>
+        
+            @*כפתור שליחה*@
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="loginUser">התחברות</MudButton>
+        
     </MudPaper>
 </div>
 
