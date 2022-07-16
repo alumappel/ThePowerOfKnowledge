@@ -23,117 +23,118 @@
     <MudContainer Width="70%" Fixed="true">
         @*//מכיל את הגדרות המשחק*@
         <MudContainer>
-            <MudText Typo="Typo.h2">הגדרות משחק</MudText>
-            <MudTextField Class="textTopic" T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
-            <br />
+                <MudText Typo="Typo.h2">הגדרות משחק</MudText>
+                <MudTextField Class="textTopic" T="string" Counter="20" MaxLength="20" HelperText="מספר התווים: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters20))" Label="נושא המשחק: " Variant="Variant.Outlined" @bind-Value="currentGame.GameTopic" />
+                <br />
 
 
-            @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
-            @if (AlertEmptyTopic == true)
-            {
-                <MudAlert Class="typetopicgame" Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
-            }
-
-
-
+                @*שגיאה של לא הוכנס שום ערך לתוכן נושא*@
+                @if (AlertEmptyTopic == true)
+                {
+                    <MudAlert Class="typetopicgame" Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין נושא למשחק</MudAlert>
+                }
 
 
 
 
 
-            <MudText Typo="Typo.h2">הנחייה</MudText>
-            @*שורה של הנחייה*@
-            <MudGrid>
-                <MudItem xs="3">
-                    <MudText Class="CatchTheApple">איספו בעזרת תנועת חיצים את כל התפוחים שעליהם </MudText>
-                </MudItem>
-                <MudItem xs="6">
 
 
-                    @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
-                    @if (currentGame.GameQuestionImge != null)
+
+                <MudText Typo="Typo.h2">הנחייה</MudText>
+                @*שורה של הנחייה*@
+                <MudGrid>
+                    <MudItem xs="3">
+                        <MudText Class="CatchTheApple">איספו בעזרת תנועת חיצים את כל התפוחים שעליהם </MudText>
+                    </MudItem>
+                    <MudItem xs="6">
+
+
+                        @*בדיקה שאין שגיאה מבדיקת אורך של התמונה*@
+                        @if (currentGame.GameQuestionImge != null)
+                        {
+
+
+                            <MudTextField Class="CountOfWithImg" T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" AutoFocus="shortInputQwastion" />
+
+                        }
+
+                        @*במידה והתמונה ריקה*@
+                        @if (currentGame.GameQuestionImge == null)
+                        {
+
+                            <MudTextField Class="textDirective" T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
+                        }
+                    </MudItem>
+
+
+                    <MudItem xs="3">
+                        @*אם אין תמונה*@
+                        @if (currentGame.GameQuestionImge == null)
+                        {
+                            <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
+
+                            <MudIconButton Class="updatephoto2" HtmlTag="label"
+                                           Color="Color.Info"
+                                           Icon="@Icons.Filled.PhotoCamera"
+                                           for="fileInput1"
+                                           Disabled="@imgIsOnGame()"
+                                           Size="Size.Large">
+                            </MudIconButton>
+                        }
+
+
+                        @*אם יש תמונה*@
+                        @if (currentGame.GameQuestionImge != null)
+                        {
+
+                            <MudCard Class="theimgfromuser">
+                                <MudCardContent Class="TheImage">
+
+                                    <img src="@currentGame.GameQuestionImge" width="140" height="140" />
+
+                                </MudCardContent>
+
+                                <MudCardActions Class="deletetheimagefromuser">
+                                    <MudIconButton Color="Color.Info"
+                                                   Icon="@Icons.Filled.Delete"
+                                                   @onclick="@(()=>FakeDeletImgQwation(currentGame.GameQuestionImge))"
+                                                   Disabled="@imgIsOffGame()"
+                                                   Size="Size.Medium">
+                                    </MudIconButton>
+
+                                </MudCardActions>
+                            </MudCard>
+
+                        }
+
+
+                    </MudItem>
+                </MudGrid>
+
+
+
+                @*שגיאה של תמונה גדולה מדי*@
+                <div Class="imgTooBig">
+                    @if (AlertTooBigImgGame == true)
                     {
-
-
-                        <MudTextField Class="CountOfWithImg" T="string" Counter="35" MaxLength="35" HelperText="מספר התווים עם תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters35))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" AutoFocus="shortInputQwastion" />
+                        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל </MudAlert>
 
                     }
-
-                    @*במידה והתמונה ריקה*@
-                    @if (currentGame.GameQuestionImge == null)
-                    {
-
-                        <MudTextField Class="textDirective" T="string" Counter="50" MaxLength="50" HelperText="מספר התווים ללא תמונה: " Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters50))" Label="המשך ההנחייה: " Variant="Variant.Outlined" @bind-Value="currentGame.GameQuestionText" />
-                    }
-                </MudItem>
+                </div>
 
 
-                <MudItem xs="3">
-                    @*אם אין תמונה*@
-                    @if (currentGame.GameQuestionImge == null)
-                    {
-                        <InputFile id="fileInput1" hidden accept="image/png, image/gif, image/jpeg" OnChange="UploadFileGame" />
-
-                        <MudIconButton Class="updatephoto2" HtmlTag="label"
-                                       Color="Color.Info"
-                                       Icon="@Icons.Filled.PhotoCamera"
-                                       for="fileInput1"
-                                       Disabled="@imgIsOnGame()"
-                                       Size="Size.Large">
-                        </MudIconButton>
-                    }
-
-
-                    @*אם יש תמונה*@
-                    @if (currentGame.GameQuestionImge != null)
-                    {
-
-                        <MudCard Class="theimgfromuser">
-                            <MudCardContent Class="TheImage">
-
-                                <img src="@currentGame.GameQuestionImge" width="140" height="140" />
-
-                            </MudCardContent>
-
-                            <MudCardActions Class="deletetheimagefromuser">
-                                <MudIconButton Color="Color.Info"
-                                               Icon="@Icons.Filled.Delete"
-                                               @onclick="@(()=>FakeDeletImgQwation(currentGame.GameQuestionImge))"
-                                               Disabled="@imgIsOffGame()"
-                                               Size="Size.Medium">
-                                </MudIconButton>
-
-                            </MudCardActions>
-                        </MudCard>
-
-                    }
-
-
-                </MudItem>
-            </MudGrid>
+                @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
+                @if (AlertEmptyQwastion == true)
+                {
+                    <MudAlert Class="typedirective" Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
+                }
 
 
 
-            @*שגיאה של תמונה גדולה מדי*@
-            <div Class="imgTooBig">
-            @if (AlertTooBigImgGame == true)
-            {
-                   <MudAlert Severity ="Severity.Warning" Variant="Variant.Outlined">התמונה חורגת ממגבלת הגודל </MudAlert>
+                @*//שמירת הגדרות המשחק*@
+                <MudButton Class="SaveTheGameIcon" @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת הגדרות משחק</MudButton>
 
-            }
-            </div>
-
-
-            @*שגיאה של לא הוכנס שום ערך לתוכן שאלה*@
-            @if (AlertEmptyQwastion == true)
-            {
-                <MudAlert Class="typedirective" Severity="Severity.Warning" Variant="Variant.Outlined">יש להזין טקסט להמשך ההנחייה</MudAlert>
-            }
-
-
-
-            @*//שמירת הגדרות המשחק*@
-            <MudButton Class="SaveTheGameIcon" @onclick="() => SaveGame(currentGame)" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">שמירת הגדרות משחק</MudButton>
         </MudContainer>
 
 
